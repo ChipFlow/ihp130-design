@@ -1,0 +1,37 @@
+
+# Project metadata
+
+[project]
+name = "gf130-design"
+version = "0.0.0"
+description = ""
+authors = [
+    {name = "Robert Taylor", email = "rob.taylor@chipflow.io>" },
+    {name = "Catherine Zotova", email = "catherine.zotova@chipflow.io>" },
+]
+license = {file = "LICENSE.md"}
+
+requires-python = "~=3.8"
+dependencies = [
+  "chipflow-lib @ git+https://gitlab.com/ChipFlow/chipflow-lib.git@gatecat/uart_cv32",
+  "amaranth-cv32e40p @ git+https://github.com/ChipFlow/amaranth-cv32e40p@main",
+  "ziglang==0.11.0.dev3747",
+  "pyelftools~=0.29",
+]
+
+# Build system configuration
+
+[build-system]
+requires = ["pdm-backend"]
+build-backend = "pdm.backend"
+
+# Development workflow configuration
+
+[tool.pdm.dev-dependencies]
+test = [
+  "pytest~=7.2.0",
+]
+
+[tool.pdm.scripts]
+_.env_file = ".env.toolchain"
+test.cmd = "pytest"
