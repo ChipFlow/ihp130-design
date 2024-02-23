@@ -3,14 +3,14 @@ from chipflow_lib.software.soft_gen import SoftwareGenerator
 
 from amaranth import *
 from amaranth.lib import wiring
-from amaranth.lib.wiring import connect
+from amaranth.lib.wiring import In, Out, flipped, connect
 
 from amaranth_soc import csr, wishbone
 from amaranth_soc.csr.wishbone import WishboneCSRBridge
 
-from amaranth_orchard.base.gpio import GPIOPeripheral
-from amaranth_orchard.memory.spimemio import SPIMemIO
-from amaranth_orchard.io.uart import UARTPeripheral
+from amaranth_orchard.base.gpio import GPIOPeripheral, GPIOPins
+from amaranth_orchard.memory.spimemio import SPIMemIO, QSPIPins
+from amaranth_orchard.io.uart import UARTPeripheral, UARTPins
 from amaranth_orchard.memory.sram import SRAMPeripheral
 from amaranth_orchard.base.platform_timer import PlatformTimer
 from amaranth_orchard.base.soc_id import SoCID
@@ -22,7 +22,11 @@ __all__ = ["MySoC"]
 
 class MySoC(wiring.Component):
     def __init__(self):
-        super().__init__({})
+        super().__init__({
+            "flash" : Out(QSPIPins.Signature()),
+            "led_gpio" : Out(GPIOPins.Signature(width=8)),
+            "uart": Out(UARTPins.Signature()),
+        })
 
         # Memory regions:
         self.mem_spiflash_base = 0x00000000
@@ -45,8 +49,6 @@ class MySoC(wiring.Component):
 
     def elaborate(self, platform):
         m = Module()
-
-        m.submodules.clock_reset_provider = platform.providers.ClockResetProvider()
 
         wb_arbiter  = wishbone.Arbiter(addr_width=30, data_width=32, granularity=8)
         wb_decoder  = wishbone.Decoder(addr_width=30, data_width=32, granularity=8)
@@ -75,12 +77,10 @@ class MySoC(wiring.Component):
         m.submodules.debug = debug
         # SPI flash
 
-        spiflash_provider = platform.providers.QSPIFlashProvider()
-        spiflash = SPIMemIO(name="spiflash", flash=spiflash_provider.pins)
+        spiflash = SPIMemIO(name="spiflash", flash=self.flash)
         wb_decoder .add(spiflash.data_bus, addr=self.mem_spiflash_base)
         csr_decoder.add(spiflash.ctrl_bus, addr=self.csr_spiflash_base - self.csr_base)
 
-        m.submodules.spiflash_provider = spiflash_provider
         m.submodules.spiflash = spiflash
 
         # SRAM
@@ -92,20 +92,16 @@ class MySoC(wiring.Component):
 
         # LED GPIOs
 
-        led_gpio_provider = platform.providers.LEDGPIOProvider()
-        led_gpio = GPIOPeripheral(name="led_gpio", pins=led_gpio_provider.pins)
+        led_gpio = GPIOPeripheral(name="led_gpio", pins=self.led_gpio)
         csr_decoder.add(led_gpio.bus, addr=self.csr_led_gpio_base - self.csr_base)
 
-        m.submodules.led_gpio_provider = led_gpio_provider
         m.submodules.led_gpio = led_gpio
 
         # UART
 
-        uart_provider = platform.providers.UARTProvider()
-        uart = UARTPeripheral(name="uart", init_divisor=int(25e6//115200), pins=uart_provider.pins)
+        uart = UARTPeripheral(name="uart", init_divisor=int(25e6//115200), pins=self.uart)
         csr_decoder.add(uart.bus, addr=self.csr_uart_base - self.csr_base)
 
-        m.submodules.uart_provider = uart_provider
         m.submodules.uart = uart
 
         # SoC ID
