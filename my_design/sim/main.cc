@@ -1,6 +1,6 @@
 #undef NDEBUG
 
-#include <backends/cxxrtl/cxxrtl.h>
+#include <cxxrtl/cxxrtl.h>
 #include "build/sim/sim_soc.h"
 #include "spiflash.h"
 #include "wb_mon.h"
