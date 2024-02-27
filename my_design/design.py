@@ -278,3 +278,13 @@ class MySoC(wiring.Component):
         sw.generate("build/software/generated")
 
         return m
+
+
+if __name__ == "__main__":
+    from amaranth.back import verilog
+    soc_top = MySoC()
+    with open("build/soc_top.v", "w") as f:
+        f.write(verilog.convert(soc_top, name="soc_top"))
+
+
+
