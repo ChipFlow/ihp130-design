@@ -2,10 +2,8 @@
 
 #include <cxxrtl/cxxrtl.h>
 #include "build/sim/sim_soc.h"
-#include "spiflash.h"
-#include "wb_mon.h"
+#include "models.h"
 
-#include "log.h"
 
 #include <fstream>
 #include <filesystem>
@@ -15,38 +13,44 @@ using namespace cxxrtl_design;
 int main(int argc, char **argv) {
     cxxrtl_design::p_sim__top top;
 
-#if 0
-    // uncomment to log WB transactions
-    wb_mon_set_output(*top.cell_p_bus__mon, "build/wishbone_log.csv");
-#endif
-    spiflash_load(*top.cell_p_spiflash__provider, "../software/software.bin", 0x00100000U);
+    spiflash_model flash("flash", top.p_flash____clk__o, top.p_flash____csn__o,
+        top.p_flash____d__o, top.p_flash____d__oe, top.p_flash____d__i);
+
+    uart_model uart_0("uart_0", top.p_uart__0____tx__o, top.p_uart__0____rx__i);
+    uart_model uart_1("uart_1", top.p_uart__1____tx__o, top.p_uart__1____rx__i);
+
+    gpio_model gpio_0("gpio_0", top.p_gpio__0____o, top.p_gpio__0____oe, top.p_gpio__0____i);
+    gpio_model gpio_1("gpio_1", top.p_gpio__1____o, top.p_gpio__1____oe, top.p_gpio__1____i);
+
+    flash.load_data("../software/software.bin", 0x00100000U);
+
+    open_event_log("events.json");
 
     top.step();
+    unsigned timestamp = 0;
     auto tick = [&]() {
+        flash.step(timestamp);
+        uart_0.step(timestamp);
+        uart_1.step(timestamp);
+
+        gpio_0.step(timestamp);
+        gpio_1.step(timestamp);
+
         top.p_clk.set(false);
         top.step();
+        ++timestamp;
+
         top.p_clk.set(true);
         top.step();
+        ++timestamp;
     };
     top.p_rst.set(true);
     tick();
     top.p_rst.set(false);
 
-    int idx = 0;
-
-    while (1) {
+    for (int i = 0; i < 2000000; i++) {
         tick();
-        idx = (idx + 1) % 1000000;
-
-        // // Simulate button presses
-        // if (idx == 100000) // at t=100000, press button 1
-        //     top.p_buttons.set(0b01U);
-        // else if (idx == 150000) // at t=150000, release button 1
-        //     top.p_buttons.set(0b00U);
-        // else if (idx == 300000) // at t=300000, press button 2
-        //     top.p_buttons.set(0b10U);
-        // else if (idx == 350000) // at t=350000, release button 2
-        //     top.p_buttons.set(0b00U);
     }
+    close_event_log();
     return 0;
 }

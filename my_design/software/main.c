@@ -5,14 +5,6 @@
 void main() {
 	puts("🐱: nyaa~!\r\n");
 
-	puts("SoC type: ");
-	puthex(SOC_ID->type);
-	puts("\r\n");
-
-	puts("SoC version: ");
-	puthex(SOC_ID->version);
-	puts("\r\n");
-
 	puts("Flash ID: ");
 	puthex(spiflash_read_id(SPIFLASH));
 	puts("\r\n");
@@ -22,6 +14,19 @@ void main() {
 	spiflash_set_quad_mode(SPIFLASH);
 
 	puts("Initialised!\r\n");
+
+	puts("SoC type: ");
+	puthex(SOC_ID->type);
+	puts(" ");
+	puthex(SOC_ID->version);
+	puts("\r\n");
+
+	GPIO_1->oe = 0xF0;
+	GPIO_1->out = 0x50;
+	GPIO_1->out = 0xA0;
+	GPIO_1->oe = 0x00;
+
+	uart_puts(UART_1, "ABCD");
 
 	while (1) {
 		// // Listen for button presses

@@ -1,32 +1,51 @@
 from chipflow_lib.steps.sim import SimStep
-from chipflow_lib.platforms.sim import SimPlatform
 
 from amaranth import *
 from amaranth.lib import wiring
 from amaranth.lib.wiring import connect, flipped
+from amaranth.back import rtlil
 
 from ..design import MySoC
 from ..sim import doit_build
 
-class SocWrapper(wiring.Component):
+import os
+from pathlib import Path
+
+class SimPlatform:
+
     def __init__(self):
-        super().__init__({})
-    def elaborate(self, platform):
-        m = Module()
-        m.submodules.soc = soc = MySoC()
+        self.build_dir = os.path.join(os.environ['CHIPFLOW_ROOT'], 'build', 'sim')
+        self.extra_files = dict()
 
-        m.submodules.clock_reset_provider = platform.providers.ClockResetProvider()
+    def add_file(self, filename, content):
+        if not isinstance(content, (str, bytes)):
+            content = content.read()
+        self.extra_files[filename] = content
 
-        m.submodules.spiflash_provider = spiflash_provider = platform.providers.QSPIFlashProvider()
-        connect(m, flipped(spiflash_provider.pins), soc.flash)
 
-        m.submodules.led_gpio_provider = led_gpio_provider = platform.providers.LEDGPIOProvider()
-        connect(m, flipped(led_gpio_provider.pins), soc.gpio_0)
+    def build(self, e):
+        Path(self.build_dir).mkdir(parents=True, exist_ok=True)
 
-        m.submodules.uart_provider = uart_provider = platform.providers.UARTProvider()
-        connect(m, flipped(uart_provider.pins), soc.uart_0)
+        output = rtlil.convert(e, name="sim_top", ports=None, platform=self)
 
-        return m
+        top_rtlil = Path(self.build_dir) / "sim_soc.il"
+        with open(top_rtlil, "w") as rtlil_file:
+            rtlil_file.write(output)
+        top_ys = Path(self.build_dir) / "sim_soc.ys"
+        with open(top_ys, "w") as yosys_file:
+            for extra_filename, extra_content in self.extra_files.items():
+                extra_path = Path(self.build_dir) / extra_filename
+                with open(extra_path, "w") as extra_file:
+                    extra_file.write(extra_content)
+                if extra_filename.endswith(".il"):
+                    print(f"read_rtlil {extra_filename}", file=yosys_file)
+                else:
+                    # FIXME: use -defer (workaround for YosysHQ/yosys#4059)
+                    print(f"read_verilog {extra_filename}", file=yosys_file)
+            print("read_ilang sim_soc.il", file=yosys_file)
+            print("hierarchy -top sim_top", file=yosys_file)
+            print("write_cxxrtl -header sim_soc.cc", file=yosys_file)
+
 
 class MySimStep(SimStep):
     doit_build_module = doit_build
@@ -37,7 +56,7 @@ class MySimStep(SimStep):
         super().__init__(config, platform)
 
     def build(self):
-        my_design = SocWrapper()
+        my_design = MySoC()
 
         self.platform.build(my_design)
         self.doit_build()
