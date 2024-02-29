@@ -6,17 +6,16 @@ name = "gf130-design"
 version = "0.0.0"
 description = ""
 authors = [
-    {name = "Robert Taylor", email = "rob.taylor@chipflow.io>" },
-    {name = "Catherine Zotova", email = "catherine.zotova@chipflow.io>" },
+  {name = "Robert Taylor", email = "rob.taylor@chipflow.io" },
+  {name = "Catherine Zotova", email = "catherine.zotova@chipflow.io" },
 ]
 license = {file = "LICENSE.md"}
 
 requires-python = "~=3.8"
 dependencies = [
-  "chipflow-lib @ git+https://gitlab.com/ChipFlow/chipflow-lib.git@main",
+  "chipflow-lib @ git+https://github.com/ChipFlow/chipflow-lib.git@main",
   "amaranth-cv32e40p @ git+https://github.com/ChipFlow/amaranth-cv32e40p@main",
-  "ziglang==0.11.0.dev3747",
-  "pyelftools~=0.29",
+  "ziglang==0.11.0",
 ]
 
 # Build system configuration
