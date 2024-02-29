@@ -1,0 +1,18 @@
+{
+    "rtlDebugger.command": ["${workspaceFolder}/build/sim/sim_soc"],
+    "rtlDebugger.cwd": "${workspaceFolder}/build/sim",
+    "rtlDebugger.env": {
+        "DEBUG": ""
+    },
+    "rtlDebugger.debugItem": {
+        "cpu dbus__adr": {
+            "base": 16
+        },
+        "cpu dbus__dat_r": {
+            "base": 16
+        },
+        "cpu dbus__dat_w": {
+            "base": 16
+        }
+    }
+}

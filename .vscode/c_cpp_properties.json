@@ -1,0 +1,17 @@
+{
+    "version": 4,
+    "configurations": [
+        {
+            "name": "Linux",
+            "compilerPath": "/usr/bin/clang",
+            "cppStandard": "c++17",
+            "includePath": [
+                "${workspaceFolder}",
+                "${workspaceFolder}/my_design/sim",
+                "${workspaceFolder}/my_design/sim/vendor",
+                "${workspaceFolder}/.venv/lib/python3.11/site-packages/yowasp_yosys/share/include/backends/cxxrtl/runtime"
+            ],
+            "defines": []
+        }
+    ]
+}

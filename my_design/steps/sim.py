@@ -22,7 +22,6 @@ class SimPlatform:
             content = content.read()
         self.extra_files[filename] = content
 
-
     def build(self, e):
         Path(self.build_dir).mkdir(parents=True, exist_ok=True)
 
@@ -38,10 +37,10 @@ class SimPlatform:
                 with open(extra_path, "w") as extra_file:
                     extra_file.write(extra_content)
                 if extra_filename.endswith(".il"):
-                    print(f"read_rtlil {extra_filename}", file=yosys_file)
+                    print(f"read_rtlil {extra_path}", file=yosys_file)
                 else:
                     # FIXME: use -defer (workaround for YosysHQ/yosys#4059)
-                    print(f"read_verilog {extra_filename}", file=yosys_file)
+                    print(f"read_verilog {extra_path}", file=yosys_file)
             print("read_ilang sim_soc.il", file=yosys_file)
             print("hierarchy -top sim_top", file=yosys_file)
             print("write_cxxrtl -header sim_soc.cc", file=yosys_file)
