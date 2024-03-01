@@ -30,9 +30,8 @@ jobs:
           restore-keys: |
             YoWASP-${{ runner.os }}-
       - name: Run tests
-        if: ${{ false }}
         run: |
-          pdm run test
+          make sim-check
 
   submit:
     needs: test

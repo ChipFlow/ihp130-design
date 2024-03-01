@@ -3,9 +3,9 @@
 
 [metadata]
 groups = ["default", "test"]
-strategy = ["cross_platform", "inherit_metadata"]
-lock_version = "4.4.1"
-content_hash = "sha256:a5c5fac8e6a60a78429f1a28278a01cb853fd96118eb837072911eb22e98c98b"
+strategy = ["cross_platform"]
+lock_version = "4.4"
+content_hash = "sha256:0329cb06129fd849331444d5e4d1b53ca082b2d8583ecd778bceac3d1858fcbc"
 
 [[package]]
 name = "amaranth"
@@ -14,10 +14,8 @@ requires_python = "~=3.8"
 git = "https://github.com/amaranth-lang/amaranth"
 revision = "f8e2d26b8f366fe88980f485c03873b2e897bb6a"
 summary = "Amaranth hardware definition language"
-groups = ["default"]
 dependencies = [
     "Jinja2~=3.0",
-    "importlib-resources; python_version < \"3.9\"",
     "pyvcd<0.5,>=0.2.2",
 ]
 
@@ -28,7 +26,6 @@ requires_python = "~=3.8"
 git = "https://github.com/amaranth-lang/amaranth-boards"
 revision = "b67996c48f1bc91412605acd7012f242514d3927"
 summary = "Board and connector definitions for Amaranth HDL"
-groups = ["default"]
 dependencies = [
     "amaranth<0.6,>=0.4",
 ]
@@ -41,7 +38,6 @@ git = "https://github.com/ChipFlow/amaranth-cv32e40p"
 ref = "main"
 revision = "d859a7589fa1ce7c85b8866af2617b9b60c02994"
 summary = "CV32E40P and Amaranth Integration"
-groups = ["default"]
 dependencies = [
     "amaranth @ git+https://github.com/amaranth-lang/amaranth",
 ]
@@ -53,7 +49,6 @@ requires_python = "~=3.8"
 git = "https://github.com/ChipFlow/amaranth-orchard"
 revision = "241647733629d5cf84a2af6f7be6f2bb7d59246b"
 summary = "curated collection of Amaranth cores"
-groups = ["default"]
 dependencies = [
     "amaranth @ git+https://github.com/amaranth-lang/amaranth",
 ]
@@ -65,7 +60,6 @@ requires_python = "~=3.8"
 git = "https://github.com/amaranth-lang/amaranth-soc"
 revision = "9f46553aa4289e2a11788a73fade6410a371b162"
 summary = "System on Chip toolkit for Amaranth HDL"
-groups = ["default"]
 dependencies = [
     "amaranth @ git+https://github.com/amaranth-lang/amaranth",
 ]
@@ -77,7 +71,6 @@ requires_python = "~=3.8"
 git = "https://github.com/amaranth-lang/amaranth-stdio"
 revision = "ae774a5709321d5bffddbcebed09b0e350cb6282"
 summary = "Industry standard I/O for Amaranth HDL"
-groups = ["default"]
 dependencies = [
     "amaranth @ git+https://github.com/amaranth-lang/amaranth",
 ]
@@ -87,7 +80,6 @@ name = "attrs"
 version = "23.2.0"
 requires_python = ">=3.7"
 summary = "Classes Without Boilerplate"
-groups = ["default", "test"]
 files = [
     {file = "attrs-23.2.0-py3-none-any.whl", hash = "sha256:99b87a485a5820b23b879f04c2305b44b951b502fd64be915879d77a7e8fc6f1"},
     {file = "attrs-23.2.0.tar.gz", hash = "sha256:935dc3b529c262f6cf76e50877d35a4bd3c1de194fd41f47a2b7ae8f19971f30"},
@@ -98,7 +90,6 @@ name = "certifi"
 version = "2024.2.2"
 requires_python = ">=3.6"
 summary = "Python package for providing Mozilla's CA Bundle."
-groups = ["default"]
 files = [
     {file = "certifi-2024.2.2-py3-none-any.whl", hash = "sha256:dc383c07b76109f368f6106eee2b593b04a011ea4d55f652c6ca24a754d1cdd1"},
     {file = "certifi-2024.2.2.tar.gz", hash = "sha256:0569859f95fc761b18b45ef421b1290a0f65f147e92a1e5eb3e635f9a5e4e66f"},
@@ -109,7 +100,6 @@ name = "charset-normalizer"
 version = "3.3.2"
 requires_python = ">=3.7.0"
 summary = "The Real First Universal Charset Detector. Open, modern and actively maintained alternative to Chardet."
-groups = ["default"]
 files = [
     {file = "charset-normalizer-3.3.2.tar.gz", hash = "sha256:f30c3cb33b24454a82faecaf01b19c18562b1e89558fb6c56de4d9118a032fd5"},
     {file = "charset_normalizer-3.3.2-cp310-cp310-macosx_10_9_universal2.whl", hash = "sha256:25baf083bf6f6b341f4121c2f3c548875ee6f5339300e08be3f2b2ba1721cdd3"},
@@ -192,13 +182,12 @@ files = [
 
 [[package]]
 name = "chipflow-lib"
-version = "0.1.1.dev94"
+version = "0.1.1.dev94+g91b072d"
 requires_python = "~=3.8"
 git = "https://github.com/ChipFlow/chipflow-lib.git"
 ref = "main"
 revision = "91b072d971085088a8bbda2e3e66ac08e59c76aa"
 summary = "ChipFlow common tools."
-groups = ["default"]
 dependencies = [
     "amaranth @ git+https://github.com/amaranth-lang/amaranth",
     "amaranth-boards @ git+https://github.com/amaranth-lang/amaranth-boards",
@@ -219,7 +208,6 @@ name = "click"
 version = "8.1.7"
 requires_python = ">=3.7"
 summary = "Composable command line interface toolkit"
-groups = ["default"]
 dependencies = [
     "colorama; platform_system == \"Windows\"",
 ]
@@ -233,7 +221,6 @@ name = "cloudpickle"
 version = "3.0.0"
 requires_python = ">=3.8"
 summary = "Pickler class to extend the standard pickle.Pickler functionality"
-groups = ["default"]
 files = [
     {file = "cloudpickle-3.0.0-py3-none-any.whl", hash = "sha256:246ee7d0c295602a036e86369c77fecda4ab17b506496730f2f576d9016fd9c7"},
     {file = "cloudpickle-3.0.0.tar.gz", hash = "sha256:996d9a482c6fb4f33c1a35335cf8afd065d2a56e973270364840712d9131a882"},
@@ -244,8 +231,6 @@ name = "colorama"
 version = "0.4.6"
 requires_python = "!=3.0.*,!=3.1.*,!=3.2.*,!=3.3.*,!=3.4.*,!=3.5.*,!=3.6.*,>=2.7"
 summary = "Cross-platform colored terminal text."
-groups = ["default", "test"]
-marker = "sys_platform == \"win32\" or platform_system == \"Windows\""
 files = [
     {file = "colorama-0.4.6-py2.py3-none-any.whl", hash = "sha256:4f1d9991f5acc0ca119f9d443620b77f9d6b33703e51011c16baf57afb285fc6"},
     {file = "colorama-0.4.6.tar.gz", hash = "sha256:08695f5cb7ed6e0531a20572697297273c47b8cae5a63ffc6d6ed5c201be6e44"},
@@ -256,7 +241,6 @@ name = "doit"
 version = "0.36.0"
 requires_python = ">=3.8"
 summary = "doit - Automation Tool"
-groups = ["default"]
 dependencies = [
     "cloudpickle",
     "importlib-metadata>=4.4",
@@ -271,8 +255,6 @@ name = "exceptiongroup"
 version = "1.2.0"
 requires_python = ">=3.7"
 summary = "Backport of PEP 654 (exception groups)"
-groups = ["test"]
-marker = "python_version < \"3.11\""
 files = [
     {file = "exceptiongroup-1.2.0-py3-none-any.whl", hash = "sha256:4bfd3996ac73b41e9b9628b04e079f193850720ea5945fc96a08633c66912f14"},
     {file = "exceptiongroup-1.2.0.tar.gz", hash = "sha256:91f5c769735f051a4290d52edd0858999b57e5876e9f85937691bd4c9fa3ed68"},
@@ -283,7 +265,6 @@ name = "idna"
 version = "3.6"
 requires_python = ">=3.5"
 summary = "Internationalized Domain Names in Applications (IDNA)"
-groups = ["default"]
 files = [
     {file = "idna-3.6-py3-none-any.whl", hash = "sha256:c05567e9c24a6b9faaa835c4821bad0590fbb9d5779e7caa6e1cc4978e7eb24f"},
     {file = "idna-3.6.tar.gz", hash = "sha256:9ecdbbd083b06798ae1e86adcbfe8ab1479cf864e4ee30fe4e46a003d12491ca"},
@@ -294,7 +275,6 @@ name = "importlib-metadata"
 version = "7.0.1"
 requires_python = ">=3.8"
 summary = "Read metadata from Python packages"
-groups = ["default"]
 dependencies = [
     "zipp>=0.5",
 ]
@@ -304,26 +284,10 @@ files = [
 ]
 
 [[package]]
-name = "importlib-resources"
-version = "6.1.2"
-requires_python = ">=3.8"
-summary = "Read resources from Python packages"
-groups = ["default"]
-marker = "python_version < \"3.9\""
-dependencies = [
-    "zipp>=3.1.0; python_version < \"3.10\"",
-]
-files = [
-    {file = "importlib_resources-6.1.2-py3-none-any.whl", hash = "sha256:9a0a862501dc38b68adebc82970140c9e4209fc99601782925178f8386339938"},
-    {file = "importlib_resources-6.1.2.tar.gz", hash = "sha256:308abf8474e2dba5f867d279237cd4076482c3de7104a40b41426370e891549b"},
-]
-
-[[package]]
 name = "iniconfig"
 version = "2.0.0"
 requires_python = ">=3.7"
 summary = "brain-dead simple config-ini parsing"
-groups = ["test"]
 files = [
     {file = "iniconfig-2.0.0-py3-none-any.whl", hash = "sha256:b6a85871a79d2e3b22d2d1b94ac2824226a63c6b741c88f7ae975f18b6778374"},
     {file = "iniconfig-2.0.0.tar.gz", hash = "sha256:2d91e135bf72d31a410b17c16da610a82cb55f6b0477d1a902134b24a455b8b3"},
@@ -334,7 +298,6 @@ name = "jinja2"
 version = "3.1.3"
 requires_python = ">=3.7"
 summary = "A very fast and expressive template engine."
-groups = ["default"]
 dependencies = [
     "MarkupSafe>=2.0",
 ]
@@ -348,11 +311,8 @@ name = "jsonschema"
 version = "4.17.3"
 requires_python = ">=3.7"
 summary = "An implementation of JSON Schema validation for Python"
-groups = ["default"]
 dependencies = [
     "attrs>=17.4.0",
-    "importlib-resources>=1.4.0; python_version < \"3.9\"",
-    "pkgutil-resolve-name>=1.3.10; python_version < \"3.9\"",
     "pyrsistent!=0.17.0,!=0.17.1,!=0.17.2,>=0.14.0",
 ]
 files = [
@@ -365,7 +325,6 @@ name = "markupsafe"
 version = "2.1.5"
 requires_python = ">=3.7"
 summary = "Safely add untrusted strings to HTML/XML markup."
-groups = ["default"]
 files = [
     {file = "MarkupSafe-2.1.5-cp310-cp310-macosx_10_9_universal2.whl", hash = "sha256:a17a92de5231666cfbe003f0e4b9b3a7ae3afb1ec2845aadc2bacc93ff85febc"},
     {file = "MarkupSafe-2.1.5-cp310-cp310-macosx_10_9_x86_64.whl", hash = "sha256:72b6be590cc35924b02c78ef34b467da4ba07e4e0f0454a2c5907f473fc50ce5"},
@@ -425,22 +384,9 @@ name = "packaging"
 version = "23.2"
 requires_python = ">=3.7"
 summary = "Core utilities for Python packages"
-groups = ["test"]
 files = [
     {file = "packaging-23.2-py3-none-any.whl", hash = "sha256:8c491190033a9af7e1d931d0b5dacc2ef47509b34dd0de67ed209b5203fc88c7"},
     {file = "packaging-23.2.tar.gz", hash = "sha256:048fb0e9405036518eaaf48a55953c750c11e1a1b68e0dd1a9d62ed0c092cfc5"},
-]
-
-[[package]]
-name = "pkgutil-resolve-name"
-version = "1.3.10"
-requires_python = ">=3.6"
-summary = "Resolve a name to an object."
-groups = ["default"]
-marker = "python_version < \"3.9\""
-files = [
-    {file = "pkgutil_resolve_name-1.3.10-py3-none-any.whl", hash = "sha256:ca27cc078d25c5ad71a9de0a7a330146c4e014c2462d9af19c6b828280649c5e"},
-    {file = "pkgutil_resolve_name-1.3.10.tar.gz", hash = "sha256:357d6c9e6a755653cfd78893817c0853af365dd51ec97f3d358a819373bbd174"},
 ]
 
 [[package]]
@@ -448,7 +394,6 @@ name = "platformdirs"
 version = "4.2.0"
 requires_python = ">=3.8"
 summary = "A small Python package for determining appropriate platform-specific dirs, e.g. a \"user data dir\"."
-groups = ["default"]
 files = [
     {file = "platformdirs-4.2.0-py3-none-any.whl", hash = "sha256:0614df2a2f37e1a662acbd8e2b25b92ccf8632929bc6d43467e17fe89c75e068"},
     {file = "platformdirs-4.2.0.tar.gz", hash = "sha256:ef0cc731df711022c174543cb70a9b5bd22e5a9337c8624ef2c2ceb8ddad8768"},
@@ -459,7 +404,6 @@ name = "pluggy"
 version = "1.4.0"
 requires_python = ">=3.8"
 summary = "plugin and hook calling mechanisms for python"
-groups = ["test"]
 files = [
     {file = "pluggy-1.4.0-py3-none-any.whl", hash = "sha256:7db9f7b503d67d1c5b95f59773ebb58a8c1c288129a88665838012cfb07b8981"},
     {file = "pluggy-1.4.0.tar.gz", hash = "sha256:8c85c2876142a764e5b7548e7d9a0e0ddb46f5185161049a79b7e974454223be"},
@@ -470,7 +414,6 @@ name = "pyrsistent"
 version = "0.20.0"
 requires_python = ">=3.8"
 summary = "Persistent/Functional/Immutable data structures"
-groups = ["default"]
 files = [
     {file = "pyrsistent-0.20.0-cp310-cp310-macosx_10_9_universal2.whl", hash = "sha256:8c3aba3e01235221e5b229a6c05f585f344734bd1ad42a8ac51493d74722bbce"},
     {file = "pyrsistent-0.20.0-cp310-cp310-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:c1beb78af5423b879edaf23c5591ff292cf7c33979734c99aa66d5914ead880f"},
@@ -511,7 +454,6 @@ name = "pytest"
 version = "7.2.2"
 requires_python = ">=3.7"
 summary = "pytest: simple powerful testing with Python"
-groups = ["test"]
 dependencies = [
     "attrs>=19.2.0",
     "colorama; sys_platform == \"win32\"",
@@ -531,7 +473,6 @@ name = "pyvcd"
 version = "0.4.0"
 requires_python = ">=3.7"
 summary = "Python VCD file support"
-groups = ["default"]
 files = [
     {file = "pyvcd-0.4.0-py2.py3-none-any.whl", hash = "sha256:a21b10e5018b7940c8f2c20ef83d97496e86f15e215afed134ee115166035e17"},
     {file = "pyvcd-0.4.0.tar.gz", hash = "sha256:31be3f501441a9b8c5dc72660ff7b9cfef9b43b2121a23d96f586d2863270290"},
@@ -542,7 +483,6 @@ name = "requests"
 version = "2.30.0"
 requires_python = ">=3.7"
 summary = "Python HTTP for Humans."
-groups = ["default"]
 dependencies = [
     "certifi>=2017.4.17",
     "charset-normalizer<4,>=2",
@@ -559,7 +499,6 @@ name = "tomli"
 version = "2.0.1"
 requires_python = ">=3.7"
 summary = "A lil' TOML parser"
-groups = ["default", "test"]
 files = [
     {file = "tomli-2.0.1-py3-none-any.whl", hash = "sha256:939de3e7a6161af0c887ef91b7d41a53e7c5a1ca976325f429cb46ea9bc30ecc"},
     {file = "tomli-2.0.1.tar.gz", hash = "sha256:de526c12914f0c550d15924c62d72abc48d6fe7364aa87328337a31007fe8a4f"},
@@ -570,7 +509,6 @@ name = "urllib3"
 version = "2.2.1"
 requires_python = ">=3.8"
 summary = "HTTP library with thread-safe connection pooling, file post, and more."
-groups = ["default"]
 files = [
     {file = "urllib3-2.2.1-py3-none-any.whl", hash = "sha256:450b20ec296a467077128bff42b73080516e71b56ff59a60a02bef2232c4fa9d"},
     {file = "urllib3-2.2.1.tar.gz", hash = "sha256:d0570876c61ab9e520d776c38acbbb5b05a776d3f9ff98a5c8fd5162a444cf19"},
@@ -581,7 +519,6 @@ name = "wasmtime"
 version = "18.0.0"
 requires_python = ">=3.8"
 summary = "A WebAssembly runtime powered by Wasmtime"
-groups = ["default"]
 files = [
     {file = "wasmtime-18.0.0-py3-none-any.whl", hash = "sha256:0bdb0aa5f742d457efe39e1c494a26b8c26718aea90aeae15680ff2bae9ff06e"},
     {file = "wasmtime-18.0.0-py3-none-macosx_10_13_x86_64.whl", hash = "sha256:543435f24dd951ac9145481a2f61c9416bea149c4879ed174af9b0d1bae1d5e8"},
@@ -595,7 +532,6 @@ files = [
 name = "yowasp-nextpnr-ecp5"
 version = "0.7.0.11.post528.dev0"
 summary = "nextpnr-ecp5 FPGA place and route tool"
-groups = ["default"]
 dependencies = [
     "yowasp-runtime~=1.1",
 ]
@@ -608,9 +544,7 @@ name = "yowasp-runtime"
 version = "1.52"
 requires_python = "~=3.8"
 summary = "Common runtime for YoWASP packages"
-groups = ["default"]
 dependencies = [
-    "importlib-resources; python_version < \"3.9\"",
     "platformdirs<5,>=3.0",
     "wasmtime<19,>=1.0",
 ]
@@ -622,10 +556,8 @@ files = [
 name = "yowasp-yosys"
 version = "0.38.0.92.post687.dev0"
 summary = "Yosys Open SYnthesis Suite"
-groups = ["default"]
 dependencies = [
     "click",
-    "importlib-resources; python_version < \"3.9\"",
     "yowasp-runtime~=1.12",
 ]
 files = [
@@ -637,7 +569,6 @@ name = "ziglang"
 version = "0.11.0"
 requires_python = "~=3.5"
 summary = "       Zig is a general-purpose programming language and toolchain for\nmaintaining robust, optimal, and reusable software."
-groups = ["default"]
 files = [
     {file = "ziglang-0.11.0-py3-none-macosx_10_9_x86_64.whl", hash = "sha256:bd046eeab97ad51048575768f6dae10468b3a4449f4467ed61dae621faf6ee55"},
     {file = "ziglang-0.11.0-py3-none-macosx_11_0_arm64.whl", hash = "sha256:038b95cac9adef0c6dce9b72bdad895a0e4e0654c77c4a8f84fe79d2909a366e"},
@@ -653,7 +584,6 @@ name = "zipp"
 version = "3.17.0"
 requires_python = ">=3.8"
 summary = "Backport of pathlib-compatible object wrapper for zip files"
-groups = ["default"]
 files = [
     {file = "zipp-3.17.0-py3-none-any.whl", hash = "sha256:0e923e726174922dce09c53c59ad483ff7bbb8e572e00c7f7c46b88556409f31"},
     {file = "zipp-3.17.0.tar.gz", hash = "sha256:84e64a1c28cf7e91ed2078bb8cc8c259cb19b76942096c8d7b84947690cabaf0"},
