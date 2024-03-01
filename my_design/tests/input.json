@@ -4,6 +4,9 @@
         { "type": "action", "peripheral": "gpio_1", "event": "set", "payload": "00111100"},
         { "type": "wait", "peripheral": "uart_0", "event": "tx", "payload": 51},
         { "type": "wait", "peripheral": "uart_0", "event": "tx", "payload": 67},
-        { "type": "action", "peripheral": "gpio_1", "event": "set", "payload": "01010101"}
+        { "type": "action", "peripheral": "gpio_1", "event": "set", "payload": "01010101"},
+        { "type": "action", "peripheral": "uart_1", "event": "tx", "payload": 35},
+        { "type": "wait", "peripheral": "uart_0", "event": "tx", "payload": 35},
+        { "type": "action", "peripheral": "uart_1", "event": "tx", "payload": 42}
     ]
 }

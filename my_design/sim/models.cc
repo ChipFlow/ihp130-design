@@ -222,32 +222,56 @@ void spiflash_model::step(unsigned timestamp) {
 // UART
 
 void uart_model::step(unsigned timestamp) {
-    if (s.counter == 0) {
+
+    for (auto action : get_pending_actions(name)) {
+        if (action.event == "tx") {
+            s.tx_active = true;
+            s.tx_data = uint8_t(action.payload);
+        }
+    }
+
+    if (s.rx_counter == 0) {
         if (s.tx_last && !tx) { // start bit
-            s.counter = 1;
+            s.rx_counter = 1;
         }
     } else {
-        ++s.counter;
-        if (s.counter > (baud_div / 2) && ((s.counter - (baud_div / 2)) % baud_div) == 0) {
-            int bit = ((s.counter - (baud_div / 2)) / baud_div);
+        ++s.rx_counter;
+        if (s.rx_counter > (baud_div / 2) && ((s.rx_counter - (baud_div / 2)) % baud_div) == 0) {
+            int bit = ((s.rx_counter - (baud_div / 2)) / baud_div);
             if (bit >= 1 && bit <= 8) {
                 // update shift register
-                s.sr = (tx ? 0x80U : 0x00U) | (s.sr >> 1U);
+                s.rx_sr = (tx ? 0x80U : 0x00U) | (s.rx_sr >> 1U);
             }
             if (bit == 8) {
                 // print to console
-                log_event(timestamp, name, "tx", json(s.sr));
+                log_event(timestamp, name, "tx", json(s.rx_sr));
                 if (name == "uart_0")
-                    fprintf(stderr, "%c", char(s.sr));
+                    fprintf(stderr, "%c", char(s.rx_sr));
             }
             if (bit == 9) {
                 // end
-                s.counter = 0;
+                s.rx_counter = 0;
             }
         }
     }
     s.tx_last = bool(tx);
-    rx.set(1); // idle
+
+    if (s.tx_active) {
+        ++s.tx_counter;
+        int bit = (s.tx_counter  / baud_div);
+        if (bit == 0) {
+            rx.set(0); // start
+        } else if (bit >= 1 && bit <= 8) {
+            rx.set((s.tx_data  >> (bit - 1)) & 0x1);
+        } else if (bit == 9) { // stop
+            rx.set(1);
+        } else {
+            s.tx_active = false;
+        }
+    } else {
+        s.tx_counter = 0;
+        rx.set(1); // idle
+    }
 }
 
 // GPIO

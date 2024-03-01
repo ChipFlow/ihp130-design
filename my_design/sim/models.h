@@ -74,8 +74,11 @@ private:
     // model state
     struct {
         bool tx_last;
-        int counter = 0;
-        uint8_t sr = 0;
+        int rx_counter = 0;
+        uint8_t rx_sr = 0;
+        bool tx_active = false;
+        int tx_counter = 0;
+        uint8_t tx_data = 0;
     } s;
 };
 

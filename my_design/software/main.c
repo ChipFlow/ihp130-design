@@ -2,6 +2,12 @@
 
 #include "generated/soc.h"
 
+char uart_getch_block(volatile uart_regs_t *uart) {
+	while (!uart->rx_avail)
+		;
+	return uart->rx_data;
+}
+
 void main() {
 	puts("🐱: nyaa~!\r\n");
 
@@ -34,6 +40,13 @@ void main() {
 	puts(" ");
 	puthex(GPIO_1->in);
 	puts("\n");
+
+	puts("UART1: ");
+	putc(uart_getch_block(UART_1));
+	puts(" ");
+	putc(uart_getch_block(UART_1));
+	puts("\n");
+
 
 	while (1) {
 		// // Listen for button presses
