@@ -9,7 +9,7 @@ def main():
     assert len(gold["events"]) == len(gate["events"]), f"mismatch: {len(gold['events'])} events in reference, {len(gate['events'])} in test output"
     for ev_gold, ev_gate in zip(gold["events"], gate["events"]):
         for field in ("peripheral", "event", "payload"):
-            assert ev_gold["peripheral"] == ev_gate["peripheral"] or ev_gold["event"] != ev_gate["event"] or ev_gold["payload"] != ev_gate["payload"], \
+            assert ev_gold["peripheral"] == ev_gate["peripheral"] and ev_gold["event"] == ev_gate["event"] and ev_gold["payload"] == ev_gate["payload"], \
                 f"reference event {ev_gold} mismatches test event {ev_gate} beyond timestamp"
     print("Event logs are identical")
 

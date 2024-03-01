@@ -17,8 +17,9 @@ void main() {
 
 	puts("SoC type: ");
 	puthex(SOC_ID->type);
-	puts(" ");
-	puthex(SOC_ID->version);
+	// This would make the golden reference output change every commit
+	// puts(" ");
+	// puthex(SOC_ID->version);
 	puts("\r\n");
 
 	GPIO_1->oe = 0xF0;
