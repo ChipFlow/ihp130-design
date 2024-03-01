@@ -315,7 +315,7 @@ struct agent_server_state {
   // the server, valid only in the paused state.
   time next_sample_time;
   // Timestamp at which the simulation should be paused. Set by the server, read by the agent.
-  time run_until_time;
+  time run_until_time = cxxrtl::time::maximum();
   // Diagnostics at which the simulation should be paused. Set by the server, read by the agent.
   uint32_t run_until_diagnostics = 0;
   // Cause of the simulation being paused by the agent. Set by the agent, read by the server.
@@ -1063,13 +1063,13 @@ class server {
 
 public:
   // A helper function used to create and run the server in a new thread.
-  static void start(agent_server_state &shared_state, spool &&spool, LinkT &&link = LinkT(), std::string toplevel_scope = "") {
+  static void start(agent_server_state &shared_state, spool &&spool, LinkT &&link, std::string top_path) {
     // Wait until the initial state is available before starting the server.
     {
       std::unique_lock<std::mutex> lock(shared_state.mutex);
       shared_state.condvar.wait(lock, [&] { return shared_state.status != simulation_status::initializing; });
     }
-    server(shared_state, std::move(spool), std::move(link), toplevel_scope).run();
+    server(shared_state, std::move(spool), std::move(link), top_path).run();
   }
 };
 
@@ -1078,30 +1078,27 @@ public:
 // The agent is embedded in the user defined stimulus code and exists to track timeline advancement. It reports current
 // simulation time to the server, and checks whether the simulation should be paused or reset according to the server.
 
-template<class LinkT, class ModuleT>
+template<class ModuleT>
 class agent {
-  std::string link_uri;
-
   // Simulation state.
-  ModuleT toplevel;
-  debug_items debug_items;
+  ModuleT &toplevel;
   recorder recorder;
 
   // Server state.
-  agent_server_state shared_state; // must be initialized before `thread`
-  std::thread thread;
+  spool spool;          // moved into `thread` by `start_debug`
+  std::string top_path; // moved into `thread` by `start_debug`
+  std::thread thread;   // initialized by `start_debug`
+  agent_server_state shared_state;
 
 public:
-  agent(spool &&spool, LinkT &&link = LinkT(), std::string top_path = "")
-    : link_uri(link.uri()),
-      recorder(spool),
-      thread(&server<LinkT, ModuleT>::start, std::ref(shared_state), std::move(spool), std::move(link), top_path) {
+  agent(class spool &&spool, ModuleT &toplevel, std::string top_path = "")
+    : toplevel(toplevel), recorder(spool), spool(std::move(spool)), top_path(top_path) {
     assert(top_path.empty() || top_path.back() == ' ');
+    debug_items debug_items;
     toplevel.debug_info(&debug_items, /*scopes=*/nullptr, top_path);
     recorder.start(debug_items);
   }
 
-  agent(agent &&) = delete;
   agent(const agent &) = delete;
   agent &operator=(const agent &) = delete;
 
@@ -1115,16 +1112,17 @@ public:
       thread.join();
   }
 
-  const std::string &get_link_uri() const {
-    return link_uri;
+  bool is_debugging() const {
+    return thread.get_id() != std::thread::id();
   }
 
-  ModuleT &get_toplevel() {
-    return toplevel;
-  }
-
-  struct debug_items &get_debug_items() {
-    return debug_items;
+  template<class LinkT = tcp_link>
+  std::string start_debug(LinkT &&link = LinkT()) {
+    assert(!is_debugging());
+    std::string uri = link.uri();
+    shared_state.run_until_time = cxxrtl::time(); // doesn't need synchronization (yet)
+    thread = std::thread(&server<LinkT, ModuleT>::start, std::ref(shared_state), std::move(spool), std::move(link), std::move(top_path));
+    return uri;
   }
 
   void advance(const time &delta) {
