@@ -5,15 +5,29 @@
 #include <string>
 #include <vector>
 #include <algorithm>
+#include <optional>
+
+#include "vendor/nlohmann/json.hpp"
+
 
 namespace cxxrtl_design {
 
 using namespace cxxrtl;
 
+using json = nlohmann::json;
+
 std::string stringf(const char *format, ...);
 
+struct action {
+    action(const std::string &event, const json &payload) : event(event), payload(payload) {};
+    std::string event;
+    json payload;
+};
+
 void open_event_log(const std::string &filename);
-void log_event(unsigned timestamp, const std::string &peripheral, const std::string &event_type, const std::string &payload);
+void open_input_commands(const std::string &filename);
+void log_event(unsigned timestamp, const std::string &peripheral, const std::string &event_type, json payload);
+std::vector<action> get_pending_actions(const std::string &peripheral);
 void close_event_log();
 
 struct spiflash_model {
@@ -73,6 +87,7 @@ struct gpio_model {
     void step(unsigned timestamp);
 
 private:
+    uint32_t input_data;
     const value<width> &o;
     const value<width> &oe;
     value<width> &i;

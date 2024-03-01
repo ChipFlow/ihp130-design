@@ -29,6 +29,12 @@ void main() {
 
 	uart_puts(UART_1, "ABCD");
 
+	puts("GPIO: ");
+	puthex(GPIO_1->in);
+	puts(" ");
+	puthex(GPIO_1->in);
+	puts("\n");
+
 	while (1) {
 		// // Listen for button presses
 		// next_buttons = BTN_GPIO->in;

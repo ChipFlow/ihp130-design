@@ -28,6 +28,7 @@ int main(int argc, char **argv) {
         std::cerr << "Waiting for debugger on " << agent.start_debug() << std::endl;
 
     open_event_log("events.json");
+    open_input_commands("../../my_design/tests/input.json");
 
     unsigned timestamp = 0;
     auto tick = [&]() {

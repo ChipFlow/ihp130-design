@@ -1,8 +1,12 @@
+#undef NDEBUG
+
 #include <cxxrtl/cxxrtl.h>
+#include <assert.h>
 #include <stdlib.h>
 #include <stdio.h>
 #include <fstream>
 #include <stdarg.h>
+#include <unordered_map>
 #include "models.h"
 
 namespace cxxrtl_design {
@@ -48,6 +52,35 @@ std::string stringf(const char *format, ...)
     return result;
 }
 
+// Action generation
+namespace {
+json input_cmds;
+size_t input_ptr = 0;
+std::unordered_map<std::string, std::vector<action>> queued_actions;
+
+// Update the queued_actions map
+void fetch_actions_into_queue() {
+    while (input_ptr < input_cmds.size()) {
+        auto &cmd = input_cmds.at(input_ptr);
+        if (cmd["type"] == "wait")
+            break;
+        if (cmd["type"] != "action")
+            throw std::out_of_range("invalid 'type' value for command");
+        queued_actions[cmd["peripheral"]].emplace_back(cmd["event"], cmd["payload"]);
+        ++input_ptr;
+    }
+}
+}
+
+void open_input_commands(const std::string &filename) {
+    std::ifstream f(filename);
+    if (!f) {
+        throw std::runtime_error("failed to open event log for writing!");
+    }
+    json data = json::parse(f);
+    input_cmds = data["commands"];
+}
+
 // Event logging
 
 static std::ofstream event_log;
@@ -59,19 +92,46 @@ void open_event_log(const std::string &filename) {
     }
     event_log << "{" << std::endl;
     event_log << "\"events\": [" << std::endl;
-
+    fetch_actions_into_queue();
 }
-void log_event(unsigned timestamp, const std::string &peripheral, const std::string &event_type, const std::string &payload) {
+
+void log_event(unsigned timestamp, const std::string &peripheral, const std::string &event_type, json payload) {
     static bool had_event = false;
+    // Note: we don't use the JSON library to serialise the output event overall, so we get a partial log
+    // even if the simulation crashes.
+    // But we use `json` objects as a container for complex payloads that can be compared with the action input
     if (had_event)
         event_log << "," << std::endl;
+    auto payload_str = payload.dump();
     event_log << stringf("{ \"timestamp\": %u, \"peripheral\": \"%s\", \"event\": \"%s\", \"payload\": %s }",
-        timestamp, peripheral.c_str(), event_type.c_str(), payload.c_str());
+        timestamp, peripheral.c_str(), event_type.c_str(), payload_str.c_str());
     had_event = true;
+    // Check if we have actions waiting on this
+    if (input_ptr < input_cmds.size()) {
+        const auto &cmd = input_cmds.at(input_ptr);
+        // fetch_actions_into_queue should never leave input_ptr sitting on an action
+        assert(cmd["type"] == "wait");
+        if (cmd["peripheral"] == peripheral && cmd["event"] == event_type && cmd["payload"] == payload) {
+            ++input_ptr;
+            fetch_actions_into_queue();
+        }
+    }
 }
+
+std::vector<action> get_pending_actions(const std::string &peripheral) {
+    std::vector<action> result;
+    if (queued_actions.count(peripheral))
+        std::swap(queued_actions.at(peripheral), result);
+    return result;
+}
+
 void close_event_log() {
     event_log << std::endl << "]" << std::endl;
     event_log << "}" << std::endl;
+    if (input_ptr != input_cmds.size()) {
+        fprintf(stderr, "WARNING: not all input actions were executed (%d/%d remain)!\n",
+             int(input_cmds.size()) - int(input_ptr), int(input_cmds.size()));
+    }
 }
 
 // SPI flash
@@ -176,7 +236,7 @@ void uart_model::step(unsigned timestamp) {
             }
             if (bit == 8) {
                 // print to console
-                log_event(timestamp, name, "tx", stringf("%u", s.sr));
+                log_event(timestamp, name, "tx", json(s.sr));
                 if (name == "uart_0")
                     fprintf(stderr, "%c", char(s.sr));
             }
@@ -195,17 +255,30 @@ void uart_model::step(unsigned timestamp) {
 void gpio_model::step(unsigned timestamp) {
     uint32_t o_value = o.get<uint32_t>();
     uint32_t oe_value = oe.get<uint32_t>();
+
+    for (auto action : get_pending_actions(name)) {
+        if (action.event == "set") {
+            auto bin = std::string(action.payload);
+            input_data = 0;
+            for (unsigned i = 0; i < width; i++) {
+                if (bin.at((width - 1) - i) == '1')
+                    input_data |= (1U << i);
+            }
+        }
+    }
+
     if (o_value != s.o_last || oe_value != s.oe_last) {
-        std::string formatted_value = "\"";
+        std::string formatted_value;
         for (int i = width - 1; i >= 0; i--) {
             if (oe_value & (1U << unsigned(i)))
                 formatted_value += (o_value & (1U << unsigned(i))) ? '1' : '0';
             else
                 formatted_value += 'Z';
         }
-        formatted_value += '"';
-        log_event(timestamp, name, "change", formatted_value);
+        log_event(timestamp, name, "change", json(formatted_value));
     }
+
+    i.set((input_data & ~oe_value) | (o_value & oe_value));
     s.o_last = o_value;
     s.oe_last = oe_value;
 }
