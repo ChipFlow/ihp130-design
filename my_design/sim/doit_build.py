@@ -8,7 +8,7 @@ SOURCE_DIR  = importlib.resources.files("my_design") / "sim"
 RUNTIME_DIR = importlib.resources.files("yowasp_yosys") / "share/include/backends/cxxrtl/runtime"
 
 ZIG_CXX  = f"{sys.executable} -m ziglang c++"
-CXXFLAGS = f"-Os -g -std=c++17 -Wno-array-bounds -Wno-shift-count-overflow -fbracket-depth=1024"
+CXXFLAGS = f"-O3 -g -std=c++17 -Wno-array-bounds -Wno-shift-count-overflow -fbracket-depth=1024"
 INCLUDES = f"-I {OUTPUT_DIR} -I {SOURCE_DIR}/vendor -I {RUNTIME_DIR}"
 
 
