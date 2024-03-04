@@ -307,5 +307,38 @@ void gpio_model::step(unsigned timestamp) {
     s.oe_last = oe_value;
 }
 
+// Generic SPI model
+void spi_model::step(unsigned timestamp) {
+    for (auto action : get_pending_actions(name)) {
+        if (action.event == "set_data") {
+            s.out_buffer = s.send_data = uint32_t(action.payload);
+        }
+        if (action.event == "set_width") {
+            s.width = uint32_t(action.payload);
+        }
+    }
+
+    if (csn && !s.last_csn) {
+        s.bit_count = 0;
+        s.in_buffer = 0;
+        s.out_buffer = s.send_data;
+        log_event(timestamp, name, "deselect", json(""));
+    } else if (!csn && s.last_csn) {
+        log_event(timestamp, name, "select", json(""));
+    } else if (clk && !s.last_clk && !csn) {
+        s.in_buffer = (s.in_buffer << 1U) | copi.bit(0);
+        s.out_buffer = s.out_buffer << 1U;
+        s.bit_count += 1;
+        if (s.bit_count == s.width) {
+            log_event(timestamp, name, "data", json(s.in_buffer));
+            s.bit_count = 0;
+        }
+    } else if (!clk && s.last_clk && !csn) {
+        cipo.set(((s.out_buffer >> (s.width - 1U)) & 0x1U));
+    }
+    s.last_clk = bool(clk);
+    s.last_csn = bool(csn);
+}
+
 
 }

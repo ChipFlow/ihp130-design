@@ -1,11 +1,19 @@
 #include <stdint.h>
-
 #include "generated/soc.h"
 
 char uart_getch_block(volatile uart_regs_t *uart) {
 	while (!uart->rx_avail)
 		;
 	return uart->rx_data;
+}
+
+uint32_t spi_xfer(volatile spi_regs_t *spi, uint32_t data, uint32_t width) {
+	spi->config = ((width - 1) << 3) | 0x06; // CS=1, SCK_EDGE=1, SCK_IDLE=0
+	spi->send_data = data << (32U - width);
+	while (!(spi->status & 0x1)) // wait for rx full
+		;
+	spi->config = ((width - 1) << 3) | 0x02; // CS=0, SCK_EDGE=1, SCK_IDLE=0
+	return spi->receive_data; 
 }
 
 void main() {
@@ -47,6 +55,17 @@ void main() {
 	putc(uart_getch_block(UART_1));
 	puts("\n");
 
+
+	puts("SPI: ");
+
+	USER_SPI_0->divider = 2;
+
+	// test 8 bit transfer
+	puthex(spi_xfer(USER_SPI_0, 0x5A, 8));
+	puts(" ");
+	// test an odd 21 bit transfer 
+	puthex(spi_xfer(USER_SPI_0, 0x123456, 21));
+	puts("\n");
 
 	while (1) {
 		// // Listen for button presses

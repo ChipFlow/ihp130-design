@@ -99,6 +99,31 @@ private:
     } s;
 };
 
+
+struct spi_model {
+    std::string name;
+    spi_model(const std::string &name, const value<1> &clk, const value<1> &csn, const value<1> &copi, value<1> &cipo) : 
+        name(name), clk(clk), csn(csn), copi(copi), cipo(cipo) {
+    };
+
+    void step(unsigned timestamp);
+
+private:
+    std::vector<uint8_t> data;
+    const value<1> &clk;
+    const value<1> &csn;
+    const value<1> &copi;
+    value<1> &cipo;
+    // model state
+    struct {
+        bool last_clk = false, last_csn = false;
+        int bit_count = 0;
+        uint32_t send_data = 0;
+        uint32_t width = 8;
+        uint32_t in_buffer = 0, out_buffer = 0;
+    } s;
+};
+
 }
 
 #endif

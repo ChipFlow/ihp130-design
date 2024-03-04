@@ -17,14 +17,9 @@ from amaranth_orchard.base.soc_id import SoCID
 
 from amaranth_cv32e40p.cv32e40p import CV32E40P, DebugModule
 
-__all__ = ["SPISignature", "I2CSignature", "MotorSignature", "MySoC"]
+from .ips.spi import SPISignature, SPIPeripheral
 
-SPISignature = wiring.Signature({
-    "sck_o": Out(1),
-    "mosi_o": Out(1),
-    "miso_i": In(1),
-    "csn_o": Out(1),
-})
+__all__ = ["I2CSignature", "MotorSignature", "MySoC"]
 
 I2CSignature = wiring.Signature({
     "scl_o": Out(1),
@@ -158,22 +153,15 @@ class MySoC(wiring.Component):
 
         # User SPI
         for i in range(self.user_spi_count):
-            # TODO: create a SPI peripheral and replace this GPIO
-            soft_spi_pins = GPIOPins(width=4)
-            user_spi = GPIOPeripheral(name=f"user_spi_{i}", pins=soft_spi_pins)
+            user_spi = SPIPeripheral(name=f"user_spi_{i}")
 
             base_addr = self.csr_user_spi_base + i * self.periph_offset
             csr_decoder.add(user_spi.bus, addr=base_addr  - self.csr_base)
-            sw.add_periph("gpio", f"USER_SPI_{i}", base_addr)
+            sw.add_periph("spi", f"USER_SPI_{i}", base_addr)
 
             # FIXME: These assignments will disappear once we have a relevant peripheral available
             spi_pins = getattr(self, f"user_spi_{i}")
-            m.d.comb += [
-                spi_pins.sck_o.eq(soft_spi_pins.o[0]),
-                spi_pins.mosi_o.eq(soft_spi_pins.o[1]),
-                soft_spi_pins.i[2].eq(spi_pins.miso_i),
-                spi_pins.csn_o.eq(soft_spi_pins.o[3])
-            ]
+            connect(m, flipped(spi_pins), user_spi.spi_pins)
 
             setattr(m.submodules, f"user_spi_{i}", user_spi)
 

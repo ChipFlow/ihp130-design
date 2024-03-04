@@ -23,6 +23,10 @@ int main(int argc, char **argv) {
     gpio_model gpio_0("gpio_0", top.p_gpio__0____o, top.p_gpio__0____oe, top.p_gpio__0____i);
     gpio_model gpio_1("gpio_1", top.p_gpio__1____o, top.p_gpio__1____oe, top.p_gpio__1____i);
 
+    spi_model spi_0("spi_0", top.p_user__spi__0____sck__o, top.p_user__spi__0____csn__o, top.p_user__spi__0____mosi__o, top.p_user__spi__0____miso__i);
+    spi_model spi_1("spi_1", top.p_user__spi__1____sck__o, top.p_user__spi__1____csn__o, top.p_user__spi__1____mosi__o, top.p_user__spi__1____miso__i);
+    spi_model spi_2("spi_2", top.p_user__spi__2____sck__o, top.p_user__spi__2____csn__o, top.p_user__spi__2____mosi__o, top.p_user__spi__2____miso__i);
+
     cxxrtl::agent agent(cxxrtl::spool("spool.bin"), top);
     if (getenv("DEBUG")) // can also be done when a condition is violated, etc
         std::cerr << "Waiting for debugger on " << agent.start_debugging() << std::endl;
@@ -40,6 +44,10 @@ int main(int argc, char **argv) {
 
         gpio_0.step(timestamp);
         gpio_1.step(timestamp);
+
+        spi_0.step(timestamp);
+        spi_1.step(timestamp);
+        spi_2.step(timestamp);
 
         top.p_clk.set(false);
         agent.step();

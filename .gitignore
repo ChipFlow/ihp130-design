@@ -17,3 +17,7 @@ __pycache__/
 
 # Amaranth build
 /build
+
+# testbenches
+*.vcd
+*.gtkw

@@ -12,7 +12,7 @@ CHIPFLOW_SOFTWARE_DIR = chipflow_lib.config.get_dir_software()
 BUILD_DIR = "./build/software"
 DESIGN_DIR = os.path.dirname(__file__) + "/.."
 RISCVCC = f"{sys.executable} -m ziglang cc -target riscv32-freestanding-musl"
-CINCLUDES = f"-I. -I{BUILD_DIR}"
+CINCLUDES = f"-I. -I{BUILD_DIR} -I{DESIGN_DIR}/software"
 LINKER_SCR = f"{BUILD_DIR}/generated/sections.lds"
 SOFTWARE_START = f"{BUILD_DIR}/generated/start.S"
 CFLAGS = f"-g -mcpu=generic_rv32+m+a -mabi=ilp32 -Wl,-Bstatic,-T,"
