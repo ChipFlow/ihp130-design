@@ -25,13 +25,15 @@ int main(int argc, char **argv) {
 
     cxxrtl::agent agent(cxxrtl::spool("spool.bin"), top);
     if (getenv("DEBUG")) // can also be done when a condition is violated, etc
-        std::cerr << "Waiting for debugger on " << agent.start_debug() << std::endl;
+        std::cerr << "Waiting for debugger on " << agent.start_debugging() << std::endl;
 
     open_event_log("events.json");
     open_input_commands("../../my_design/tests/input.json");
 
     unsigned timestamp = 0;
     auto tick = [&]() {
+        // agent.print(stringf("timestamp %d\n", timestamp), CXXRTL_LOCATION);
+
         flash.step(timestamp);
         uart_0.step(timestamp);
         uart_1.step(timestamp);
@@ -48,6 +50,9 @@ int main(int argc, char **argv) {
         agent.step();
         agent.advance(1_us);
         ++timestamp;
+
+        // if (timestamp == 10)
+        //     agent.breakpoint(CXXRTL_LOCATION);
     };
 
     flash.load_data("../software/software.bin", 0x00100000U);
