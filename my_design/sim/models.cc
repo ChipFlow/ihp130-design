@@ -340,5 +340,67 @@ void spi_model::step(unsigned timestamp) {
     s.last_csn = bool(csn);
 }
 
+// Generic I2C model
+void i2c_model::step(unsigned timestamp) {
+    bool sda = !bool(sda_oe), scl = !bool(scl_oe);
+
+    for (auto action : get_pending_actions(name)) {
+        if (action.event == "ack")
+            s.do_ack = true;
+        else if (action.event == "nack")
+            s.do_ack = false;
+        else if (action.event == "set_data")
+            s.read_data = uint32_t(action.payload);
+    }
+
+    if (s.last_scl && s.last_sda && !sda) {
+        // start
+        log_event(timestamp, name, "start", json(""));
+        s.sr = 0xFF;
+        s.byte_count = 0;
+        s.bit_count = 0;
+        s.is_read = false;
+        s.drive_sda = true;
+    } else if (scl && !s.last_scl) {
+        // SCL posedge
+        if (s.byte_count == 0 || !s.is_read) {
+            s.sr = (s.sr << 1) | (sda & 0x1);
+        }
+        s.bit_count += 1;
+        if (s.bit_count == 8) {
+            if (s.byte_count == 0) {
+                // address
+                s.is_read = (s.sr & 0x1);
+                log_event(timestamp, name, "address", json(s.sr));
+            } else if (!s.is_read) {
+                log_event(timestamp, name, "write", json(s.sr));
+            }
+            s.byte_count += 1;
+        } else if (s.bit_count == 9) {
+            s.bit_count = 0;
+        }
+    } else if (!scl && s.last_scl) {
+        // SCL negedge
+        s.drive_sda = true; // idle high
+        if (s.bit_count == 8) {
+            s.drive_sda = !s.do_ack;
+        } else if (s.byte_count > 0 && s.is_read) {
+            if (s.bit_count == 0) {
+                s.sr = s.read_data;
+            } else {
+                s.sr = s.sr << 1;
+            }
+            s.drive_sda = (s.sr >> 7) & 0x1;
+        }
+    } else if (s.last_scl && !s.last_sda && sda) {
+        log_event(timestamp, name, "stop", json(""));
+        s.drive_sda = true;
+    }
+ 
+    s.last_sda = sda;
+    s.last_scl = scl;
+    sda_i.set(sda && s.drive_sda);
+    scl_i.set(scl);
+}
 
 }

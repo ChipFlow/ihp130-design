@@ -18,17 +18,9 @@ from amaranth_orchard.base.soc_id import SoCID
 from amaranth_cv32e40p.cv32e40p import CV32E40P, DebugModule
 
 from .ips.spi import SPISignature, SPIPeripheral
+from .ips.i2c import I2CSignature, I2CPeripheral
 
-__all__ = ["I2CSignature", "MotorSignature", "MySoC"]
-
-I2CSignature = wiring.Signature({
-    "scl_o": Out(1),
-    "scl_oe": Out(1),
-    "scl_i": In(1),
-    "sda_o": Out(1),
-    "sda_oe": Out(1),
-    "sda_i": In(1),
-})
+__all__ = ["MotorSignature", "MySoC"]
 
 MotorSignature = wiring.Signature({
     "pwm_o": Out(1),
@@ -186,21 +178,14 @@ class MySoC(wiring.Component):
         # I2Cs
         for i in range(self.i2c_count):
             # TODO: create a I2C peripheral and replace this GPIO
-            soft_i2c_pins = GPIOPins(width=2)
-            i2c = GPIOPeripheral(name=f"i2c_{i}", pins=soft_i2c_pins)
+            i2c = I2CPeripheral(name=f"i2c_{i}")
 
             base_addr = self.csr_i2c_base + i * self.periph_offset
             csr_decoder.add(i2c.bus, addr=base_addr  - self.csr_base)
-            sw.add_periph("gpio", f"I2C_{i}", base_addr)
+            sw.add_periph("i2c", f"I2C_{i}", base_addr)
 
-            # FIXME: These assignments will disappear once we have a relevant peripheral available
             i2c_pins = getattr(self, f"i2c_{i}")
-            for j, pin in enumerate(("scl", "sda")):
-                m.d.comb += [
-                    getattr(i2c_pins, f"{pin}_o").eq(soft_i2c_pins.o[j]),
-                    getattr(i2c_pins, f"{pin}_oe").eq(soft_i2c_pins.oe[j]),
-                    soft_i2c_pins.i[j].eq(getattr(i2c_pins, f"{pin}_i"))
-                ]
+            connect(m, flipped(i2c_pins), i2c.i2c_pins)
 
             setattr(m.submodules, f"i2c_{i}", i2c)
 

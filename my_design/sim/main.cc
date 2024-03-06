@@ -27,6 +27,9 @@ int main(int argc, char **argv) {
     spi_model spi_1("spi_1", top.p_user__spi__1____sck__o, top.p_user__spi__1____csn__o, top.p_user__spi__1____mosi__o, top.p_user__spi__1____miso__i);
     spi_model spi_2("spi_2", top.p_user__spi__2____sck__o, top.p_user__spi__2____csn__o, top.p_user__spi__2____mosi__o, top.p_user__spi__2____miso__i);
 
+    i2c_model i2c_0("i2c_0", top.p_i2c__0____sda__oe, top.p_i2c__0____sda__i, top.p_i2c__0____scl__oe, top.p_i2c__0____scl__i);
+    i2c_model i2c_1("i2c_1", top.p_i2c__1____sda__oe, top.p_i2c__1____sda__i, top.p_i2c__1____scl__oe, top.p_i2c__1____scl__i);
+
     cxxrtl::agent agent(cxxrtl::spool("spool.bin"), top);
     if (getenv("DEBUG")) // can also be done when a condition is violated, etc
         std::cerr << "Waiting for debugger on " << agent.start_debugging() << std::endl;
@@ -48,6 +51,9 @@ int main(int argc, char **argv) {
         spi_0.step(timestamp);
         spi_1.step(timestamp);
         spi_2.step(timestamp);
+
+        i2c_0.step(timestamp);
+        i2c_1.step(timestamp);
 
         top.p_clk.set(false);
         agent.step();

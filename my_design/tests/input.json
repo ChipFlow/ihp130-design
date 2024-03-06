@@ -16,7 +16,15 @@
         { "type": "wait", "peripheral": "spi_0", "event": "deselect", "payload": ""},
 
         { "type": "action", "peripheral": "spi_0", "event": "set_width", "payload": 21},
-        { "type": "action", "peripheral": "spi_0", "event": "set_data", "payload": 773615}
+        { "type": "action", "peripheral": "spi_0", "event": "set_data", "payload": 773615},
+
+        { "type": "wait", "peripheral": "i2c_0", "event": "start", "payload": "" },
+        { "type": "wait", "peripheral": "i2c_0", "event": "address", "payload": 160 },
+        { "type": "action", "peripheral": "i2c_0", "event": "ack", "payload": ""},
+        { "type": "wait", "peripheral": "i2c_0", "event": "start", "payload": "" },
+        { "type": "wait", "peripheral": "i2c_0", "event": "address", "payload": 161 },
+        { "type": "action", "peripheral": "i2c_0", "event": "ack", "payload": ""},
+        { "type": "action", "peripheral": "i2c_0", "event": "set_data", "payload": 45}
 
     ]
 }

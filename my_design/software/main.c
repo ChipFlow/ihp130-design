@@ -16,6 +16,32 @@ uint32_t spi_xfer(volatile spi_regs_t *spi, uint32_t data, uint32_t width) {
 	return spi->receive_data; 
 }
 
+void i2c_start(volatile i2c_regs_t *i2c) {
+	i2c->action = (1<<1);
+	while (i2c->status & 0x1)
+		;
+}
+
+int i2c_write(volatile i2c_regs_t *i2c, uint8_t data) {
+	i2c->send_data = data;
+	while (i2c->status & 0x1)
+		;
+	return (i2c->status & 0x2) != 0; // check ACK
+}
+
+uint8_t i2c_read(volatile i2c_regs_t *i2c) {
+	i2c->action = (1<<3);
+	while (i2c->status & 0x1)
+		;
+	return i2c->receive_data;
+}
+
+void i2c_stop(volatile i2c_regs_t *i2c) {
+	i2c->action = (1<<2);
+	while (i2c->status & 0x1)
+		;
+}
+
 void main() {
 	puts("🐱: nyaa~!\r\n");
 
@@ -66,6 +92,20 @@ void main() {
 	// test an odd 21 bit transfer 
 	puthex(spi_xfer(USER_SPI_0, 0x123456, 21));
 	puts("\n");
+
+	I2C_0->divider = 2;
+
+	i2c_start(I2C_0);
+
+	puts("I2C: ");
+	putc(i2c_write(I2C_0, 0xA0) ? 'a' : 'n');
+	putc(i2c_write(I2C_0, 0x33) ? 'a' : 'n');
+	i2c_start(I2C_0);
+	putc(i2c_write(I2C_0, 0xA1) ? 'a' : 'n');
+	puts(" ");
+	puthex(i2c_read(I2C_0));
+	puts("\n");
+	i2c_stop(I2C_0);
 
 	while (1) {
 		// // Listen for button presses

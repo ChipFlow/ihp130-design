@@ -124,6 +124,31 @@ private:
     } s;
 };
 
+struct i2c_model {
+    std::string name;
+    i2c_model(const std::string &name, const value<1> &sda_oe, value<1> &sda_i, const value<1> &scl_oe, value<1> &scl_i) : name(name), sda_oe(sda_oe), sda_i(sda_i), scl_oe(scl_oe), scl_i(scl_i) {};
+
+    void step(unsigned timestamp);
+private:
+    const value<1> &sda_oe;
+    value<1> &sda_i;
+    const value<1> &scl_oe;
+    value<1> &scl_i;
+
+    // model state
+    struct {
+        int byte_count = 0;
+        int bit_count;
+        bool do_ack;
+        bool is_read;
+        uint8_t read_data;
+        uint8_t sr;
+        bool drive_sda = true;
+        bool last_sda, last_scl;
+    } s;
+};
+
+
 }
 
 #endif
