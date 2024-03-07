@@ -20,12 +20,20 @@ from amaranth_cv32e40p.cv32e40p import CV32E40P, DebugModule
 from .ips.spi import SPISignature, SPIPeripheral
 from .ips.i2c import I2CSignature, I2CPeripheral
 
-__all__ = ["MotorSignature", "MySoC"]
+__all__ = ["MotorSignature", "JTAGSignature", "MySoC"]
 
 MotorSignature = wiring.Signature({
     "pwm_o": Out(1),
     "dir_o": Out(1),
     "stop_i": In(1),
+})
+
+JTAGSignature = wiring.Signature({
+    "trst_i": In(1),
+    "tck_i": In(1),
+    "tms_i": In(1),
+    "tdi_i": In(1),
+    "tdo_o": Out(1),
 })
 
 # ---------
@@ -36,6 +44,7 @@ class MySoC(wiring.Component):
 
         interfaces = {
             "flash" : Out(QSPIPins.Signature()),
+            "cpu_jtag": Out(JTAGSignature)
         }
 
         self.user_spi_count = 3
@@ -124,6 +133,15 @@ class MySoC(wiring.Component):
         wb_arbiter.add(debug.initiator)
         wb_decoder.add(debug.target, addr=self.debug_base)
         m.d.comb += cpu.debug_req.eq(debug.debug_req)
+
+        m.d.comb += [
+            debug.jtag_tck.eq(self.cpu_jtag.tck_i),
+            debug.jtag_tms.eq(self.cpu_jtag.tms_i),
+            debug.jtag_tdi.eq(self.cpu_jtag.tdi_i),
+            debug.jtag_trst.eq(self.cpu_jtag.trst_i),
+            self.cpu_jtag.tdo_o.eq(debug.jtag_tdo),
+        ]
+        # TODO: TRST
 
         m.submodules.debug = debug
         # SPI flash

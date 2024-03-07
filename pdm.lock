@@ -36,7 +36,7 @@ version = "0.0.0"
 requires_python = ">=3.7,<4.0"
 git = "https://github.com/ChipFlow/amaranth-cv32e40p"
 ref = "main"
-revision = "d859a7589fa1ce7c85b8866af2617b9b60c02994"
+revision = "2840c37ff46dce7d0fee1cb355f84c6db6039ce4"
 summary = "CV32E40P and Amaranth Integration"
 dependencies = [
     "amaranth @ git+https://github.com/amaranth-lang/amaranth",
@@ -182,11 +182,11 @@ files = [
 
 [[package]]
 name = "chipflow-lib"
-version = "0.1.1.dev94+g91b072d"
+version = "0.1.1.dev95+ge26e417"
 requires_python = "~=3.8"
 git = "https://github.com/ChipFlow/chipflow-lib.git"
 ref = "main"
-revision = "91b072d971085088a8bbda2e3e66ac08e59c76aa"
+revision = "e26e417ea7b6399906b81bf88a7b4183644e46c9"
 summary = "ChipFlow common tools."
 dependencies = [
     "amaranth @ git+https://github.com/amaranth-lang/amaranth",

@@ -1,9 +1,7 @@
-# SPDX-License-Identifier: BSD-2-Clause
-
 from chipflow_lib.steps.silicon import SiliconStep
-from ..design import MySoC
-
+from ._chipflow_top import ChipflowTop
 
 class MySiliconStep(SiliconStep):
     def prepare(self):
-        raise NotImplemented
+        return self.platform.build(ChipflowTop(), name="testchip_top")
+
