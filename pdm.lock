@@ -5,7 +5,7 @@
 groups = ["default", "test"]
 strategy = ["cross_platform"]
 lock_version = "4.4"
-content_hash = "sha256:0329cb06129fd849331444d5e4d1b53ca082b2d8583ecd778bceac3d1858fcbc"
+content_hash = "sha256:4391be57764b796d02e3f731b589eac438a79c55bc2093258f45592f8d8d6702"
 
 [[package]]
 name = "amaranth"
@@ -227,6 +227,38 @@ files = [
 ]
 
 [[package]]
+name = "cocotb"
+version = "1.8.1"
+requires_python = ">=3.6"
+summary = "cocotb is a coroutine based cosimulation library for writing VHDL and Verilog testbenches in Python."
+dependencies = [
+    "find-libpython",
+]
+files = [
+    {file = "cocotb-1.8.1-cp310-cp310-macosx_10_9_x86_64.whl", hash = "sha256:06ae2b2d899095ee4fd4f9604e0fd3706102ef681659f8dc68e4faf6d990d89f"},
+    {file = "cocotb-1.8.1-cp310-cp310-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:f8d642e1106750a519c015c651ec94a5d9008da0a29d39b2d073206bd60ce452"},
+    {file = "cocotb-1.8.1-cp310-cp310-manylinux_2_5_i686.manylinux1_i686.manylinux_2_17_i686.manylinux2014_i686.whl", hash = "sha256:de9d329e747048ae8d9c08794cc2ee48850b13c387d647227ff76ac2df184fcb"},
+    {file = "cocotb-1.8.1-cp310-cp310-win32.whl", hash = "sha256:87cb47d81d6c55f64662512dda8088e5f430740a42feaa67f7b8e10bd249c02c"},
+    {file = "cocotb-1.8.1-cp310-cp310-win_amd64.whl", hash = "sha256:8b0643be8b1dee02453233a40ad94919f5781bcb08893689c99b9c7ab08695f3"},
+    {file = "cocotb-1.8.1-cp311-cp311-macosx_10_9_x86_64.whl", hash = "sha256:708cb6fcb2ee00fe80bd45a03f2a202980d2b563dcb064c2f3c904c84e87e2b1"},
+    {file = "cocotb-1.8.1-cp311-cp311-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:4a6d3d824c746410da8f294c34dcca820f1350c1639cafb4b6394844a07f7371"},
+    {file = "cocotb-1.8.1-cp311-cp311-manylinux_2_5_i686.manylinux1_i686.manylinux_2_17_i686.manylinux2014_i686.whl", hash = "sha256:a3a9e442211691a3602dd8cce288e9b66f2bab220bc01d1b17e5f30db4a9622c"},
+    {file = "cocotb-1.8.1-cp311-cp311-win32.whl", hash = "sha256:7d47c3aa3432575eb26f6783ef7832a6db873265fd40a89ade22599e59a784f6"},
+    {file = "cocotb-1.8.1-cp311-cp311-win_amd64.whl", hash = "sha256:9ffebe392a4f0cb757ccea51d4902db9abc537e57b9151c5ecc8b4f898ec7817"},
+    {file = "cocotb-1.8.1-cp312-cp312-macosx_10_9_x86_64.whl", hash = "sha256:9d70978a5c587fc26c66c3f0e8a5bc0545a70397cbfd15b342685fed38959fc1"},
+    {file = "cocotb-1.8.1-cp312-cp312-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:5692e56925de8d71ce8d379bd80a2e103fe0fba1e0c4c3b539b10eafe22fb6c1"},
+    {file = "cocotb-1.8.1-cp312-cp312-manylinux_2_5_i686.manylinux1_i686.manylinux_2_17_i686.manylinux2014_i686.whl", hash = "sha256:4cbfb462315b12f157381c388f3ab5a074c0293e54852f8851152bf295bf6807"},
+    {file = "cocotb-1.8.1-cp312-cp312-win32.whl", hash = "sha256:ac5fa8f47613c1487156d20fb09d4679566572922971ea922ec5acec38629fa9"},
+    {file = "cocotb-1.8.1-cp312-cp312-win_amd64.whl", hash = "sha256:b9e7a09d0f76115f02d9c957110d5970e759c2bc8d1d5a448716ed3a67a66367"},
+    {file = "cocotb-1.8.1-cp39-cp39-macosx_10_9_x86_64.whl", hash = "sha256:cbe760f6a0869140a7fa2124c295e2a4299300f0f839017e6b43ab4490bbc522"},
+    {file = "cocotb-1.8.1-cp39-cp39-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:d2a05df85a5259654d2c10cc0ac8ad877b6ca986fb559a911a9207bcdbc887fd"},
+    {file = "cocotb-1.8.1-cp39-cp39-manylinux_2_5_i686.manylinux1_i686.manylinux_2_17_i686.manylinux2014_i686.whl", hash = "sha256:59cb5e35533b28301e1ff1858aabe1d6bac4305536d5fc40edb188dfda42e0ae"},
+    {file = "cocotb-1.8.1-cp39-cp39-win32.whl", hash = "sha256:2824f26d15713056de44507017f88189419cf7b68252cedbdbed272ee753917f"},
+    {file = "cocotb-1.8.1-cp39-cp39-win_amd64.whl", hash = "sha256:797044b85d5efc56bad7ff789f1811990e67de22fbec614ac37009a9aa608ce5"},
+    {file = "cocotb-1.8.1.tar.gz", hash = "sha256:1499dbe0d4d10676bc9b234861e1df171a7f02aca6b696b5fadf01fe61e3a4f6"},
+]
+
+[[package]]
 name = "colorama"
 version = "0.4.6"
 requires_python = "!=3.0.*,!=3.1.*,!=3.2.*,!=3.3.*,!=3.4.*,!=3.5.*,!=3.6.*,>=2.7"
@@ -258,6 +290,15 @@ summary = "Backport of PEP 654 (exception groups)"
 files = [
     {file = "exceptiongroup-1.2.0-py3-none-any.whl", hash = "sha256:4bfd3996ac73b41e9b9628b04e079f193850720ea5945fc96a08633c66912f14"},
     {file = "exceptiongroup-1.2.0.tar.gz", hash = "sha256:91f5c769735f051a4290d52edd0858999b57e5876e9f85937691bd4c9fa3ed68"},
+]
+
+[[package]]
+name = "find-libpython"
+version = "0.3.1"
+summary = "Finds the libpython associated with your environment, wherever it may be hiding"
+files = [
+    {file = "find_libpython-0.3.1-py3-none-any.whl", hash = "sha256:f63c2c05b9c6077bfafa5c7b283547b918a54c17fd930ceead487d1f220ff9cb"},
+    {file = "find_libpython-0.3.1.tar.gz", hash = "sha256:4dd75e54c0828cfa8e97287565d2499a6bd6216140afdf251c87a456e8e52cd3"},
 ]
 
 [[package]]
@@ -466,6 +507,19 @@ dependencies = [
 files = [
     {file = "pytest-7.2.2-py3-none-any.whl", hash = "sha256:130328f552dcfac0b1cec75c12e3f005619dc5f874f0a06e8ff7263f0ee6225e"},
     {file = "pytest-7.2.2.tar.gz", hash = "sha256:c99ab0c73aceb050f68929bc93af19ab6db0558791c6a0715723abe9d0ade9d4"},
+]
+
+[[package]]
+name = "pyuvm"
+version = "2.9.1"
+requires_python = ">=3.6"
+summary = "A Python implementation of the UVM using cocotb"
+dependencies = [
+    "cocotb>=1.6.0",
+]
+files = [
+    {file = "pyuvm-2.9.1-py3-none-any.whl", hash = "sha256:d988a3e8326a74f610bef381ab3a9bd21e3a30e5e48d1852fa134de3811c9346"},
+    {file = "pyuvm-2.9.1.tar.gz", hash = "sha256:d9377ead1b20ca0c19ee21d8ecbcdf411949d28c49e3d5119f803e12069e2aea"},
 ]
 
 [[package]]

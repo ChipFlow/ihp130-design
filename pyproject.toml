@@ -15,6 +15,7 @@ requires-python = "~=3.9"
 dependencies = [
   "chipflow-lib @ git+https://github.com/ChipFlow/chipflow-lib.git@main",
   "amaranth-cv32e40p @ git+https://github.com/ChipFlow/amaranth-cv32e40p@main",
+  "pyuvm~=2.9.1",
   "ziglang==0.11.0",
 ]
 

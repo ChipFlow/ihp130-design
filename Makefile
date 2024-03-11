@@ -30,6 +30,11 @@ sim-run: sim-build software-build
 sim-check: sim-run
 	pdm run python -m my_design.tools.json_compare my_design/tests/events_reference.json build/sim/events.json
 
+.PHONY: verif-run-pyuvm
+verif-run-pyuvm: init
+	YOSYS=yowasp-yosys pdm run chipflow export --dir pyuvm_verif/verilog
+	pdm run make -C pyuvm_verif -j4
+
 .PHONY: silicon-prepare # Build RTLIL for the design
 silicon-prepare:
 	pdm run chipflow silicon prepare
