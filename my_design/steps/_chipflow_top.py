@@ -49,7 +49,7 @@ class ChipflowTop(Elaboratable):
         _connect_interface(soc.i2c_1, "i2c1")
 
         for pwm_idx in range(10):
-            _connect_interface(getattr(soc, f"motor_{pwm_idx}"), f"motor_pwm{pwm_idx}")
+            _connect_interface(getattr(soc, f"motor_pwm{pwm_idx}"), f"motor_pwm{pwm_idx}")
 
         for ao_idx in range(6):
             m.d.comb += platform.request(f"pdm_ao_{ao_idx}").o.eq(soc.pdm_ao[ao_idx])

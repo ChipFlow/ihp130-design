@@ -19,14 +19,9 @@ from amaranth_cv32e40p.cv32e40p import CV32E40P, DebugModule
 
 from .ips.spi import SPISignature, SPIPeripheral
 from .ips.i2c import I2CSignature, I2CPeripheral
+from .ips.pwm import PWMPins, PWMPeripheral
 
-__all__ = ["MotorSignature", "JTAGSignature", "MySoC"]
-
-MotorSignature = wiring.Signature({
-    "pwm_o": Out(1),
-    "dir_o": Out(1),
-    "stop_i": In(1),
-})
+__all__ = ["JTAGSignature", "MySoC"]
 
 JTAGSignature = wiring.Signature({
     "trst_i": In(1),
@@ -63,7 +58,7 @@ class MySoC(wiring.Component):
             interfaces[f"i2c_{i}"] = Out(I2CSignature)
 
         for i in range(self.motor_count):
-            interfaces[f"motor_{i}"] = Out(MotorSignature)
+            interfaces[f"motor_pwm{i}"] = Out(PWMPins.Signature())
 
         interfaces[f"pdm_ao"] = Out(self.pdm_ao_width)
 
@@ -96,6 +91,7 @@ class MySoC(wiring.Component):
         self.csr_pdm_ao_base   = 0xb8000000
 
         self.periph_offset    = 0x00100000
+        self.motor_offset     = 0x00000100
 
         self.sram_size  = 0x800 # 2KiB
         self.bios_start = 0x100000 # 1MiB into spiflash to make room for a bitstream
@@ -207,25 +203,15 @@ class MySoC(wiring.Component):
 
             setattr(m.submodules, f"i2c_{i}", i2c)
 
+            
         # Motor drivers
         for i in range(self.motor_count):
-            # TODO: create a PWM peripheral and replace this GPIO
-            soft_motor_pins = GPIOPins(width=3)
-            pwm = GPIOPeripheral(name=f"motor_pwm_{i}", pins=soft_motor_pins)
-
-            base_addr = self.csr_motor_base + i * self.periph_offset
-            csr_decoder.add(pwm.bus, addr=base_addr  - self.csr_base)
-            sw.add_periph("gpio", f"MOTOR_PWM_{i}", base_addr)
-
-            # FIXME: These assignments will disappear once we have a relevant peripheral available
-            motor_pins = getattr(self, f"motor_{i}")
-            m.d.comb += [
-                motor_pins.pwm_o.eq(soft_motor_pins.o[0]),
-                motor_pins.dir_o.eq(soft_motor_pins.o[1]),
-                soft_motor_pins.i[2].eq(motor_pins.stop_i),
-            ]
-
-            setattr(m.submodules, f"motor_pwm_{i}", pwm)
+            motor_pwm = PWMPeripheral(name=f"motor_pwm{i}", pins=getattr(self, f"motor_pwm{i}"))
+            base_addr = self.csr_motor_base + i * self.motor_offset
+            csr_decoder.add(motor_pwm.bus, addr=base_addr  - self.csr_base)
+        
+            sw.add_periph("motor_pwm", f"MOTOR_PWM{i}", base_addr)
+            setattr(m.submodules, f"motor_pwm{i}", motor_pwm)
 
         # PDM for analog outputs
         # TODO: create a PDM peripheral and replace this GPIO
@@ -276,6 +262,3 @@ if __name__ == "__main__":
     soc_top = MySoC()
     with open("build/soc_top.v", "w") as f:
         f.write(verilog.convert(soc_top, name="soc_top"))
-
-
-
