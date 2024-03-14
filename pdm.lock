@@ -4,15 +4,15 @@
 [metadata]
 groups = ["default", "test"]
 strategy = ["cross_platform"]
-lock_version = "4.4"
+lock_version = "4.4.1"
 content_hash = "sha256:4391be57764b796d02e3f731b589eac438a79c55bc2093258f45592f8d8d6702"
 
 [[package]]
 name = "amaranth"
-version = "0.5.0.dev134"
+version = "0.5.0.dev158"
 requires_python = "~=3.8"
 git = "https://github.com/amaranth-lang/amaranth"
-revision = "f8e2d26b8f366fe88980f485c03873b2e897bb6a"
+revision = "49dee891e870fa350ed95a042b0360540ba8c04e"
 summary = "Amaranth hardware definition language"
 dependencies = [
     "Jinja2~=3.0",
@@ -182,11 +182,11 @@ files = [
 
 [[package]]
 name = "chipflow-lib"
-version = "0.1.1.dev95+ge26e417"
+version = "0.1.1.dev96"
 requires_python = "~=3.8"
 git = "https://github.com/ChipFlow/chipflow-lib.git"
 ref = "main"
-revision = "e26e417ea7b6399906b81bf88a7b4183644e46c9"
+revision = "ca68b2e9e894b1539fae0e18e050e317877a6f05"
 summary = "ChipFlow common tools."
 dependencies = [
     "amaranth @ git+https://github.com/amaranth-lang/amaranth",
@@ -200,7 +200,7 @@ dependencies = [
     "tomli~=2.0.1",
     "yowasp-nextpnr-ecp5==0.7.0.11.post528.dev0",
     "yowasp-runtime",
-    "yowasp-yosys==0.38.0.92.post687.dev0",
+    "yowasp-yosys==0.39.0.0.post694",
 ]
 
 [[package]]
@@ -608,14 +608,14 @@ files = [
 
 [[package]]
 name = "yowasp-yosys"
-version = "0.38.0.92.post687.dev0"
+version = "0.39.0.0.post694"
 summary = "Yosys Open SYnthesis Suite"
 dependencies = [
     "click",
     "yowasp-runtime~=1.12",
 ]
 files = [
-    {file = "yowasp_yosys-0.38.0.92.post687.dev0-py3-none-any.whl", hash = "sha256:a5e82ac9bfc5a1c5bc5c675fb14db36e0826e2040ee5f34b71785350768dffa2"},
+    {file = "yowasp_yosys-0.39.0.0.post694-py3-none-any.whl", hash = "sha256:f4eaaa60a00dda98adf4eb393592615981184f3c10fe159453c58bc30869b8ae"},
 ]
 
 [[package]]
