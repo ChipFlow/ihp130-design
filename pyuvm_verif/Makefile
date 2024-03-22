@@ -1,10 +1,10 @@
 CWD=$(shell pwd)
 SIM=verilator
 VERILOG_SOURCES=$(wildcard $(CWD)/verilog/*.v)
-MODULE := testbench
-TOPLEVEL = top
+MODULE := testbench_spi
+TOPLEVEL = spi_wrap
 
-COMPILE_ARGS += -Wno-fatal -Wno-BLKANDNBLK
+COMPILE_ARGS += -Wno-fatal -Wno-BLKANDNBLK --timing --trace
 
 COCOTB_HDL_TIMEUNIT = 1ns
 COCOTB_HDL_TIMEPRECISION = 1ns
