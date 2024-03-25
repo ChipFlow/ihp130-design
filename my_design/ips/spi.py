@@ -188,3 +188,11 @@ class SPIPeripheral(wiring.Component):
         ]
 
         return m
+
+if __name__ == '__main__':
+    from amaranth.back import verilog
+    from pathlib import Path
+    spi = SPIPeripheral(name="spi")
+    Path("build/export/ips").mkdir(parents=True, exist_ok=True)
+    with open("build/export/ips/spi_peripheral.v", "w") as f:
+        f.write(verilog.convert(spi, name="spi_peripheral"))
