@@ -37,55 +37,53 @@ class SpiBfm(metaclass=utility_classes.Singleton):
         command_tuple = (addr, data, op)
         await self.driver_queue.put(command_tuple)
 
-    async def get_cmd(self):
-        cmd = await self.cmd_mon_queue.get()
-        return cmd
-
-    async def get_result(self):
-        result = await self.result_mon_queue.get()
-        return result
-
     async def reset(self):
-        await FallingEdge(self.dut.clk_tst)
+        await FallingEdge(self.dut.clk_test)
         self.dut.rst.value = 1
         self.dut.addr.value = 0
         self.dut.wdata.value = 0
         self.dut.rstb.value = 0
         self.dut.wstb.value = 0
-        self.dut.miso = 0
-        await FallingEdge(self.dut.clk_tst)
+        self.dut.miso.value = 0
+        await FallingEdge(self.dut.clk_test)
         self.dut.rst.value = 0
-        await FallingEdge(self.dut.clk_tst)
+        await FallingEdge(self.dut.clk_test)
+        uvm_root().logger.info(f"RESET DONE")
 
     async def driver_bfm(self):
+        uvm_root().logger.info(f"START BFM")
         self.dut.addr.value = 0
         self.dut.wdata.value = 0
         self.dut.rstb.value = 0
         self.dut.wstb.value = 0
+        uvm_root().logger.info(f"START BFM POST")
         while True:
-            await FallingEdge(self.dut.clk_tst)
-            try:
-                (addr, data, op) = self.driver_queue.get_nowait()
-                self.dut.addr.value = addr
-                self.dut.wdata.value = data
-                if op == Ops.WR:
-                    uvm_root().logger.info(f"WRITE OP START addr: {addr} data: {data}")
-                    self.dut.wstb.value = 1
-                    uvm_root().logger.info(f"WRITE before falling edge")
-                    await FallingEdge(self.dut.clk_tst)
-                    self.dut.wstb.value = 0
-                    uvm_root().logger.info(f"WRITE after falling edge")
-                elif op == Ops.RD:
-                    uvm_root().logger.info(f"READ OP START")
-                    self.dut.rstb.value = 1
-                    await FallingEdge(self.dut.clk_tst)
-                    self.dut.rstb.value = 0
-                else:
-                    uvm_root().logger.error(f"NOT VALID OP!!!")
-            except QueueEmpty:
-                uvm_root().logger.info(f"EMPTY QUEUE")
-                await ClockCycles(self.dut.clk_tst,30)
-                break
+            await FallingEdge(self.dut.clk_test)
+            uvm_root().logger.info(f"START before done")
+            done = get_int(self.dut.done)
+            uvm_root().logger.info(f"START done {done}")
+            if done == 0:
+                try:
+                    (addr, data, op) = self.driver_queue.get_nowait()
+                    uvm_root().logger.info(f"QUEUE NOT EMPTY")
+                    if op == Ops.WR:
+                        uvm_root().logger.info(f"WRITE OP START addr: {addr} data: {data}")
+                        self.dut.wstb.value = 1
+                        self.dut.addr.value = addr
+                        self.dut.wdata.value = data
+                        await FallingEdge(self.dut.clk_test)
+                        self.dut.wstb.value = 0
+                        uvm_root().logger.info(f"WRITE OP END addr: {addr} data: {data}")
+                    elif op == Ops.RD:
+                        uvm_root().logger.info(f"READ OP START")
+                        self.dut.rstb.value = 1
+                        await FallingEdge(self.dut.clk_test)
+                        self.dut.rstb.value = 0
+                    else:
+                        uvm_root().logger.error(f"NOT VALID OP!!!")
+                except QueueEmpty:
+                    uvm_root().logger.info(f"QUEUE EMPTY")
+                    pass
 
     def start_bfm(self):
         cocotb.start_soon(self.driver_bfm())

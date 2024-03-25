@@ -36,8 +36,9 @@ class SpiWR0Seq(uvm_sequence):
 class TestSeq(uvm_sequence):
     async def body(self):
         seqr = ConfigDB().get(None, "", "SEQR")
-        spiwr0test = SpiWR0Seq("random")
-        await spiwr0test.start(seqr)
+        spiwr0test = SpiWR0Seq("spiwr0test")
+        spi0_task = cocotb.start_soon(spiwr0test.start(seqr))
+        await spi0_task
 
 class Driver(uvm_driver):
     def build_phase(self):
@@ -55,9 +56,6 @@ class Driver(uvm_driver):
         while True:
             cmd = await self.seq_item_port.get_next_item()
             await self.bfm.send_op(cmd.addr, cmd.data, cmd.op)
-            result = await self.bfm.get_result()
-            self.ap.write(result)
-            cmd.result = result
             self.seq_item_port.item_done()
 
 class SpiEnv(uvm_env):
