@@ -28,17 +28,49 @@ class SpiSeqItem(uvm_sequence_item):
 
 class SpiWR0Seq(uvm_sequence):
     async def body(self):
-        cmd_tr = SpiSeqItem("cmd_tr", 0x0, None, Ops.WR)
+        cmd_tr = SpiSeqItem("cmd_tr", 0x0, 0x3c, Ops.WR)
         await self.start_item(cmd_tr)
-        cmd_tr.randomize_data()
+        """cmd_tr.randomize_data()"""
+        await self.finish_item(cmd_tr)
+
+class SpiWR4Seq(uvm_sequence):
+    async def body(self):
+        cmd_tr = SpiSeqItem("cmd_tr", 0x4, 0x0, Ops.WR)
+        await self.start_item(cmd_tr)
+        """cmd_tr.randomize_data()"""
+        await self.finish_item(cmd_tr)
+
+class SpiWRSeq(uvm_sequence):
+    async def body(self):
+        cmd_tr = SpiSeqItem("cmd_tr", 0xb, 0xab, Ops.WR)
+        await self.start_item(cmd_tr)
+        """cmd_tr.randomize_data()"""
+        await self.finish_item(cmd_tr)
+
+class SpiRDSeq(uvm_sequence):
+    async def body(self):
+        cmd_tr = SpiSeqItem("cmd_tr", 0xc, 0xaa, Ops.RD)
+        await self.start_item(cmd_tr)
+        """cmd_tr.randomize_data()"""
         await self.finish_item(cmd_tr)
 
 class TestSeq(uvm_sequence):
     async def body(self):
         seqr = ConfigDB().get(None, "", "SEQR")
-        spiwr0test = SpiWR0Seq("spiwr0test")
-        spi0_task = cocotb.start_soon(spiwr0test.start(seqr))
-        await spi0_task
+        spiwrtest = SpiWR0Seq("spiwrtest")
+        await spiwrtest.start(seqr)
+
+class TestWrSeq(uvm_sequence):
+    async def body(self):
+        seqr = ConfigDB().get(None, "", "SEQR")
+        spiwr0 = SpiWR0Seq("spiwr0")
+        spiwr4 = SpiWR4Seq("spiwr4")
+        spiwr = SpiWRSeq("spiwr")
+        spird = SpiRDSeq("spird")
+        await spiwr0.start(seqr)
+        await spiwr4.start(seqr)
+        await spiwr.start(seqr)
+        await spird.start(seqr)
 
 class Driver(uvm_driver):
     def build_phase(self):
@@ -53,11 +85,14 @@ class Driver(uvm_driver):
 
     async def run_phase(self):
         await self.launch_tb()
+        uvm_root().logger.info(f"LAUNCH")
         while True:
             cmd = await self.seq_item_port.get_next_item()
             await self.bfm.send_op(cmd.addr, cmd.data, cmd.op)
+            uvm_root().logger.info(f"RUN PHASE addr: {cmd.addr} data: {cmd.data} op: {cmd.op}")
+            result = await self.bfm.get_result()
             self.seq_item_port.item_done()
-
+            uvm_root().logger.info(f"RUN PHASE LAUNCH DONE")
 class SpiEnv(uvm_env):
     def build_phase(self):
         self.seqr = uvm_sequencer("seqr", self)
@@ -70,12 +105,23 @@ class SpiEnv(uvm_env):
 @pyuvm.test()
 class BasicTest(uvm_test):
     def build_phase(self):
+        uvm_root().logger.info(f"BUILD ENV")
         self.env = SpiEnv("env", self)
 
     def end_of_elaboration_phase(self):
-        self.test_spi_wr = TestSeq.create("test_spi_wr")
+        uvm_root().logger.info(f"CREATE TestSeq")
+        self.test_all = TestSeq.create("test_all")
 
     async def run_phase(self):
         self.raise_objection()
-        await self.test_spi_wr.start()
+        uvm_root().logger.info(f"START TEST")
+        await self.test_all.start()
+        uvm_root().logger.info(f"END TEST")
         self.drop_objection()
+
+@pyuvm.test()
+class WrDataTest(BasicTest):
+
+    def build_phase(self):
+        uvm_factory().set_type_override_by_type(TestSeq, TestWrSeq)
+        super().build_phase()
