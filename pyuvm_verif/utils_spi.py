@@ -14,7 +14,7 @@ logger.setLevel(logging.DEBUG)
 
 @enum.unique
 class Ops(enum.IntEnum):
-    """Legal ops for the TinyALU"""
+    """Legal ops for the Spi"""
     WR = 1
     RD = 2
 
@@ -24,6 +24,13 @@ def get_int(signal):
     except ValueError:
         sig = 0
     return sig
+
+def spi_prediction(addr, data, op):
+    """Python model of the TinyALU"""
+    assert isinstance(op, Ops), "The spi op must be of type Ops"
+    if op == Ops.WR:
+        result = data
+    return result
 
 class SpiBfm(metaclass=utility_classes.Singleton):
     def __init__(self):
@@ -35,18 +42,45 @@ class SpiBfm(metaclass=utility_classes.Singleton):
     async def send_op(self, addr, data, op):
         command_tuple = (addr, data, op)
         await self.driver_queue.put(command_tuple)
+
+    async def get_cmd(self):
+        cmd = await self.cmd_mon_queue.get()
+        return cmd
+
     async def get_result(self):
         result = await self.result_mon_queue.get()
         return result
-    async def result_mon_bfm(self):
-        prev_done = 0
+    async def cmd_mon_bfm(self):
+        prev_start = 0
         while True:
-            await FallingEdge(self.dut.clk_test)
-            done = get_int(self.dut.done)
-            if prev_done == 0 and done == 1:
-                result = get_int(self.dut.done)
-                self.result_mon_queue.put_nowait(done)
-            prev_done = done
+            await RisingEdge(self.dut.clk_test)
+            wstb = get_int(self.dut.wstb)
+            rstb = get_int(self.dut.rstb)
+            if wstb == 1 or rstb == 1:
+                if wstb == 1:
+                    op = 1
+                else:
+                    op = 2
+                cmd_tuple = (get_int(self.dut.addr),
+                             get_int(self.dut.rdata),
+                             op)
+                self.cmd_mon_queue.put_nowait(cmd_tuple)
+                uvm_root().logger.info(f"PUT CMD TUPLE {cmd_tuple}")
+    async def result_mon_bfm(self):
+        while True:
+            await RisingEdge(self.dut.clk_test)
+            wstb = get_int(self.dut.wstb)
+            rstb = get_int(self.dut.rstb)
+            if wstb == 1:
+                await FallingEdge(self.dut.clk_test)
+                result = get_int(self.dut.wdata)
+                self.result_mon_queue.put_nowait(result)
+                uvm_root().logger.info(f"PUT WR RESULT {result}")
+            if rstb == 1:
+                await FallingEdge(self.dut.clk_test)
+                result = get_int(self.dut.rdata)
+                self.result_mon_queue.put_nowait(result)
+                uvm_root().logger.info(f"PUT RD RESULT {result}")
 
     async def reset(self):
         await FallingEdge(self.dut.clk_test)
@@ -98,4 +132,5 @@ class SpiBfm(metaclass=utility_classes.Singleton):
         uvm_root().logger.info(f"FINISH BFM DRIVER")
     def start_bfm(self):
         cocotb.start_soon(self.driver_bfm())
+        cocotb.start_soon(self.cmd_mon_bfm())
         cocotb.start_soon(self.result_mon_bfm())

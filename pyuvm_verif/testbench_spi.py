@@ -6,7 +6,7 @@ import pyuvm
 import sys
 from pathlib import Path
 sys.path.append(str(Path("..").resolve()))
-from utils_spi import SpiBfm,Ops
+from utils_spi import SpiBfm,Ops,spi_prediction
 
 class SpiSeqItem(uvm_sequence_item):
     def __init__(self, name, address, data, op):
@@ -49,7 +49,7 @@ class SpiWRSeq(uvm_sequence):
 
 class SpiRDSeq(uvm_sequence):
     async def body(self):
-        cmd_tr = SpiSeqItem("cmd_tr", 0xc, 0xaa, Ops.RD)
+        cmd_tr = SpiSeqItem("cmd_tr", 0x0, 0xaa, Ops.RD)
         await self.start_item(cmd_tr)
         """cmd_tr.randomize_data()"""
         await self.finish_item(cmd_tr)
@@ -64,12 +64,8 @@ class TestWrSeq(uvm_sequence):
     async def body(self):
         seqr = ConfigDB().get(None, "", "SEQR")
         spiwr0 = SpiWR0Seq("spiwr0")
-        spiwr4 = SpiWR4Seq("spiwr4")
-        spiwr = SpiWRSeq("spiwr")
         spird = SpiRDSeq("spird")
         await spiwr0.start(seqr)
-        await spiwr4.start(seqr)
-        await spiwr.start(seqr)
         await spird.start(seqr)
 
 class Driver(uvm_driver):
@@ -91,16 +87,83 @@ class Driver(uvm_driver):
             await self.bfm.send_op(cmd.addr, cmd.data, cmd.op)
             uvm_root().logger.info(f"RUN PHASE addr: {cmd.addr} data: {cmd.data} op: {cmd.op}")
             result = await self.bfm.get_result()
+            self.ap.write(result)
+            uvm_root().logger.info(f"GET RESULT: {result}")
             self.seq_item_port.item_done()
             uvm_root().logger.info(f"RUN PHASE LAUNCH DONE")
+
+class Monitor(uvm_component):
+    def __init__(self, name, parent, method_name):
+        super().__init__(name, parent)
+        self.method_name = method_name
+
+    def build_phase(self):
+        self.ap = uvm_analysis_port("ap", self)
+        self.bfm = SpiBfm()
+        self.get_method = getattr(self.bfm, self.method_name)
+
+    async def run_phase(self):
+        while True:
+            datum = await self.get_method()
+            self.logger.debug(f"MONITORED {datum}")
+            self.ap.write(datum)
+
+class Scoreboard(uvm_component):
+
+    def build_phase(self):
+        self.cmd_fifo = uvm_tlm_analysis_fifo("cmd_fifo", self)
+        self.result_fifo = uvm_tlm_analysis_fifo("result_fifo", self)
+
+        self.cmd_get_port = uvm_get_port("cmd_get_port", self)
+        self.result_get_port = uvm_get_port("result_get_port", self)
+
+        self.cmd_export = self.cmd_fifo.analysis_export
+        self.result_export = self.result_fifo.analysis_export
+
+    def connect_phase(self):
+        self.cmd_get_port.connect(self.cmd_fifo.get_export)
+        self.result_get_port.connect(self.result_fifo.get_export)
+
+    def check_phase(self):
+        self.logger.info(f"CHECK SCB PHASE")
+        passed = True
+        while True:
+            self.logger.info(f"CHECK SOMETHING")
+            cmd_success, cmd = self.cmd_get_port.try_get()
+            if not cmd_success:
+                break
+            else:
+                result_success, data_read = self.result_get_port.try_get()
+                if not result_success:
+                    self.logger.critical(f"result {data_read} had no command")
+                else:
+                    (addr, data, op_numb) = cmd
+                    if op_numb == 1:
+                        predicted_data = data_read
+                        self.logger.info(f"WDATA  {predicted_data} ")
+                    if op_numb == 2:
+                        if predicted_data == data_read:
+                            self.logger.info(f"PASSED: 0x{predicted_data} ="
+                                             f" 0x{data_read}")
+                        else:
+                            self.logger.error(f"FAILED: "
+                                              f"ACTUAL:   0x{data_read} "
+                                              f"EXPECTED: 0x{predicted_data}")
+                            passed = False
+        assert passed
+
 class SpiEnv(uvm_env):
     def build_phase(self):
         self.seqr = uvm_sequencer("seqr", self)
         ConfigDB().set(None, "*", "SEQR", self.seqr)
         self.driver = Driver.create("driver", self)
+        self.cmd_mon = Monitor("cmd_mon", self, "get_cmd")
+        self.scoreboard = Scoreboard("scoreboard", self)
 
     def connect_phase(self):
         self.driver.seq_item_port.connect(self.seqr.seq_item_export)
+        self.cmd_mon.ap.connect(self.scoreboard.cmd_export)
+        self.driver.ap.connect(self.scoreboard.result_export)
 
 @pyuvm.test()
 class BasicTest(uvm_test):
