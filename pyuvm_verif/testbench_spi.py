@@ -6,7 +6,7 @@ import pyuvm
 import sys
 from pathlib import Path
 sys.path.append(str(Path("..").resolve()))
-from utils_spi import SpiBfm,Ops,spi_prediction
+from utils_spi import SpiBfm,Ops
 
 class SpiSeqItem(uvm_sequence_item):
     def __init__(self, name, address, data, op):
@@ -28,45 +28,198 @@ class SpiSeqItem(uvm_sequence_item):
 
 class SpiWR0Seq(uvm_sequence):
     async def body(self):
-        cmd_tr = SpiSeqItem("cmd_tr", 0x0, 0x3c, Ops.WR)
+        cmd_tr = SpiSeqItem("cmd_tr", 0x0, None, Ops.WR)
         await self.start_item(cmd_tr)
-        """cmd_tr.randomize_data()"""
+        if not hasattr(SpiSeqItem,'data'):
+            cmd_tr.randomize_data()
         await self.finish_item(cmd_tr)
 
 class SpiWR4Seq(uvm_sequence):
     async def body(self):
         cmd_tr = SpiSeqItem("cmd_tr", 0x4, 0x0, Ops.WR)
         await self.start_item(cmd_tr)
-        """cmd_tr.randomize_data()"""
+        cmd_tr.randomize_data()
         await self.finish_item(cmd_tr)
 
-class SpiWRSeq(uvm_sequence):
+class SpiSeq(uvm_sequence):
+    def __init__(self, name, address, data, op):
+        super().__init__(name)
+        self.addr = address
+        self.data = data
+        self.op = Ops(op)
     async def body(self):
-        cmd_tr = SpiSeqItem("cmd_tr", 0xb, 0xab, Ops.WR)
+        cmd_tr = SpiSeqItem("cmd_tr", address=self.addr, data=self.data, op=self.op)
         await self.start_item(cmd_tr)
-        """cmd_tr.randomize_data()"""
         await self.finish_item(cmd_tr)
 
-class SpiRDSeq(uvm_sequence):
+class SpiRD0Seq(uvm_sequence):
     async def body(self):
-        cmd_tr = SpiSeqItem("cmd_tr", 0x0, 0xaa, Ops.RD)
+        cmd_tr = SpiSeqItem("cmd_tr", 0x0, None, Ops.RD)
         await self.start_item(cmd_tr)
-        """cmd_tr.randomize_data()"""
+        cmd_tr.randomize_data()
+        await self.finish_item(cmd_tr)
+
+class SpiRD4Seq(uvm_sequence):
+    async def body(self):
+        cmd_tr = SpiSeqItem("cmd_tr", 0x4, None, Ops.RD)
+        await self.start_item(cmd_tr)
+        cmd_tr.randomize_data()
         await self.finish_item(cmd_tr)
 
 class TestSeq(uvm_sequence):
     async def body(self):
+        uvm_root().logger.info(f"TEST: SINGLE WRITE TO 0x0 ADDRESS")
         seqr = ConfigDB().get(None, "", "SEQR")
-        spiwrtest = SpiWR0Seq("spiwrtest")
-        await spiwrtest.start(seqr)
+        wrtest = SpiWR0Seq("wrtest")
+        await wrtest.start(seqr)
+
+class TestRegSeq(uvm_sequence):
+    async def body(self):
+        uvm_root().logger.info(f"TEST: REGISTER WRITE AND READ TO 0x0 and 0x4 ADDRESSES")
+        seqr = ConfigDB().get(None, "", "SEQR")
+        for i in range(100):
+            spiwr0 = SpiWR0Seq("spiwr0")
+            spird0 = SpiRD0Seq("spird0")
+            await spiwr0.start(seqr)
+            await spird0.start(seqr)
+
+        for i in range(100):
+            spiwr4 = SpiWR4Seq("spiwr4")
+            spird4 = SpiRD4Seq("spird4")
+            await spiwr4.start(seqr)
+            await spird4.start(seqr)
 
 class TestWrSeq(uvm_sequence):
     async def body(self):
+        uvm_root().logger.info(f"TEST: WRITE TO 0xB ADDRESS, COLLECT AND COMPARE WRITTEN VALUES")
         seqr = ConfigDB().get(None, "", "SEQR")
-        spiwr0 = SpiWR0Seq("spiwr0")
-        spird = SpiRDSeq("spird")
+        spiwr0 = SpiSeq("spiwr0",0x0,0x3f,1)
+        spiwr1 = SpiSeq("spiwr1", 0x4, 0x0, 1)
+        spiwr2 = SpiSeq("spiwr2", 0xb, 0x45, 1)
         await spiwr0.start(seqr)
-        await spird.start(seqr)
+        await spiwr1.start(seqr)
+        await spiwr2.start(seqr)
+        for i in range(1):
+            data3 = random.randint(0, 255)
+            spiwr3 = SpiSeq("spiwr3", 0xb, data3, 1)
+            await spiwr3.start(seqr)
+
+        spiwr0 = SpiSeq("spiwr0", 0x0, 0x3e, 1)
+        spiwr1 = SpiSeq("spiwr1", 0x4, 0x0, 1)
+        spiwr2 = SpiSeq("spiwr2", 0xb, 0x45, 1)
+        await spiwr0.start(seqr)
+        await spiwr1.start(seqr)
+        await spiwr2.start(seqr)
+        for i in range(1):
+            data3 = random.randint(0, 255)
+            spiwr3 = SpiSeq("spiwr3", 0xb, data3, 1)
+            await spiwr3.start(seqr)
+
+        spiwr0 = SpiSeq("spiwr0", 0x0, 0x87, 1)
+        spiwr1 = SpiSeq("spiwr1", 0x4, 0x0, 1)
+        spiwr2 = SpiSeq("spiwr2", 0xb, 0x45, 1)
+        await spiwr0.start(seqr)
+        await spiwr1.start(seqr)
+        await spiwr2.start(seqr)
+        for i in range(1):
+            data3 = random.randint(0, 255)
+            spiwr3 = SpiSeq("spiwr3", 0xb, data3, 1)
+            await spiwr3.start(seqr)
+
+        spiwr0 = SpiSeq("spiwr0", 0x0, 0x86, 1)
+        spiwr1 = SpiSeq("spiwr1", 0x4, 0x0, 1)
+        spiwr2 = SpiSeq("spiwr2", 0xb, 0x45, 1)
+        await spiwr0.start(seqr)
+        await spiwr1.start(seqr)
+        await spiwr2.start(seqr)
+        for i in range(1):
+            data3 = random.randint(0, 255)
+            spiwr3 = SpiSeq("spiwr3", 0xb, data3, 1)
+            await spiwr3.start(seqr)
+
+        spiwr0 = SpiSeq("spiwr0", 0x0, 0x3d, 1)
+        spiwr1 = SpiSeq("spiwr1", 0x4, 0x0, 1)
+        spiwr2 = SpiSeq("spiwr2", 0xb, 0x45, 1)
+        await spiwr0.start(seqr)
+        await spiwr1.start(seqr)
+        await spiwr2.start(seqr)
+        for i in range(0):
+            data3 = random.randint(0, 255)
+            spiwr3 = SpiSeq("spiwr3", 0xb, data3, 1)
+            await spiwr3.start(seqr)
+
+        spiwr0 = SpiSeq("spiwr0", 0x0, 0x3c, 1)
+        spiwr1 = SpiSeq("spiwr1", 0x4, 0x0, 1)
+        spiwr2 = SpiSeq("spiwr2", 0xb, 0x45, 1)
+        await spiwr0.start(seqr)
+        await spiwr1.start(seqr)
+        await spiwr2.start(seqr)
+        for i in range(0):
+            data3 = random.randint(0, 255)
+            spiwr3 = SpiSeq("spiwr3", 0xb, data3, 1)
+            await spiwr3.start(seqr)
+
+class TestRdSeq(uvm_sequence):
+    async def body(self):
+        uvm_root().logger.info(f"TEST: WRITE TO 0xB ADDRESS, READ TO 0xC ADDRESS AND COMPARE VALUES")
+        seqr = ConfigDB().get(None, "", "SEQR")
+        spiwr0 = SpiSeq("spiwr0",0x0,0x3f,1)
+        spiwr1 = SpiSeq("spiwr1", 0x4, 0x0, 1)
+        await spiwr0.start(seqr)
+        await spiwr1.start(seqr)
+        for i in range(1):
+            data3 = random.randint(0, 255)
+            spiwr3 = SpiSeq("spiwr3", 0xb, data3, 1)
+            await spiwr3.start(seqr)
+            spird = SpiSeq("spird", 0xc, data3,  2)
+            await spird.start(seqr)
+
+        spiwr0 = SpiSeq("spiwr0", 0x0, 0x3e, 1)
+        spiwr1 = SpiSeq("spiwr1", 0x4, 0x0, 1)
+        await spiwr0.start(seqr)
+        await spiwr1.start(seqr)
+        for i in range(1):
+            data3 = random.randint(0, 255)
+            spiwr3 = SpiSeq("spiwr3", 0xb, data3, 1)
+            await spiwr3.start(seqr)
+            spird = SpiSeq("spird", 0xc, data3, 2)
+            await spird.start(seqr)
+
+        spiwr0 = SpiSeq("spiwr0", 0x0, 0x3d, 1)
+        spiwr1 = SpiSeq("spiwr1", 0x4, 0x0, 1)
+        await spiwr0.start(seqr)
+        await spiwr1.start(seqr)
+        for i in range(1):
+            data3 = random.randint(0, 255)
+            spiwr3 = SpiSeq("spiwr3", 0xb, data3, 1)
+            await spiwr3.start(seqr)
+            spird = SpiSeq("spird", 0xc, data3, 2)
+            await spird.start(seqr)
+
+        spiwr0 = SpiSeq("spiwr0", 0x0, 0x3c, 1)
+        spiwr1 = SpiSeq("spiwr1", 0x4, 0x0, 1)
+        await spiwr0.start(seqr)
+        await spiwr1.start(seqr)
+        for i in range(1):
+            data3 = random.randint(0, 255)
+            spiwr3 = SpiSeq("spiwr3", 0xb, data3, 1)
+            await spiwr3.start(seqr)
+            spird = SpiSeq("spird", 0xc, data3, 2)
+            await spird.start(seqr)
+
+class TestClkdivSeq(uvm_sequence):
+    async def body(self):
+        uvm_root().logger.info(f"TEST: CLOCK DIVIDER")
+        seqr = ConfigDB().get(None, "", "SEQR")
+        spiwr0 = SpiSeq("spiwr0", 0x0, 0x3f, 1)
+        await spiwr0.start(seqr)
+        for i in (0,1,2,62,255):
+            data1 = int(i)
+            spiwr1 = SpiSeq("spiwr1", 0x4, data1, 1)
+            await spiwr1.start(seqr)
+            data2 = random.randint(0, 255)
+            spiwr2 = SpiSeq("spiwr2", 0xb, data2, 1)
+            await spiwr2.start(seqr)
 
 class Driver(uvm_driver):
     def build_phase(self):
@@ -81,16 +234,14 @@ class Driver(uvm_driver):
 
     async def run_phase(self):
         await self.launch_tb()
-        uvm_root().logger.info(f"LAUNCH")
         while True:
             cmd = await self.seq_item_port.get_next_item()
             await self.bfm.send_op(cmd.addr, cmd.data, cmd.op)
-            uvm_root().logger.info(f"RUN PHASE addr: {cmd.addr} data: {cmd.data} op: {cmd.op}")
+            uvm_root().logger.info(f"RUN PHASE addr: {hex(cmd.addr)} data: {hex(cmd.data)} op: {cmd.op}")
             result = await self.bfm.get_result()
             self.ap.write(result)
-            uvm_root().logger.info(f"GET RESULT: {result}")
+            uvm_root().logger.info(f"GET RESULT: {hex(result)}")
             self.seq_item_port.item_done()
-            uvm_root().logger.info(f"RUN PHASE LAUNCH DONE")
 
 class Monitor(uvm_component):
     def __init__(self, name, parent, method_name):
@@ -128,7 +279,6 @@ class Scoreboard(uvm_component):
         self.logger.info(f"CHECK SCB PHASE")
         passed = True
         while True:
-            self.logger.info(f"CHECK SOMETHING")
             cmd_success, cmd = self.cmd_get_port.try_get()
             if not cmd_success:
                 break
@@ -138,17 +288,20 @@ class Scoreboard(uvm_component):
                     self.logger.critical(f"result {data_read} had no command")
                 else:
                     (addr, data, op_numb) = cmd
-                    if op_numb == 1:
+                    if op_numb == 1 and addr in(0,4):
                         predicted_data = data_read
-                        self.logger.info(f"WDATA  {predicted_data} ")
-                    if op_numb == 2:
+                        self.logger.info(f"WDATA  {hex(predicted_data)} ")
+                    if op_numb == 1 and (addr == 11 or addr == 12):
+                        predicted_data = data
+                        self.logger.info(f"WDATA ADDR B {hex(predicted_data)} ")
+                    if (op_numb == 2 and addr in(0,4,12)) or (op_numb == 1 and addr == 11):
                         if predicted_data == data_read:
-                            self.logger.info(f"PASSED: 0x{predicted_data} ="
-                                             f" 0x{data_read}")
+                            self.logger.info(f"PASSED: {hex(predicted_data)} ="
+                                             f" {hex(data_read)}")
                         else:
                             self.logger.error(f"FAILED: "
-                                              f"ACTUAL:   0x{data_read} "
-                                              f"EXPECTED: 0x{predicted_data}")
+                                              f"ACTUAL:   {hex(data_read)} "
+                                              f"EXPECTED: {hex(predicted_data)}")
                             passed = False
         assert passed
 
@@ -168,11 +321,9 @@ class SpiEnv(uvm_env):
 @pyuvm.test()
 class BasicTest(uvm_test):
     def build_phase(self):
-        uvm_root().logger.info(f"BUILD ENV")
         self.env = SpiEnv("env", self)
 
     def end_of_elaboration_phase(self):
-        uvm_root().logger.info(f"CREATE TestSeq")
         self.test_all = TestSeq.create("test_all")
 
     async def run_phase(self):
@@ -183,8 +334,30 @@ class BasicTest(uvm_test):
         self.drop_objection()
 
 @pyuvm.test()
-class WrDataTest(BasicTest):
+class RegTest(BasicTest):
+
+    def build_phase(self):
+        uvm_factory().set_type_override_by_type(TestSeq, TestRegSeq)
+        super().build_phase()
+
+
+@pyuvm.test()
+class WriteTest(BasicTest):
 
     def build_phase(self):
         uvm_factory().set_type_override_by_type(TestSeq, TestWrSeq)
+        super().build_phase()
+
+@pyuvm.test()
+class ReadTest(BasicTest):
+
+    def build_phase(self):
+        uvm_factory().set_type_override_by_type(TestSeq, TestRdSeq)
+        super().build_phase()
+
+@pyuvm.test()
+class ClkdividerTest(BasicTest):
+
+    def build_phase(self):
+        uvm_factory().set_type_override_by_type(TestSeq, TestClkdivSeq)
         super().build_phase()

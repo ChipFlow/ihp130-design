@@ -1,3 +1,5 @@
+ARG ?= SPI
+
 .PHONY: init # Init local environemnt
 init:
 	pdm install
@@ -33,7 +35,7 @@ sim-check: sim-run
 .PHONY: verif-run-pyuvm
 verif-run-pyuvm: init
 	YOSYS=yowasp-yosys pdm run chipflow export --dir pyuvm_verif/verilog
-	pdm run make -C pyuvm_verif -j4
+	pdm run make -C pyuvm_verif -j4 ARG=$(ARG)
 
 .PHONY: silicon-prepare # Build RTLIL for the design
 silicon-prepare:

@@ -1,8 +1,15 @@
 CWD=$(shell pwd)
 SIM=verilator
 VERILOG_SOURCES=$(wildcard $(CWD)/verilog/*.v)
-MODULE := testbench_spi
-TOPLEVEL = spi_wrap
+.PHONY: print_vars
+
+ifeq ($(ARG),SPI)
+    MODULE := testbench_spi
+    TOPLEVEL = spi_wrap
+else ifeq ($(ARG),FLASH)
+    print_vars:
+		@echo "TODO PERIPHERAL $(ARG)"
+endif
 
 COMPILE_ARGS += -Wno-fatal -Wno-BLKANDNBLK --timing --trace
 EXTRA_ARGS += --trace --trace-structs
