@@ -82,7 +82,15 @@ void main() {
     MOTOR_PWM9->numr = 0x7F;
     MOTOR_PWM9->denom = 0xFF;
     MOTOR_PWM9->conf = 0x3;
+	
+    PDM0->outval = 0xFF;
+    PDM1->outval = 0x7F;
+    PDM2->outval = 0x3F;
 
+    PDM0->conf = 0x1;
+    PDM1->conf = 0x1;
+    PDM2->conf = 0x0;
+	
     puts("GPIO: ");
     puthex(GPIO_1->in);
     puts(" ");

@@ -52,7 +52,7 @@ class ChipflowTop(Elaboratable):
             _connect_interface(getattr(soc, f"motor_pwm{pwm_idx}"), f"motor_pwm{pwm_idx}")
 
         for ao_idx in range(6):
-            m.d.comb += platform.request(f"pdm_ao_{ao_idx}").o.eq(soc.pdm_ao[ao_idx])
+            m.d.comb += platform.request(f"pdm_ao_{ao_idx}").o.eq(getattr(soc, f"pdm_ao_{ao_idx}"))
 
         for gpio_bank in range(2):
             gpio = getattr(soc, f"gpio_{gpio_bank}")

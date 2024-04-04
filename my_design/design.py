@@ -20,6 +20,7 @@ from amaranth_cv32e40p.cv32e40p import CV32E40P, DebugModule
 from .ips.spi import SPISignature, SPIPeripheral
 from .ips.i2c import I2CSignature, I2CPeripheral
 from .ips.pwm import PWMPins, PWMPeripheral
+from .ips.pdm import PDMPeripheral
 
 __all__ = ["JTAGSignature", "MySoC"]
 
@@ -45,7 +46,7 @@ class MySoC(wiring.Component):
         self.user_spi_count = 3
         self.i2c_count = 2
         self.motor_count = 10
-        self.pdm_ao_width = 6
+        self.pdm_ao_count = 6
         self.uart_count = 2
 
         self.gpio_banks = 2
@@ -60,7 +61,8 @@ class MySoC(wiring.Component):
         for i in range(self.motor_count):
             interfaces[f"motor_pwm{i}"] = Out(PWMPins.Signature())
 
-        interfaces[f"pdm_ao"] = Out(self.pdm_ao_width)
+        for i in range(self.pdm_ao_count):
+            interfaces[f"pdm_ao_{i}"] = Out(1)
 
         for i in range(self.uart_count):
             interfaces[f"uart_{i}"] = Out(UARTPins.Signature())
@@ -90,8 +92,9 @@ class MySoC(wiring.Component):
         self.csr_motor_base    = 0xb7000000
         self.csr_pdm_ao_base   = 0xb8000000
 
-        self.periph_offset    = 0x00100000
-        self.motor_offset     = 0x00000100
+        self.periph_offset     = 0x00100000
+        self.motor_offset      = 0x00000100
+        self.pdm_ao_offset     = 0x00000010
 
         self.sram_size  = 0x800 # 2KiB
         self.bios_start = 0x100000 # 1MiB into spiflash to make room for a bitstream
@@ -213,18 +216,15 @@ class MySoC(wiring.Component):
             sw.add_periph("motor_pwm", f"MOTOR_PWM{i}", base_addr)
             setattr(m.submodules, f"motor_pwm{i}", motor_pwm)
 
-        # PDM for analog outputs
-        # TODO: create a PDM peripheral and replace this GPIO
-        soft_pdm_pins = GPIOPins(width=self.pdm_ao_width)
-        pdm = GPIOPeripheral(name=f"pdm_ao", pins=soft_pdm_pins)
-
-        csr_decoder.add(pdm.bus, addr=self.csr_pdm_ao_base - self.csr_base)
-        sw.add_periph("gpio", f"PDM_AO_{i}", self.csr_pdm_ao_base)
-
-        # FIXME: This assignment will disappear once we have a relevant peripheral available
-        m.d.comb += [self.pdm_ao.eq(soft_pdm_pins.o)]
-
-        m.submodules.pdm_ao = pdm
+        # pdm_ao
+        for i in range(self.pdm_ao_count):
+            pdm = PDMPeripheral(name=f"pdm{i}", bitwidth=10)
+            base_addr = self.csr_pdm_ao_base + i * self.pdm_ao_offset
+            csr_decoder.add(pdm.bus, addr=base_addr  - self.csr_base)
+        
+            sw.add_periph("pdm", f"PDM{i}", base_addr)
+            setattr(m.submodules, f"pdm{i}", pdm)          
+            m.d.comb += getattr(self, f"pdm_ao_{i}").eq(pdm.pdm_ao)
 
         # SoC ID
 
