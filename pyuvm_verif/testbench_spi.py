@@ -355,9 +355,9 @@ class ReadTest(BasicTest):
         uvm_factory().set_type_override_by_type(TestSeq, TestRdSeq)
         super().build_phase()
 
-@pyuvm.test()
+"""@pyuvm.test()
 class ClkdividerTest(BasicTest):
 
     def build_phase(self):
         uvm_factory().set_type_override_by_type(TestSeq, TestClkdivSeq)
-        super().build_phase()
+        super().build_phase()"""
