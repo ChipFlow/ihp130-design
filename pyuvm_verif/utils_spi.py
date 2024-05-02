@@ -178,7 +178,6 @@ class SpiBfm(metaclass=utility_classes.Singleton):
         while True:
             await RisingEdge(self.dut.clk_test)
             wstb = get_int(self.dut.wstb)
-            rstb = get_int(self.dut.rstb)
             if wstb == 1:
                 await FallingEdge(self.dut.clk_test)
                 result = get_int(self.dut.wdata)

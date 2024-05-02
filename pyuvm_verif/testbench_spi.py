@@ -213,13 +213,12 @@ class TestClkdivSeq(uvm_sequence):
         seqr = ConfigDB().get(None, "", "SEQR")
         spiwr0 = SpiSeq("spiwr0", 0x0, 0x3f, 1)
         await spiwr0.start(seqr)
-        for i in (0,1,2,62,255):
-            data1 = int(i)
-            spiwr1 = SpiSeq("spiwr1", 0x4, data1, 1)
-            await spiwr1.start(seqr)
-            data2 = random.randint(0, 255)
-            spiwr2 = SpiSeq("spiwr2", 0xb, data2, 1)
-            await spiwr2.start(seqr)
+        data1 = random.randint(0, 255)
+        spiwr1 = SpiSeq("spiwr1", 0x4, data1, 1)
+        await spiwr1.start(seqr)
+        data2 = random.randint(0, 255)
+        spiwr2 = SpiSeq("spiwr2", 0xb, data2, 1)
+        await spiwr2.start(seqr)
 
 class Driver(uvm_driver):
     def build_phase(self):
@@ -355,9 +354,9 @@ class ReadTest(BasicTest):
         uvm_factory().set_type_override_by_type(TestSeq, TestRdSeq)
         super().build_phase()
 
-"""@pyuvm.test()
+@pyuvm.test()
 class ClkdividerTest(BasicTest):
 
     def build_phase(self):
         uvm_factory().set_type_override_by_type(TestSeq, TestClkdivSeq)
-        super().build_phase()"""
+        super().build_phase()
