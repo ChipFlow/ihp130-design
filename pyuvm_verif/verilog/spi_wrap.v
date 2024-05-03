@@ -42,6 +42,20 @@ module spi_wrap
   	$dumpvars(1,spi_wrap);
   end
 
+  spi_peripheral  spi_inst (
+    .clk(clk_test),
+    .rst(rst),
+    .bus__addr(addr),
+    .bus__r_stb(rstb),
+    .bus__w_data(wdata),
+    .bus__w_stb(wstb),
+    .spi_pins__sck_o(sck),
+    .spi_pins__mosi_o(mosi),
+    .spi_pins__csn_o(csn),
+    .bus__r_data(rdata),
+    .spi_pins__miso_i(miso)
+  );
+
 endmodule : spi_wrap
   input bus__r_stb;
   wire bus__r_stb;
