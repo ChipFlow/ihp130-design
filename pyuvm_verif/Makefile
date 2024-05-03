@@ -1,6 +1,6 @@
 CWD=$(shell pwd)
 SIM=verilator
-VERILOG_SOURCES=$(wildcard $(CWD)/verilog/*.v)
+VERILOG_SOURCES=$(wildcard $(CWD)/*/*.v)
 .PHONY: print_vars
 
 ifeq ($(ARG),SPI)
