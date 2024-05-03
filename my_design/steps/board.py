@@ -89,8 +89,8 @@ class BoardSocWrapper(wiring.Component):
 
         _connect_interface(soc.i2c_0, "i2c0")
 
-        _connect_interface(soc.motor_0, "motor_pwm0")
-        _connect_interface(soc.motor_1, "motor_pwm1")
+        _connect_interface(soc.motor_pwm0, "motor_pwm0")
+        _connect_interface(soc.motor_pwm1, "motor_pwm1")
 
         _connect_interface(soc.uart_1, "uart1")
 
