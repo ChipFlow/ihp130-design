@@ -17,6 +17,7 @@ class BoardSocWrapper(wiring.Component):
         m = Module()
         m.submodules.soc = soc = MySoC()
 
+        m.domains += ClockDomain("sync")
         m.submodules.clock_reset_provider = platform.providers.ClockResetProvider()
 
         m.submodules.spiflash_provider = spiflash_provider = platform.providers.QSPIFlashProvider()
