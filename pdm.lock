@@ -4,15 +4,15 @@
 [metadata]
 groups = ["default", "test"]
 strategy = ["cross_platform"]
-lock_version = "4.4"
-content_hash = "sha256:4391be57764b796d02e3f731b589eac438a79c55bc2093258f45592f8d8d6702"
+lock_version = "4.4.1"
+content_hash = "sha256:557962976101515af930b811eba003892a26f2a89cf7849cc24e66e60ea93d8e"
 
 [[package]]
 name = "amaranth"
-version = "0.5.0.dev161+g11ec35d"
+version = "0.5.0.dev277"
 requires_python = "~=3.8"
 git = "https://github.com/amaranth-lang/amaranth"
-revision = "11ec35d258b059f5c8b1c3d4a4fe1538d2bee046"
+revision = "9201cc3179d53c9fcfb6443e571533d64dbdd417"
 summary = "Amaranth hardware definition language"
 dependencies = [
     "Jinja2~=3.0",
@@ -73,6 +73,31 @@ revision = "ae774a5709321d5bffddbcebed09b0e350cb6282"
 summary = "Industry standard I/O for Amaranth HDL"
 dependencies = [
     "amaranth @ git+https://github.com/amaranth-lang/amaranth",
+]
+
+[[package]]
+name = "amaranth-yosys"
+version = "0.40.0.0.post94"
+requires_python = "~=3.8"
+summary = "Specialized WebAssembly build of Yosys used by Amaranth HDL"
+dependencies = [
+    "wasmtime<21,>=1",
+]
+files = [
+    {file = "amaranth_yosys-0.40.0.0.post94-py3-none-any.whl", hash = "sha256:6a2e539d84d1dce8848ae6daf4f66c57547321682e6b57aaa3b988af388e61c9"},
+]
+
+[[package]]
+name = "amaranth"
+version = "0.5.0.dev277"
+extras = ["builtin-yosys"]
+requires_python = "~=3.8"
+git = "https://github.com/amaranth-lang/amaranth"
+revision = "9201cc3179d53c9fcfb6443e571533d64dbdd417"
+summary = "Amaranth hardware definition language"
+dependencies = [
+    "amaranth @ git+https://github.com/amaranth-lang/amaranth@9201cc3179d53c9fcfb6443e571533d64dbdd417",
+    "amaranth-yosys>=0.40",
 ]
 
 [[package]]
@@ -167,11 +192,11 @@ files = [
 
 [[package]]
 name = "chipflow-lib"
-version = "0.1.1.dev96+gca68b2e"
+version = "0.1.1.dev97"
 requires_python = "~=3.8"
 git = "https://github.com/ChipFlow/chipflow-lib.git"
 ref = "main"
-revision = "ca68b2e9e894b1539fae0e18e050e317877a6f05"
+revision = "6e9f5c30c6ae99105fbe6279eef13e084a5abc4e"
 summary = "ChipFlow common tools."
 dependencies = [
     "amaranth @ git+https://github.com/amaranth-lang/amaranth",
@@ -599,6 +624,7 @@ files = [
     {file = "ziglang-0.11.0-py3-none-manylinux_2_12_x86_64.manylinux2010_x86_64.musllinux_1_1_x86_64.whl", hash = "sha256:45e8116428267e20529b9ee43a7e7364791c1a092845d2143b248a1dbf6760b0"},
     {file = "ziglang-0.11.0-py3-none-manylinux_2_17_aarch64.manylinux2014_aarch64.musllinux_1_1_aarch64.whl", hash = "sha256:d6372bada34714a5395539cc4d76e9cc6062739cee5ce9949a250f7c525ceb94"},
     {file = "ziglang-0.11.0-py3-none-manylinux_2_17_armv7l.manylinux2014_armv7l.musllinux_1_1_armv7l.whl", hash = "sha256:5fe81f91fd872fc32ed0f82807df6c680a82cbea56a9f24f818e9da299049022"},
+    {file = "ziglang-0.11.0-py3-none-win32.whl", hash = "sha256:97ac4312a358d2a4ba2c153fdb1827caf6bc158501a468ebd6a554b50edee42e"},
     {file = "ziglang-0.11.0-py3-none-win_amd64.whl", hash = "sha256:a7edc7020e7ffbbb3af3a40c17a9bda65d5a65132ff933e153ffa80d8f5ad731"},
 ]
 
