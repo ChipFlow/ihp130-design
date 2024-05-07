@@ -100,3 +100,11 @@ class I2CPeripheral(wiring.Component):
             self._status.f.ack.r_data.eq(i2c.ack_o),
         ]
         return m
+
+if __name__ == '__main__':
+    from amaranth.back import verilog
+    from pathlib import Path
+    i2c = I2CPeripheral(name="i2c")
+    Path("build/export/ips").mkdir(parents=True, exist_ok=True)
+    with open("build/export/ips/i2c.v", "w") as f:
+        f.write(verilog.convert(i2c, name="i2c_peripheral"))
