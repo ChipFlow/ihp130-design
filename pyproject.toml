@@ -36,3 +36,6 @@ test = [
 [tool.pdm.scripts]
 _.env_file = ".env.toolchain"
 test.cmd = "pytest"
+
+[tool.pdm.resolution.overrides]
+yowasp-yosys = "0.40.0.68.post721.dev0"

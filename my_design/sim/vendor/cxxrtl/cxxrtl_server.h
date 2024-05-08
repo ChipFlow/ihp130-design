@@ -291,9 +291,10 @@ enum class simulation_status {
 };
 
 enum class diagnostic_type: uint32_t {
-	print      = 1 << 0,
-	assertion  = 1 << 1, // avoid name clash with `assert`
-	assumption = 1 << 2,
+	breakpoint = 1 << 0, // avoid name clash with `break`
+	print      = 1 << 1,
+	assertion  = 1 << 2, // avoid name clash with `assert`
+	assumption = 1 << 3,
 };
 
 enum class pause_reason {
@@ -920,14 +921,16 @@ class server {
 			return build_error("invalid_args", "The `run_simulation` command requires the `until_diagnostics` argument to be an array.");
 		until_diagnostics = 0;
 		for (json &json_diagnostic_type : packet.at("until_diagnostics"))
-			if (json_diagnostic_type == "print")
+			if (json_diagnostic_type == "break")
+				until_diagnostics |= (uint32_t)diagnostic_type::breakpoint;
+			else if (json_diagnostic_type == "print")
 				until_diagnostics |= (uint32_t)diagnostic_type::print;
 			else if (json_diagnostic_type == "assert")
 				until_diagnostics |= (uint32_t)diagnostic_type::assertion;
 			else if (json_diagnostic_type == "assume")
 				until_diagnostics |= (uint32_t)diagnostic_type::assumption;
 			else
-				return build_error("invalid_args", "The `run_simulation` command supports the following diagnostic types: `print`, `assert`, `assume`.");
+				return build_error("invalid_args", "The `run_simulation` command supports the following diagnostic types: `break`, `print`, `assert`, `assume`.");
 		packet.erase("until_diagnostics");
 		if (!(packet.contains("sample_item_values") && packet.at("sample_item_values").is_boolean()))
 			return build_error("invalid_args", "The `run_simulation` command requires the `sample_item_values` argument to be a boolean.");
