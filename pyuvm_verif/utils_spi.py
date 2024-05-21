@@ -34,6 +34,8 @@ class SpiBfm(metaclass=utility_classes.Singleton):
         self.result_mon_queue = Queue(maxsize=0)
         self.data_miso = 0
         self.clk_div = 0
+        self.width_num = 0
+        self.width_en = 0
     def reverse_bits(self, number, bit_size):
         binary = bin(number)
         reverse = binary[-1:1:-1]
@@ -53,6 +55,7 @@ class SpiBfm(metaclass=utility_classes.Singleton):
         result = await self.result_mon_queue.get()
         return result
     async def cmd_mon_bfm(self):
+        global wid_end
         while True:
             await RisingEdge(self.dut.clk_test)
             wstb = get_int(self.dut.wstb)
@@ -65,11 +68,20 @@ class SpiBfm(metaclass=utility_classes.Singleton):
                     if addr == 0:
                         self.sck_start  = (data & 0x01)
                         self.sck_edge   = (data & 0x02)
+                        width_bin = bin(data)[2:].zfill(8)
+                        self.width_num = int(width_bin[:5],2)
                         uvm_root().logger.info(f"SCK EDGE: {self.sck_edge}")
                         uvm_root().logger.info(f"SCK START: {self.sck_start}")
+                        uvm_root().logger.info(f"!!!WIDTH NUMBER: {self.width_num}!!!")
+                        wid_end = self.width_num + 10
                     if addr == 4:
                         self.clk_div = get_int(self.dut.wdata)
                         uvm_root().logger.info(f"CLK DIV: {self.clk_div}")
+                    if addr == 11:
+                        self.width_en = 1
+                        for i in range(0,wid_end):
+                            await FallingEdge(self.dut.clk_test)
+                        self.width_en = 0
                 else:
                     op = 2
                 cmd_tuple = (addr,
@@ -180,7 +192,6 @@ class SpiBfm(metaclass=utility_classes.Singleton):
             wstb = get_int(self.dut.wstb)
             if wstb == 1:
                 await FallingEdge(self.dut.clk_test)
-                result = get_int(self.dut.wdata)
                 addr = get_int(self.dut.addr)
                 if addr == 11:
                     await RisingEdge(self.dut.sck)
@@ -191,8 +202,26 @@ class SpiBfm(metaclass=utility_classes.Singleton):
                     uvm_root().logger.info(f"CLK DIVIDER MEASURED: {clk_div_measr}")
                     assert self.clk_div == (clk_div_measr-2), f"CLK DIV {self.clk_div} NOT EQUAL TO CLK DIV MEASURED {clk_div_measr-2}"
 
+    async def width_assert_bfm(self):
+        while True:
+            await RisingEdge(self.dut.clk_test)
+            wstb = get_int(self.dut.wstb)
+            if wstb == 1:
+                await FallingEdge(self.dut.clk_test)
+                addr = get_int(self.dut.addr)
+                if addr == 11:
+                    width_measer = 0
+                    while self.width_en == 1:
+                        await RisingEdge(self.dut.sck)
+                        width_measer = width_measer + 1
+                    uvm_root().logger.info(f"!!!! WIDTH OF SPI MEASURED: {width_measer} !!!!")
+                    if self.clk_div == 0:
+                        assert self.width_num == (
+                            width_measer-1), f"WIDTH {self.width_num} NOT EQUAL TO WIDTH MEASURED {width_measer-1}"
+
     def start_bfm(self):
         cocotb.start_soon(self.driver_bfm())
         cocotb.start_soon(self.cmd_mon_bfm())
         cocotb.start_soon(self.result_mon_bfm())
         cocotb.start_soon(self.clkdiv_assert_bfm())
+        cocotb.start_soon(self.width_assert_bfm())

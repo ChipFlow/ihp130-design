@@ -115,49 +115,6 @@ class TestWrSeq(uvm_sequence):
             spiwr3 = SpiSeq("spiwr3", 0xb, data3, 1)
             await spiwr3.start(seqr)
 
-        spiwr0 = SpiSeq("spiwr0", 0x0, 0x87, 1)
-        spiwr1 = SpiSeq("spiwr1", 0x4, 0x0, 1)
-        spiwr2 = SpiSeq("spiwr2", 0xb, 0x45, 1)
-        await spiwr0.start(seqr)
-        await spiwr1.start(seqr)
-        await spiwr2.start(seqr)
-        for i in range(1):
-            data3 = random.randint(0, 255)
-            spiwr3 = SpiSeq("spiwr3", 0xb, data3, 1)
-            await spiwr3.start(seqr)
-
-        spiwr0 = SpiSeq("spiwr0", 0x0, 0x86, 1)
-        spiwr1 = SpiSeq("spiwr1", 0x4, 0x0, 1)
-        spiwr2 = SpiSeq("spiwr2", 0xb, 0x45, 1)
-        await spiwr0.start(seqr)
-        await spiwr1.start(seqr)
-        await spiwr2.start(seqr)
-        for i in range(1):
-            data3 = random.randint(0, 255)
-            spiwr3 = SpiSeq("spiwr3", 0xb, data3, 1)
-            await spiwr3.start(seqr)
-
-        spiwr0 = SpiSeq("spiwr0", 0x0, 0x3d, 1)
-        spiwr1 = SpiSeq("spiwr1", 0x4, 0x0, 1)
-        spiwr2 = SpiSeq("spiwr2", 0xb, 0x45, 1)
-        await spiwr0.start(seqr)
-        await spiwr1.start(seqr)
-        await spiwr2.start(seqr)
-        for i in range(0):
-            data3 = random.randint(0, 255)
-            spiwr3 = SpiSeq("spiwr3", 0xb, data3, 1)
-            await spiwr3.start(seqr)
-
-        spiwr0 = SpiSeq("spiwr0", 0x0, 0x3c, 1)
-        spiwr1 = SpiSeq("spiwr1", 0x4, 0x0, 1)
-        spiwr2 = SpiSeq("spiwr2", 0xb, 0x45, 1)
-        await spiwr0.start(seqr)
-        await spiwr1.start(seqr)
-        await spiwr2.start(seqr)
-        for i in range(0):
-            data3 = random.randint(0, 255)
-            spiwr3 = SpiSeq("spiwr3", 0xb, data3, 1)
-            await spiwr3.start(seqr)
 
 class TestRdSeq(uvm_sequence):
     async def body(self):
@@ -185,40 +142,33 @@ class TestRdSeq(uvm_sequence):
             spird = SpiSeq("spird", 0xc, data3, 2)
             await spird.start(seqr)
 
-        spiwr0 = SpiSeq("spiwr0", 0x0, 0x3d, 1)
-        spiwr1 = SpiSeq("spiwr1", 0x4, 0x0, 1)
-        await spiwr0.start(seqr)
-        await spiwr1.start(seqr)
-        for i in range(1):
-            data3 = random.randint(0, 255)
-            spiwr3 = SpiSeq("spiwr3", 0xb, data3, 1)
-            await spiwr3.start(seqr)
-            spird = SpiSeq("spird", 0xc, data3, 2)
-            await spird.start(seqr)
-
-        spiwr0 = SpiSeq("spiwr0", 0x0, 0x3c, 1)
-        spiwr1 = SpiSeq("spiwr1", 0x4, 0x0, 1)
-        await spiwr0.start(seqr)
-        await spiwr1.start(seqr)
-        for i in range(1):
-            data3 = random.randint(0, 255)
-            spiwr3 = SpiSeq("spiwr3", 0xb, data3, 1)
-            await spiwr3.start(seqr)
-            spird = SpiSeq("spird", 0xc, data3, 2)
-            await spird.start(seqr)
-
 class TestClkdivSeq(uvm_sequence):
     async def body(self):
         uvm_root().logger.info(f"TEST: CLOCK DIVIDER")
         seqr = ConfigDB().get(None, "", "SEQR")
         spiwr0 = SpiSeq("spiwr0", 0x0, 0x3f, 1)
         await spiwr0.start(seqr)
-        data1 = random.randint(0, 255)
-        spiwr1 = SpiSeq("spiwr1", 0x4, data1, 1)
-        await spiwr1.start(seqr)
-        data2 = random.randint(0, 255)
-        spiwr2 = SpiSeq("spiwr2", 0xb, data2, 1)
-        await spiwr2.start(seqr)
+        for i in (1,25,63,127):
+            data1 = i
+            spiwr1 = SpiSeq("spiwr1", 0x4, data1, 1)
+            await spiwr1.start(seqr)
+            data2 = random.randint(0, 255)
+            spiwr2 = SpiSeq("spiwr2", 0xb, data2, 1)
+            await spiwr2.start(seqr)
+
+class WidthSeq(uvm_sequence):
+    async def body(self):
+        uvm_root().logger.info(f"TEST: SPI WIDTH")
+        seqr = ConfigDB().get(None, "", "SEQR")
+        for i in (0x3f, 0x47):
+            data1 = i;
+            spiwr0 = SpiSeq("spiwr0", 0x0, data1, 1)
+            await spiwr0.start(seqr)
+            spiwr1 = SpiSeq("spiwr1", 0x4, 0x0, 1)
+            await spiwr1.start(seqr)
+            data2 = random.randint(0, 255)
+            spiwr2 = SpiSeq("spiwr2", 0xb, data2, 1)
+            await spiwr2.start(seqr)
 
 class Driver(uvm_driver):
     def build_phase(self):
@@ -359,4 +309,11 @@ class ClkdividerTest(BasicTest):
 
     def build_phase(self):
         uvm_factory().set_type_override_by_type(TestSeq, TestClkdivSeq)
+        super().build_phase()
+
+@pyuvm.test()
+class WidthTest(BasicTest):
+
+    def build_phase(self):
+        uvm_factory().set_type_override_by_type(TestSeq, WidthSeq)
         super().build_phase()

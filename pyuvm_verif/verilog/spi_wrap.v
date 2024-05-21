@@ -20,7 +20,6 @@ module spi_wrap
 
   //clock generation
   bit clk_test;
-  bit wstb_test;
 
   initial clk_test = 0;
   always #5 clk_test = ~clk_test;
