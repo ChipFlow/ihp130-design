@@ -29,7 +29,7 @@ class TestPdmPeripheral(unittest.TestCase):
         self.assertEqual(result, value)
 
     def test_pdm_ao(self):
-        dut = PDMPeripheral(name="dut", bitwidth=10)
+        dut = PDMPeripheral(bitwidth=10)
         def testbench():
             yield from self._write_reg(dut, self.REG_OUTVAL, 0xFF, 4)
             yield Tick()
@@ -52,7 +52,7 @@ class TestPdmPeripheral(unittest.TestCase):
             sim.run()
 
     def test_conf(self):
-        dut = PDMPeripheral(name="dut", bitwidth=10)
+        dut = PDMPeripheral(bitwidth=10)
         def testbench():
             yield from self._write_reg(dut, self.REG_OUTVAL, 0xFF, 4)
             yield Tick()

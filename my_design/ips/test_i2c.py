@@ -6,7 +6,7 @@ import unittest
 
 class _I2CHarness(Elaboratable):
     def __init__(self):
-        self.i2c = I2CPeripheral(name="dut")
+        self.i2c = I2CPeripheral()
         self.sda = Signal()
         self.scl = Signal()
         self.sda_i = Signal(init=1)

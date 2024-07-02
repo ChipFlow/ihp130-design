@@ -31,7 +31,7 @@ class TestPwmPeripheral(unittest.TestCase):
         self.assertEqual(result, value)
 
     def test_pwm_o(self):
-        dut = PWMPeripheral(name="dut", pins=PWMPins())
+        dut = PWMPeripheral(pins=PWMPins())
         def testbench():
             yield from self._write_reg(dut, self.REG_NUMR, 0x1F, 4)
             yield from self._write_reg(dut, self.REG_DENOM, 0xFF, 4)
@@ -53,7 +53,7 @@ class TestPwmPeripheral(unittest.TestCase):
             sim.run()
 
     def test_conf(self):
-        dut = PWMPeripheral(name="dut", pins=PWMPins())
+        dut = PWMPeripheral(pins=PWMPins())
         def testbench():
             yield from self._write_reg(dut, self.REG_NUMR, 0x1F, 4)
             yield from self._write_reg(dut, self.REG_DENOM, 0xFF, 4)
@@ -67,7 +67,7 @@ class TestPwmPeripheral(unittest.TestCase):
             sim.run()
 
     def test_dir(self):
-        dut = PWMPeripheral(name="dut", pins=PWMPins())
+        dut = PWMPeripheral(pins=PWMPins())
         def testbench():
             yield from self._write_reg(dut, self.REG_NUMR, 0x1F, 4)
             yield from self._write_reg(dut, self.REG_DENOM, 0xFF, 4)

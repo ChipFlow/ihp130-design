@@ -145,8 +145,8 @@ class SPIPeripheral(wiring.Component):
     """
     A custom, minimal SPI controller
     """
-    def __init__(self, *, name):
-        regs = csr.Builder(addr_width=5, data_width=8, name=name)
+    def __init__(self):
+        regs = csr.Builder(addr_width=5, data_width=8)
 
         self._config       = regs.add("config",       self.Config(),      offset=0x00)
         self._divider      = regs.add("divider",      self.Divider(),     offset=0x04)
@@ -192,7 +192,7 @@ class SPIPeripheral(wiring.Component):
 if __name__ == '__main__':
     from amaranth.back import verilog
     from pathlib import Path
-    spi = SPIPeripheral(name="spi")
+    spi = SPIPeripheral()
     Path("build/export/ips").mkdir(parents=True, exist_ok=True)
     with open("build/export/ips/spi_peripheral.v", "w") as f:
         f.write(verilog.convert(spi, name="spi_peripheral"))
