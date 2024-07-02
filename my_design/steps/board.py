@@ -24,7 +24,8 @@ class BoardSocWrapper(wiring.Component):
         connect(m, flipped(spiflash_provider.pins), soc.flash)
 
         m.submodules.led_gpio_provider = led_gpio_provider = platform.providers.LEDGPIOProvider()
-        connect(m, flipped(led_gpio_provider.pins), soc.gpio_0)
+        for n in range(8):
+            connect(m, soc.gpio_0[n], led_gpio_provider.pins[n])
 
         m.submodules.uart_provider = uart_provider = platform.providers.UARTProvider()
         connect(m, flipped(uart_provider.pins), soc.uart_0)

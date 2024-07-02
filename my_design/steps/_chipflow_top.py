@@ -59,9 +59,9 @@ class ChipflowTop(Elaboratable):
             for i in range(8):
                 platform_pin = platform.request(f"gpio{gpio_bank}_{i}")
                 m.d.comb += [
-                    platform_pin.o.eq(gpio.o[i]),
-                    platform_pin.oe.eq(gpio.oe[i]),
-                    gpio.i[i].eq(platform_pin.i),
+                    platform_pin.o.eq(gpio[i].o),
+                    platform_pin.oe.eq(gpio[i].oe),
+                    gpio[i].i.eq(platform_pin.i),
                 ]
 
         _connect_interface(soc.uart_0, "uart0")

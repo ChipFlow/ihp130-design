@@ -82,23 +82,64 @@ private:
     } s;
 };
 
-struct gpio_model {
-    static constexpr unsigned width = 8;
-    std::string name;
-    gpio_model(const std::string &name, const value<width> &o, const value<width> &oe, value<width> &i) : name(name), o(o), oe(oe), i(i) {};
+struct gpio_pin {
+    value<1> &i;
+    const value<1> &o;
+    const value<1> &oe;
+    gpio_pin(value<1> &i, const value<1> &o, const value<1> &oe) : i(i), o(o), oe(oe) {};
+};
 
-    void step(unsigned timestamp);
+template<unsigned Width>
+struct gpio_model {
+    static constexpr unsigned width = Width;
+    std::string name;
+    gpio_model(const std::string &name, const std::array<gpio_pin, Width> &pins) : name(name), pins(pins) {};
+
+    void step(unsigned timestamp) {
+        uint32_t o_value = 0;
+        uint32_t oe_value = 0;
+        for (unsigned i = 0; i < Width; i++) {
+            o_value |= (pins[i].o.template get<uint32_t>() << i);
+            oe_value |= (pins[i].oe.template get<uint32_t>() << i);
+        }
+
+        for (auto action : get_pending_actions(name)) {
+            if (action.event == "set") {
+                auto bin = std::string(action.payload);
+                input_data = 0;
+                for (unsigned i = 0; i < Width; i++) {
+                    if (bin.at((Width - 1) - i) == '1')
+                        input_data |= (1U << i);
+                }
+            }
+        }
+
+        if (o_value != s.o_last || oe_value != s.oe_last) {
+            std::string formatted_value;
+            for (int i = Width - 1; i >= 0; i--) {
+                if (oe_value & (1U << unsigned(i)))
+                    formatted_value += (o_value & (1U << unsigned(i))) ? '1' : '0';
+                else
+                    formatted_value += 'Z';
+            }
+            log_event(timestamp, name, "change", json(formatted_value));
+        }
+
+        uint32_t i_value = (input_data & ~oe_value) | (o_value & oe_value);
+        for (unsigned i = 0; i < Width; i++) {
+            pins[i].i.set((i_value >> i) & 1);
+        }
+        s.o_last = o_value;
+        s.oe_last = oe_value;
+    }
 
 private:
     uint32_t input_data;
-    const value<width> &o;
-    const value<width> &oe;
-    value<width> &i;
+    const std::array<gpio_pin, Width> &pins;
     struct {
         uint32_t o_last, oe_last;
     } s;
 };
-
 
 struct spi_model {
     std::string name;

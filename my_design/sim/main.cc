@@ -20,8 +20,28 @@ int main(int argc, char **argv) {
     uart_model uart_0("uart_0", top.p_uart__0____tx__o, top.p_uart__0____rx__i);
     uart_model uart_1("uart_1", top.p_uart__1____tx__o, top.p_uart__1____rx__i);
 
-    gpio_model gpio_0("gpio_0", top.p_gpio__0____o, top.p_gpio__0____oe, top.p_gpio__0____i);
-    gpio_model gpio_1("gpio_1", top.p_gpio__1____o, top.p_gpio__1____oe, top.p_gpio__1____i);
+    std::array<gpio_pin, 8> gpio_0_pins = {
+        gpio_pin(top.p_gpio__0____0____i, top.p_gpio__0____0____o, top.p_gpio__0____0____oe),
+        gpio_pin(top.p_gpio__0____1____i, top.p_gpio__0____1____o, top.p_gpio__0____1____oe),
+        gpio_pin(top.p_gpio__0____2____i, top.p_gpio__0____2____o, top.p_gpio__0____2____oe),
+        gpio_pin(top.p_gpio__0____3____i, top.p_gpio__0____3____o, top.p_gpio__0____3____oe),
+        gpio_pin(top.p_gpio__0____4____i, top.p_gpio__0____4____o, top.p_gpio__0____4____oe),
+        gpio_pin(top.p_gpio__0____5____i, top.p_gpio__0____5____o, top.p_gpio__0____5____oe),
+        gpio_pin(top.p_gpio__0____6____i, top.p_gpio__0____6____o, top.p_gpio__0____6____oe),
+        gpio_pin(top.p_gpio__0____7____i, top.p_gpio__0____7____o, top.p_gpio__0____7____oe)
+    };
+    std::array<gpio_pin, 8> gpio_1_pins = {
+        gpio_pin(top.p_gpio__1____0____i, top.p_gpio__1____0____o, top.p_gpio__1____0____oe),
+        gpio_pin(top.p_gpio__1____1____i, top.p_gpio__1____1____o, top.p_gpio__1____1____oe),
+        gpio_pin(top.p_gpio__1____2____i, top.p_gpio__1____2____o, top.p_gpio__1____2____oe),
+        gpio_pin(top.p_gpio__1____3____i, top.p_gpio__1____3____o, top.p_gpio__1____3____oe),
+        gpio_pin(top.p_gpio__1____4____i, top.p_gpio__1____4____o, top.p_gpio__1____4____oe),
+        gpio_pin(top.p_gpio__1____5____i, top.p_gpio__1____5____o, top.p_gpio__1____5____oe),
+        gpio_pin(top.p_gpio__1____6____i, top.p_gpio__1____6____o, top.p_gpio__1____6____oe),
+        gpio_pin(top.p_gpio__1____7____i, top.p_gpio__1____7____o, top.p_gpio__1____7____oe)
+    };
+    gpio_model<8> gpio_0("gpio_0", gpio_0_pins);
+    gpio_model<8> gpio_1("gpio_1", gpio_1_pins);
 
     spi_model spi_0("spi_0", top.p_user__spi__0____sck__o, top.p_user__spi__0____csn__o, top.p_user__spi__0____mosi__o, top.p_user__spi__0____miso__i);
     spi_model spi_1("spi_1", top.p_user__spi__1____sck__o, top.p_user__spi__1____csn__o, top.p_user__spi__1____mosi__o, top.p_user__spi__1____miso__i);

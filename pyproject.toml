@@ -13,7 +13,7 @@ license = {file = "LICENSE.md"}
 
 requires-python = "~=3.9"
 dependencies = [
-  "amaranth[builtin-yosys] @ git+https://github.com/amaranth-lang/amaranth",
+  "amaranth[builtin-yosys]>=0.5,<0.6",
   "amaranth-cv32e40p @ git+https://github.com/ChipFlow/amaranth-cv32e40p@main",
   "chipflow-lib @ git+https://github.com/ChipFlow/chipflow-lib.git@main",
   "pyuvm~=2.9.1",

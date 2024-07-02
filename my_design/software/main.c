@@ -62,27 +62,28 @@ void main() {
     // puthex(SOC_ID->version);
     puts("\r\n");
 
-    GPIO_1->oe = 0xF0;
-    GPIO_1->out = 0x50;
-    GPIO_1->out = 0xA0;
-    GPIO_1->oe = 0x00;
+    GPIO_1->mode = GPIO_PIN4_PUSH_PULL | GPIO_PIN5_PUSH_PULL \
+                 | GPIO_PIN6_PUSH_PULL | GPIO_PIN7_PUSH_PULL;
+    GPIO_1->output = 0x50;
+    GPIO_1->setclr = GPIO_PIN4_CLEAR | GPIO_PIN5_SET \
+                   | GPIO_PIN6_CLEAR | GPIO_PIN7_SET;
+    GPIO_1->mode = GPIO_PIN4_INPUT_ONLY | GPIO_PIN5_INPUT_ONLY \
+		 | GPIO_PIN6_INPUT_ONLY | GPIO_PIN7_INPUT_ONLY;
 
     uart_puts(UART_1, "ABCD");
-    
+
     MOTOR_PWM0->numr = 0x1F;
     MOTOR_PWM0->denom = 0xFF;
     MOTOR_PWM0->conf = 0x3;
 
-    
     MOTOR_PWM1->numr = 0x3F;
     MOTOR_PWM1->denom = 0xFF;
     MOTOR_PWM1->conf = 0x3;
 
-
     MOTOR_PWM9->numr = 0x7F;
     MOTOR_PWM9->denom = 0xFF;
     MOTOR_PWM9->conf = 0x3;
-	
+
     PDM0->outval = 0xFF;
     PDM1->outval = 0x7F;
     PDM2->outval = 0x3F;
@@ -90,11 +91,11 @@ void main() {
     PDM0->conf = 0x1;
     PDM1->conf = 0x1;
     PDM2->conf = 0x0;
-	
+
     puts("GPIO: ");
-    puthex(GPIO_1->in);
+    puthex(GPIO_1->input);
     puts(" ");
-    puthex(GPIO_1->in);
+    puthex(GPIO_1->input);
     puts("\n");
 
     puts("UART1: ");

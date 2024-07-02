@@ -7,8 +7,8 @@ from amaranth.lib.wiring import In, Out, flipped, connect
 
 from amaranth_soc import csr, wishbone
 from amaranth_soc.csr.wishbone import WishboneCSRBridge
+from amaranth_soc import gpio
 
-from amaranth_orchard.base.gpio import GPIOPeripheral, GPIOPins
 from amaranth_orchard.memory.spimemio import SPIMemIO, QSPIPins
 from amaranth_orchard.io.uart import UARTPeripheral, UARTPins
 from amaranth_orchard.memory.sram import SRAMPeripheral
@@ -68,7 +68,7 @@ class MySoC(wiring.Component):
             interfaces[f"uart_{i}"] = Out(UARTPins.Signature())
 
         for i in range(self.gpio_banks):
-            interfaces[f"gpio_{i}"] = Out(GPIOPins.Signature(width=self.gpio_width))
+            interfaces[f"gpio_{i}"] = Out(gpio.PinSignature()).array(self.gpio_width)
 
         super().__init__(interfaces)
 
@@ -176,12 +176,16 @@ class MySoC(wiring.Component):
 
         # GPIOs
         for i in range(self.gpio_banks):
-            gpio = GPIOPeripheral(pins=getattr(self, f"gpio_{i}"))
+            gpio_bank = gpio.Peripheral(pin_count=8, addr_width=4, data_width=8)
             base_addr = self.csr_gpio_base + i * self.periph_offset
-            csr_decoder.add(gpio.bus, name=f"gpio_{i}", addr=base_addr - self.csr_base)
-            sw.add_periph("gpio", f"GPIO_{i}", base_addr)
+            csr_decoder.add(gpio_bank.bus, name=f"gpio_{i}", addr=base_addr - self.csr_base)
 
-            setattr(m.submodules, f"gpio_{i}", gpio)
+            gpio_bank_pins = getattr(self, f"gpio_{i}")
+            for n in range(8):
+                connect(m, gpio_bank.pins[n], flipped(gpio_bank_pins[n]))
+
+            sw.add_periph("gpio", f"GPIO_{i}", base_addr)
+            setattr(m.submodules, f"gpio_{i}", gpio_bank)
 
         # UART
         for i in range(self.uart_count):

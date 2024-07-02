@@ -3,7 +3,6 @@
 { "timestamp": 0, "peripheral": "spi_0", "event": "deselect", "payload": "" },
 { "timestamp": 0, "peripheral": "spi_1", "event": "deselect", "payload": "" },
 { "timestamp": 0, "peripheral": "spi_2", "event": "deselect", "payload": "" },
-{ "timestamp": 7022, "peripheral": "gpio_0", "event": "change", "payload": "ZZZZZZZZ" },
 { "timestamp": 24094, "peripheral": "uart_0", "event": "tx", "payload": 240 },
 { "timestamp": 35226, "peripheral": "uart_0", "event": "tx", "payload": 159 },
 { "timestamp": 46358, "peripheral": "uart_0", "event": "tx", "payload": 144 },
