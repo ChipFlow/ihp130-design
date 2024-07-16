@@ -87,8 +87,7 @@ jobs:
           PATH=${GITHUB_WORKSPACE}/.verilator/bin:$PATH make verif-run-pyuvm
 
   submit:
-    needs: test
-    if: ${{ false }}
+    needs: [test, pyuvm]
     runs-on: ubuntu-22.04
     steps:
       - name: Check out source code

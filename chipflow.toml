@@ -1,4 +1,5 @@
-# TODO: update with new padring and GF130
+[chipflow]
+project_id = 10
 
 [chipflow.steps]
 sim = "my_design.steps.sim:MySimStep"
@@ -141,7 +142,7 @@ sc_jtag_trst = { type = "i", loc = "111" }
 # x1 reserved
 
 # System
-sys_clk   = { type = "i", loc = "114" }
+sys_clk   = { type = "clk", loc = "114" }
 sys_rst_n = { type = "i", loc = "115" }
 test_clk  = { type = "i", loc = "116" }
 test_mode = { type = "i", loc = "117" }
