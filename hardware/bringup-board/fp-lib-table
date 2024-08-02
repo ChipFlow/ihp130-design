@@ -1,0 +1,4 @@
+(fp_lib_table
+  (version 7)
+  (lib (name "bringup_board_parts")(type "KiCad")(uri "${KIPRJMOD}/bringup_board_parts.pretty")(options "")(descr ""))
+)
