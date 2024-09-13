@@ -5,23 +5,45 @@ on:
   pull_request:
   merge_group:
 
-name: CI
-jobs:
+concurrency:
+  group: ${{ github.workflow }}-${{ github.head_ref || github.run_id }}
+  cancel-in-progress: true
 
+jobs:
   test:
-    runs-on: [ubuntu-latest, ubuntu-24.04, macos-12, macos-13, macos-14]
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, ubuntu-24.04, macos-12, macos-13, macos-14]
+        python: ["3.9", "3.10", "3.11", "3.12"]
+        exclude:
+          - os: macos-12
+            python: "3.11"
+          - os: macos-12
+            python: "3.12"
+          - os: macos-13
+            python: "3.11"
+          - os: macos-13
+            python: "3.12"
+
+
+    runs-on: ${{ matrix.os }}
     steps:
       - name: Check out source code
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
+
       - name: Set up PDM
         uses: pdm-project/setup-pdm@v4
         with:
           cache: true
+          python-version: ${{ matrix.python }}
+
       - name: Install dependencies
         run: |
           pdm install
+
       - name: Cache YoWASP build products
         uses: actions/cache@v4
         with:
@@ -29,29 +51,62 @@ jobs:
           key: YoWASP-${{ runner.os }}-${{ hashFiles('./.venv/**/*.wasm') }}
           restore-keys: |
             YoWASP-${{ runner.os }}-
+
       - name: Run tests
         run: |
           make sim-check
 
   pyuvm:
-    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        os: ["ubuntu-latest", "ubuntu-24.04", "macos-12", "macos-13", "macos-14"]
+        python: ["3.9", "3.10", "3.11", "3.12"]
+        exclude:
+          - os: macos-12
+            python: "3.11"
+          - os: macos-12
+            python: "3.12"
+          - os: macos-13
+            python: "3.11"
+          - os: macos-13
+            python: "3.12"
+
+
+      fail-fast: false
+
+    runs-on: ${{ matrix.os }}
     env:
       DEPS_PATH: ${{ github.workspace }}/deps
       VERILATOR_REVISION: ba47da6587cd62f43546ce2aa50b5e13d2dde216
+
     steps:
+      - name: Install dependencies (Ubuntu)
+        run: |
+          sudo apt-get update
+          sudo apt-get install git build-essential autoconf g++ flex bison perl help2man zlib1g-dev libfl-dev
+        if: runner.os == 'Linux'
+
+      - name: Install dependencies (Mac)
+        run: |
+          brew install autoconf flex bison perl help2man zlib
+        if: runner.os == 'macOS'
+
       - name: Check out source code
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
+
+      - name: ccache
+        uses: hendrikmuhs/ccache-action@v1.2
+        with:
+          key: ${{ matrix.os }}-${{ matrix.python }}
+
       - name: Set up PDM
         uses: pdm-project/setup-pdm@v4
         with:
           cache: true
-      - name: Install dependencies
-        run: |
-          sudo apt-get update
-          sudo apt-get install git build-essential autoconf g++ flex bison perl help2man zlib1g-dev libfl-dev
-          pdm install
+          python-version: ${{ matrix.python }}
+
       - name: Cache YoWASP build products
         uses: actions/cache@v4
         with:
@@ -65,7 +120,7 @@ jobs:
         id: cache-verilator
         with:
           path: .verilator
-          key: cache-verilator-${{ env.VERILATOR-REVISION }}-r1
+          key: cache-verilator-${{ env.VERILATOR-REVISION }}-${{ matrix.os }}
 
       - name: Build verilator
         run: |
