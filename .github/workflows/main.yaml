@@ -77,7 +77,7 @@ jobs:
     runs-on: ${{ matrix.os }}
     env:
       DEPS_PATH: ${{ github.workspace }}/deps
-      VERILATOR_REVISION: ba47da6587cd62f43546ce2aa50b5e13d2dde216
+      VERILATOR_REVISION: v5.028
 
     steps:
       - name: Install dependencies (Ubuntu)
