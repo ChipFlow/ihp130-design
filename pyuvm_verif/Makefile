@@ -11,7 +11,7 @@ else ifeq ($(ARG),FLASH)
 		@echo "TODO PERIPHERAL $(ARG)"
 endif
 
-COMPILE_ARGS += -Wno-fatal -Wno-BLKANDNBLK --timing --trace
+COMPILE_ARGS += -Wno-fatal -Wno-BLKANDNBLK --timing --trace --std=c++20
 EXTRA_ARGS += --trace --trace-structs
 
 COCOTB_HDL_TIMEUNIT = 1ns
