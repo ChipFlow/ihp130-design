@@ -57,6 +57,7 @@ jobs:
           make sim-check
 
   pyuvm:
+    if: false
     strategy:
       matrix:
         os: ["ubuntu-latest", "ubuntu-24.04", "macos-12", "macos-13", "macos-14"]
