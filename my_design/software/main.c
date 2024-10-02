@@ -13,7 +13,7 @@ uint32_t spi_xfer(volatile spi_regs_t *spi, uint32_t data, uint32_t width) {
     while (!(spi->status & 0x1)) // wait for rx full
         ;
     spi->config = ((width - 1) << 3) | 0x02; // CS=0, SCK_EDGE=1, SCK_IDLE=0
-    return spi->receive_data; 
+    return spi->receive_data;
 }
 
 void i2c_start(volatile i2c_regs_t *i2c) {
@@ -111,7 +111,7 @@ void main() {
     // test 8 bit transfer
     puthex(spi_xfer(USER_SPI_0, 0x5A, 8));
     puts(" ");
-    // test an odd 21 bit transfer 
+    // test an odd 21 bit transfer
     puthex(spi_xfer(USER_SPI_0, 0x123456, 21));
     puts("\n");
 

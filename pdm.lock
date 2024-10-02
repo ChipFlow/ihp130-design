@@ -5,7 +5,7 @@
 groups = ["default", "test"]
 strategy = ["inherit_metadata"]
 lock_version = "4.5.0"
-content_hash = "sha256:01263f0ce82026ac8ebcd0a356bcfed078a4cbcc65022d97ab7d55b293ee2c6f"
+content_hash = "sha256:1568d144ac2366a43abd551a62a9309eaa6e56bae296e8687f965580d2899f63"
 
 [[metadata.targets]]
 requires_python = "~=3.9"
@@ -37,19 +37,6 @@ summary = "Board and connector definitions for Amaranth HDL"
 groups = ["default"]
 dependencies = [
     "amaranth<0.7,>=0.5",
-]
-
-[[package]]
-name = "amaranth-cv32e40p"
-version = "0.0.0"
-requires_python = "<4.0,>=3.8"
-git = "https://github.com/ChipFlow/amaranth-cv32e40p"
-ref = "main"
-revision = "d6662e76bbb13785cd3afc6644c884a92354fe99"
-summary = "CV32E40P and Amaranth Integration"
-groups = ["default"]
-dependencies = [
-    "amaranth>=0.5",
 ]
 
 [[package]]
@@ -532,6 +519,20 @@ files = [
     {file = "MarkupSafe-3.0.2-cp39-cp39-win32.whl", hash = "sha256:8c4e8c3ce11e1f92f6536ff07154f9d49677ebaaafc32db9db4620bc11ed480f"},
     {file = "MarkupSafe-3.0.2-cp39-cp39-win_amd64.whl", hash = "sha256:6e296a513ca3d94054c2c881cc913116e90fd030ad1c656b3869762b754f5f8a"},
     {file = "markupsafe-3.0.2.tar.gz", hash = "sha256:ee55d3edf80167e48ea11a923c7386f4669df67d7994554387f84e7d8b0a2bf0"},
+]
+
+[[package]]
+name = "minerva"
+version = "0.1.dev131"
+requires_python = "~=3.8"
+git = "https://github.com/minerva-cpu/minerva"
+revision = "010050c4a61e6faed055685d474f944376df22fe"
+summary = "A 32-bit RISC-V soft processor"
+groups = ["default"]
+dependencies = [
+    "amaranth-soc @ git+https://github.com/amaranth-lang/amaranth-soc",
+    "amaranth[builtin-yosys]<0.6,>=0.5",
+    "yowasp-yosys",
 ]
 
 [[package]]
