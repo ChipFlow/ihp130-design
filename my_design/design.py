@@ -11,16 +11,16 @@ from amaranth_soc.wishbone.sram import WishboneSRAM
 from amaranth_soc import gpio
 
 from amaranth_orchard.io.uart import UARTPeripheral, UARTPins
-from amaranth_orchard.base.platform_timer import PlatformTimer
 from amaranth_orchard.base.soc_id import SoCID
 
 from minerva.core import Minerva
 
-from .ips.spi_flash import PortGroup, QSPIController, WishboneQSPIFlashController
-from .ips.spi import SPISignature, SPIPeripheral
 from .ips.i2c import I2CSignature, I2CPeripheral
 from .ips.pwm import PWMPins, PWMPeripheral
 from .ips.pdm import PDMPeripheral
+from .ips.spi import SPISignature, SPIPeripheral
+from .ips.spi_flash import PortGroup, QSPIController, WishboneQSPIFlashController
+from .ips.riscv_timer import RISCVMachineTimer
 
 
 __all__ = ["MySoC"]
@@ -41,12 +41,12 @@ class MySoC(wiring.Component):
     def __init__(self):
         # Top level interfaces
 
-        self.user_spi_count = 3
-        self.i2c_count      = 2
-        self.motor_count    = 10
-        self.pdm_ao_count   = 6
-        self.uart_count     = 2
-        self.gpio_banks     = 2
+        self.user_spi_count = 0
+        self.i2c_count      = 0
+        self.motor_count    = 0
+        self.pdm_ao_count   = 0
+        self.uart_count     = 1
+        self.gpio_banks     = 0
         self.gpio_width     = 8
 
         members = {"flash": Out(_QSPIPinsSignature())}
@@ -76,6 +76,7 @@ class MySoC(wiring.Component):
 
         self.csr_gpio_base     = 0xb1000000
         self.csr_uart_base     = 0xb2000000
+        self.csr_timer_base    = 0xb3000000
         self.csr_soc_id_base   = 0xb4000000
 
         self.csr_user_spi_base = 0xb5000000
@@ -205,6 +206,13 @@ class MySoC(wiring.Component):
 
             sw.add_periph("uart", f"UART_{i}", base_addr)
 
+        # Timer
+
+        m.submodules.timer = timer = RISCVMachineTimer()
+        csr_decoder.add(timer.bus, name="timer", addr=self.csr_timer_base - self.csr_base)
+
+        m.d.comb += cpu.timer_interrupt.eq(timer.irq)
+
         # I2Cs
 
         for i in range(self.i2c_count):
@@ -255,8 +263,8 @@ class MySoC(wiring.Component):
 
         # Debug support
 
-        if isinstance(platform, SimPlatform):
-            m.submodules.wb_mon = platform.add_monitor("wb_mon", wb_decoder.bus)
+        # if isinstance(platform, SimPlatform):
+        #     m.submodules.wb_mon = platform.add_monitor("wb_mon", wb_decoder.bus)
 
         sw.generate("build/software/generated")
 

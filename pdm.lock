@@ -523,10 +523,10 @@ files = [
 
 [[package]]
 name = "minerva"
-version = "0.1.dev131"
+version = "0.1.dev135"
 requires_python = "~=3.8"
 git = "https://github.com/minerva-cpu/minerva"
-revision = "010050c4a61e6faed055685d474f944376df22fe"
+revision = "d8de00e39a69ed031f0222a20eef3c4ccc5f04a0"
 summary = "A 32-bit RISC-V soft processor"
 groups = ["default"]
 dependencies = [

@@ -47,9 +47,6 @@ class WishboneQSPIFlashController(wiring.Component):
     def elaborate(self, platform):
         m = Module()
 
-        # TODO: don't hardcode; figure out why divisor=1 doesn't work
-        m.d.comb += self.spi_bus.divisor.eq(2)
-
         wb_data_octets = self.wb_bus.data_width // 8
 
         o_addr_count = Signal(range(3))
