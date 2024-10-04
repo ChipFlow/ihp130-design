@@ -45,16 +45,6 @@ void i2c_stop(volatile i2c_regs_t *i2c) {
 void main() {
     puts("🐱: nyaa~!\r\n");
 
-    puts("Flash ID: ");
-    puthex(spiflash_read_id(SPIFLASH));
-    puts("\r\n");
-
-    puts("Entering QSPI mode\r\n");
-    spiflash_set_qspi_flag(SPIFLASH);
-    spiflash_set_quad_mode(SPIFLASH);
-
-    puts("Initialised!\r\n");
-
     puts("SoC type: ");
     puthex(SOC_ID->type);
     // This would make the golden reference output change every commit

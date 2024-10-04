@@ -2,7 +2,7 @@ from chipflow_lib.platforms.sim import SimPlatform
 from chipflow_lib.software.soft_gen import SoftwareGenerator
 
 from amaranth import *
-from amaranth.lib import wiring
+from amaranth.lib import io, wiring
 from amaranth.lib.wiring import In, Out, flipped, connect
 
 from amaranth_soc import csr, wishbone
@@ -10,13 +10,13 @@ from amaranth_soc.csr.wishbone import WishboneCSRBridge
 from amaranth_soc.wishbone.sram import WishboneSRAM
 from amaranth_soc import gpio
 
-from amaranth_orchard.memory.spimemio import SPIMemIO, QSPIPins
 from amaranth_orchard.io.uart import UARTPeripheral, UARTPins
 from amaranth_orchard.base.platform_timer import PlatformTimer
 from amaranth_orchard.base.soc_id import SoCID
 
 from minerva.core import Minerva
 
+from .ips.spi_flash import PortGroup, QSPIController, WishboneQSPIFlashController
 from .ips.spi import SPISignature, SPIPeripheral
 from .ips.i2c import I2CSignature, I2CPeripheral
 from .ips.pwm import PWMPins, PWMPeripheral
@@ -26,49 +26,49 @@ from .ips.pdm import PDMPeripheral
 __all__ = ["MySoC"]
 
 
+class _QSPIPinsSignature(wiring.Signature):
+    def __init__(self):
+        super().__init__({
+            "clk_o": Out(1),
+            "csn_o": Out(1),
+            "d_o":   Out(4),
+            "d_oe":  Out(4),
+            "d_i":   In(4),
+        })
+
+
 class MySoC(wiring.Component):
     def __init__(self):
         # Top level interfaces
 
-        interfaces = {
-            "flash" : Out(QSPIPins.Signature()),
-        }
-
         self.user_spi_count = 3
-        self.i2c_count = 2
-        self.motor_count = 10
-        self.pdm_ao_count = 6
-        self.uart_count = 2
+        self.i2c_count      = 2
+        self.motor_count    = 10
+        self.pdm_ao_count   = 6
+        self.uart_count     = 2
+        self.gpio_banks     = 2
+        self.gpio_width     = 8
 
-        self.gpio_banks = 2
-        self.gpio_width = 8
+        members = {"flash": Out(_QSPIPinsSignature())}
 
         for i in range(self.user_spi_count):
-            interfaces[f"user_spi_{i}"] = Out(SPISignature)
-
+            members[f"user_spi_{i}"] = Out(SPISignature)
         for i in range(self.i2c_count):
-            interfaces[f"i2c_{i}"] = Out(I2CSignature)
-
+            members[f"i2c_{i}"] = Out(I2CSignature)
         for i in range(self.motor_count):
-            interfaces[f"motor_pwm{i}"] = Out(PWMPins.Signature())
-
+            members[f"motor_pwm{i}"] = Out(PWMPins.Signature())
         for i in range(self.pdm_ao_count):
-            interfaces[f"pdm_ao_{i}"] = Out(1)
-
+            members[f"pdm_ao_{i}"] = Out(1)
         for i in range(self.uart_count):
-            interfaces[f"uart_{i}"] = Out(UARTPins.Signature())
-
+            members[f"uart_{i}"] = Out(UARTPins.Signature())
         for i in range(self.gpio_banks):
-            interfaces[f"gpio_{i}"] = Out(gpio.PinSignature()).array(self.gpio_width)
+            members[f"gpio_{i}"] = Out(gpio.PinSignature()).array(self.gpio_width)
 
-        super().__init__(interfaces)
+        super().__init__(members)
 
         # Memory regions:
         self.mem_spiflash_base = 0x00000000
         self.mem_sram_base     = 0x10000000
-
-        # Debug region
-        self.debug_base        = 0xa0000000
 
         # CSR regions:
         self.csr_base          = 0xb0000000
@@ -87,7 +87,7 @@ class MySoC(wiring.Component):
         self.motor_offset      = 0x00000100
         self.pdm_ao_offset     = 0x00000010
 
-        self.sram_size  = 0x800 # 2KiB
+        self.sram_size  = 0x2000   # 8KiB
         self.bios_start = 0x100000 # 1MiB into spiflash to make room for a bitstream
 
     def elaborate(self, platform):
@@ -118,13 +118,47 @@ class MySoC(wiring.Component):
 
         # SPI flash
 
-        spiflash = SPIMemIO(flash=self.flash)
-        wb_decoder .add(spiflash.data_bus, name="spiflash", addr=self.mem_spiflash_base)
-        csr_decoder.add(spiflash.ctrl_bus, name="spiflash", addr=self.csr_spiflash_base - self.csr_base)
+        qspi_port = PortGroup(
+            sck = io.SimulationPort("o",  1),
+            io  = io.SimulationPort("io", 4),
+            cs  = io.SimulationPort("o",  1),
+        )
+        qspi_port = PortGroup()
+        qspi_port.sck = io.SimulationPort("o",  1)
+        qspi_port.io0 = io.SimulationPort("io", 1)
+        qspi_port.io1 = io.SimulationPort("io", 1)
+        qspi_port.io2 = io.SimulationPort("io", 1)
+        qspi_port.io3 = io.SimulationPort("io", 1)
+        qspi_port.cs  = io.SimulationPort("o",  1)
 
+        m.d.comb += [
+            self.flash.clk_o.eq(qspi_port.sck.o),
+            self.flash.csn_o.eq(~qspi_port.cs.o),
+
+            self.flash.d_o [0].eq(qspi_port.io0.o),
+            self.flash.d_o [1].eq(qspi_port.io1.o),
+            self.flash.d_o [2].eq(qspi_port.io2.o),
+            self.flash.d_o [3].eq(qspi_port.io3.o),
+
+            self.flash.d_oe[0].eq(qspi_port.io0.oe),
+            self.flash.d_oe[1].eq(qspi_port.io1.oe),
+            self.flash.d_oe[2].eq(qspi_port.io2.oe),
+            self.flash.d_oe[3].eq(qspi_port.io3.oe),
+
+            qspi_port.io0.i.eq(self.flash.d_i[0]),
+            qspi_port.io1.i.eq(self.flash.d_i[1]),
+            qspi_port.io2.i.eq(self.flash.d_i[2]),
+            qspi_port.io3.i.eq(self.flash.d_i[3]),
+        ]
+
+        qspi = QSPIController(qspi_port)
+        spiflash = WishboneQSPIFlashController(addr_width=24, data_width=32)
+        m.submodules.qspi = qspi
         m.submodules.spiflash = spiflash
 
-        sw.add_periph("spiflash", "SPIFLASH", self.csr_spiflash_base)
+        connect(m, spiflash.spi_bus, qspi)
+
+        wb_decoder.add(spiflash.wb_bus, name="spiflash", addr=self.mem_spiflash_base)
 
         # SRAM
 
