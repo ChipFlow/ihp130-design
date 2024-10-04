@@ -67,7 +67,7 @@ class MySoC(wiring.Component):
 
         # CPU
 
-        m.submodules.cpu = cpu = Minerva(with_muldiv=True, reset_address=self.bios_start)
+        m.submodules.cpu = cpu = Minerva(reset_address=self.bios_start)
 
         wb_arbiter.add(cpu.ibus)
         wb_arbiter.add(cpu.dbus)
