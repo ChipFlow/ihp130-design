@@ -1,14 +1,15 @@
 #undef NDEBUG
 
 #include <cxxrtl/cxxrtl.h>
-#include <cxxrtl/cxxrtl_server.h>
+#include <cxxrtl/cxxrtl_vcd.h>
 #include "sim_soc.h"
 #include "models.h"
 
 #include <fstream>
 #include <filesystem>
 
-using namespace cxxrtl::time_literals;
+#define TRACE 0
+
 using namespace cxxrtl_design;
 
 int main(int argc, char **argv) {
@@ -18,6 +19,7 @@ int main(int argc, char **argv) {
         top.p_flash____d__o, top.p_flash____d__oe, top.p_flash____d__i);
 
     uart_model uart_0("uart_0", top.p_uart__0____tx__o, top.p_uart__0____rx__i);
+#if 0
     uart_model uart_1("uart_1", top.p_uart__1____tx__o, top.p_uart__1____rx__i);
 
     std::array<gpio_pin, 8> gpio_0_pins = {
@@ -49,20 +51,34 @@ int main(int argc, char **argv) {
 
     i2c_model i2c_0("i2c_0", top.p_i2c__0____sda__oe, top.p_i2c__0____sda__i, top.p_i2c__0____scl__oe, top.p_i2c__0____scl__i);
     i2c_model i2c_1("i2c_1", top.p_i2c__1____sda__oe, top.p_i2c__1____sda__i, top.p_i2c__1____scl__oe, top.p_i2c__1____scl__i);
+#endif
 
-    cxxrtl::agent agent(cxxrtl::spool("spool.bin"), top);
-    if (getenv("DEBUG")) // can also be done when a condition is violated, etc
-        std::cerr << "Waiting for debugger on " << agent.start_debugging() << std::endl;
+    /* open_event_log("events.json"); */
+    /* open_input_commands("../../my_design/tests/input.json"); */
 
-    open_event_log("events.json");
-    open_input_commands("../../my_design/tests/input.json");
+#if TRACE
+    cxxrtl::vcd_writer vcd;
+    std::ofstream vcd_file;
+    debug_items debug_items;
+    uint64_t cycle = 0;
+
+    vcd_file.open("trace.vcd");
+    top.debug_info(&debug_items, /*scopes=*/nullptr, "");
+    vcd.timescale(1, "us");
+    vcd.add_without_memories(debug_items);
+#endif
+
+    auto top_step = [&]() {
+        do {
+            top.eval(/*performer=*/nullptr);
+        } while (top.commit());
+    };
 
     unsigned timestamp = 0;
     auto tick = [&]() {
-        // agent.print(stringf("timestamp %d\n", timestamp), CXXRTL_LOCATION);
-
         flash.step(timestamp);
         uart_0.step(timestamp);
+#if 0
         uart_1.step(timestamp);
 
         gpio_0.step(timestamp);
@@ -74,32 +90,38 @@ int main(int argc, char **argv) {
 
         i2c_0.step(timestamp);
         i2c_1.step(timestamp);
+#endif
 
         top.p_clk.set(false);
-        agent.step();
-        agent.advance(1_us);
+        top_step();
         ++timestamp;
+#if TRACE
+	vcd.sample(2 * cycle);
+#endif
 
         top.p_clk.set(true);
-        agent.step();
-        agent.advance(1_us);
+        top_step();
         ++timestamp;
-
-        // if (timestamp == 10)
-        //     agent.breakpoint(CXXRTL_LOCATION);
+#if TRACE
+	vcd.sample(2 * cycle + 1);
+	vcd_file << vcd.buffer;
+	vcd.buffer.clear();
+	cycle += 1;
+#endif
     };
 
-    flash.load_data("../software/software.bin", 0x00100000U);
-    agent.step();
-    agent.advance(1_us);
+    /* flash.load_data("../software/software.bin", 0x00100000U); */
+    flash.load_data("../../zephyr.bin", 0x00100000U);
+    top_step();
 
     top.p_rst.set(true);
     tick();
 
     top.p_rst.set(false);
-    for (int i = 0; i < 2000000; i++)
+    /* for (int i = 0; i < 2000000; i++) */
+    while (1)
         tick();
 
-    close_event_log();
+    /* close_event_log(); */
     return 0;
 }

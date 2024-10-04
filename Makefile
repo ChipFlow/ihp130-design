@@ -25,7 +25,7 @@ board-load-ulx3s:
 	openFPGALoader -b ulx3s build/top.bit
 
 .PHONY: sim-run # Run the simulation of the design
-sim-run: sim-build software-build
+sim-run: sim-build #software-build
 	cd build/sim && ./sim_soc
 
 .PHONY: sim-check
