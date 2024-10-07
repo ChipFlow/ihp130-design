@@ -789,6 +789,8 @@ class server {
 			json &item_desc = (item_descs[item_name] = json::object());
 			if (attrs.find("src") != attrs.end() && attrs.at("src").value_type == metadata::STRING)
 				item_desc["src"] = attrs.at("src").string_value;
+			else
+				item_desc["src"] = nullptr; // XXX
 			if (parts.front().type == debug_item::MEMORY) {
 				item_desc["type"] = "memory";
 				item_desc["lsb_at"] = parts.front().lsb_at;
