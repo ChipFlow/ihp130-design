@@ -1196,17 +1196,26 @@ public:
 		size_t deltas = 0;
 		std::unique_lock<std::mutex> lock(shared_state.mutex);
 		if (shared_state.status == simulation_status::initializing) {
-			deltas = toplevel.step(&wrapping_performer);
+			//deltas = toplevel.step(&wrapping_performer); // FIXME
+			do {
+				toplevel.eval(&wrapping_performer);
+				deltas++;
+			} while (toplevel.commit());
 			recorder.record_complete();
 			recorder.flush();
 			shared_state.status = simulation_status::running;
 			shared_state.condvar.notify_all();
 		} else {
-			bool converged = false;
+			// FIXME
+			//bool converged = false;
+			//do {
+			//	converged = toplevel.eval(&wrapping_performer);
+			//	deltas++;
+			//} while (recorder.record_incremental(toplevel) && !converged);
 			do {
-				converged = toplevel.eval(&wrapping_performer);
+				toplevel.eval(&wrapping_performer);
 				deltas++;
-			} while (recorder.record_incremental(toplevel) && !converged);
+			} while (recorder.record_incremental(toplevel));
 		}
 		if (shared_state.run_until_diagnostics & wrapping_performer.diagnostics_emitted) {
 			recorder.flush();
