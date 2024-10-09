@@ -106,6 +106,9 @@ int main(int argc, char **argv) {
         agent.step();
         agent.advance(1_us);
         ++timestamp;
+
+        if (timestamp % 100000 == 0)
+            agent.snapshot();
 #if TRACE
 	vcd.sample(2 * cycle + 1);
 	vcd_file << vcd.buffer;
