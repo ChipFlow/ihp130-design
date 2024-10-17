@@ -12693,7 +12693,7 @@
 		)
 		(uuid "02df3eca-fb51-408b-9f22-a058b80c4d6a")
 	)
-	(label "PWM5_STOP"
+	(label "PWM1_PWM"
 		(at 318.77 140.97 180)
 		(fields_autoplaced yes)
 		(effects
@@ -12704,7 +12704,7 @@
 		)
 		(uuid "051d029b-62c0-42b2-8cc0-6bd60148c563")
 	)
-	(label "PWM5_PWM"
+	(label "PWM1_STOP"
 		(at 318.77 146.05 180)
 		(fields_autoplaced yes)
 		(effects
@@ -12803,7 +12803,7 @@
 		)
 		(uuid "0de6cede-f101-4644-ac71-48992df339db")
 	)
-	(label "PWM2_STOP"
+	(label "PWM5_STOP"
 		(at 273.05 161.29 0)
 		(fields_autoplaced yes)
 		(effects
@@ -12869,7 +12869,7 @@
 		)
 		(uuid "1480e75b-40b2-4e5a-921e-0074f8cda390")
 	)
-	(label "PWM6_PWM"
+	(label "PWM2_DIR"
 		(at 318.77 148.59 180)
 		(fields_autoplaced yes)
 		(effects
@@ -12880,7 +12880,7 @@
 		)
 		(uuid "14829077-1dbb-4fd1-a5aa-e0591a90174d")
 	)
-	(label "PWM1_DIR"
+	(label "PWM3_DIR"
 		(at 273.05 151.13 0)
 		(fields_autoplaced yes)
 		(effects
@@ -12891,7 +12891,7 @@
 		)
 		(uuid "191e09ea-1a5a-4127-b5af-e7334066f849")
 	)
-	(label "PWM3_STOP"
+	(label "PWM7_DIR"
 		(at 273.05 168.91 0)
 		(fields_autoplaced yes)
 		(effects
@@ -12902,7 +12902,7 @@
 		)
 		(uuid "1a57a1f4-5903-47d0-b65b-fffb86f39755")
 	)
-	(label "PWM4_DIR"
+	(label "PWM8_DIR"
 		(at 273.05 173.99 0)
 		(fields_autoplaced yes)
 		(effects
@@ -12913,7 +12913,7 @@
 		)
 		(uuid "1ab383b6-ef3d-4f6e-818d-8aab22d2a31c")
 	)
-	(label "PWM1_PWM"
+	(label "PWM2_STOP"
 		(at 273.05 148.59 0)
 		(fields_autoplaced yes)
 		(effects
@@ -12935,7 +12935,7 @@
 		)
 		(uuid "1c7c8572-5aef-4064-aa0a-5193c726cbd7")
 	)
-	(label "PWM2_DIR"
+	(label "PWM4_DIR"
 		(at 273.05 158.75 0)
 		(fields_autoplaced yes)
 		(effects
@@ -13001,7 +13001,7 @@
 		)
 		(uuid "280d135c-515f-4636-896d-6fa5dea6fb8e")
 	)
-	(label "PWM5_DIR"
+	(label "PWM0_STOP"
 		(at 318.77 143.51 180)
 		(fields_autoplaced yes)
 		(effects
@@ -13012,7 +13012,7 @@
 		)
 		(uuid "2eac74af-8dc3-4d9c-9dfe-ed2003baa9bf")
 	)
-	(label "PWM3_DIR"
+	(label "PWM6_DIR"
 		(at 273.05 166.37 0)
 		(fields_autoplaced yes)
 		(effects
@@ -13056,7 +13056,7 @@
 		)
 		(uuid "30569572-b21d-4d2f-8d76-1c2a4ef6ec2e")
 	)
-	(label "PWM7_PWM"
+	(label "PWM5_PWM"
 		(at 318.77 156.21 180)
 		(fields_autoplaced yes)
 		(effects
@@ -13287,7 +13287,7 @@
 		)
 		(uuid "53236867-e1e4-47bf-bce4-1f0b6282df89")
 	)
-	(label "PWM4_PWM"
+	(label "PWM7_STOP"
 		(at 273.05 171.45 0)
 		(fields_autoplaced yes)
 		(effects
@@ -13771,7 +13771,7 @@
 		)
 		(uuid "8dd207d9-2961-4a87-a0c2-38465ea36691")
 	)
-	(label "PWM8_PWM"
+	(label "PWM7_PWM"
 		(at 318.77 163.83 180)
 		(fields_autoplaced yes)
 		(effects
@@ -13925,7 +13925,7 @@
 		)
 		(uuid "a5b1010e-360b-44e2-913a-a3e8e3fc7da3")
 	)
-	(label "PWM8_STOP"
+	(label "PWM8_PWM"
 		(at 318.77 168.91 180)
 		(fields_autoplaced yes)
 		(effects
@@ -13969,7 +13969,7 @@
 		)
 		(uuid "ae0cf0e6-a09f-4940-bbfb-81d84629394e")
 	)
-	(label "PWM6_STOP"
+	(label "PWM4_PWM"
 		(at 318.77 153.67 180)
 		(fields_autoplaced yes)
 		(effects
@@ -13980,7 +13980,7 @@
 		)
 		(uuid "b14c9c2f-876e-4480-bfb2-255b3635bd86")
 	)
-	(label "PWM7_DIR"
+	(label "PWM4_STOP"
 		(at 318.77 158.75 180)
 		(fields_autoplaced yes)
 		(effects
@@ -14079,7 +14079,7 @@
 		)
 		(uuid "b97b230e-0356-49dd-b0ae-3963a7d08c6d")
 	)
-	(label "PWM4_STOP"
+	(label "PWM9_PWM"
 		(at 273.05 176.53 0)
 		(fields_autoplaced yes)
 		(effects
@@ -14101,7 +14101,7 @@
 		)
 		(uuid "baaeb4e4-f8db-4e4c-83f5-86638d004b54")
 	)
-	(label "PWM0_STOP"
+	(label "PWM1_DIR"
 		(at 273.05 146.05 0)
 		(fields_autoplaced yes)
 		(effects
@@ -14112,7 +14112,7 @@
 		)
 		(uuid "bb6df333-6673-4dd0-a8c9-10dc87dcb8f6")
 	)
-	(label "PWM1_STOP"
+	(label "PWM3_PWM"
 		(at 273.05 153.67 0)
 		(fields_autoplaced yes)
 		(effects
@@ -14200,7 +14200,7 @@
 		)
 		(uuid "c3176023-267b-4bcf-815c-b4600004a2b6")
 	)
-	(label "PWM8_DIR"
+	(label "PWM6_STOP"
 		(at 318.77 166.37 180)
 		(fields_autoplaced yes)
 		(effects
@@ -14211,7 +14211,7 @@
 		)
 		(uuid "c43a617d-cb8a-4fa1-943e-678bb3a0d6bc")
 	)
-	(label "PWM2_PWM"
+	(label "PWM3_STOP"
 		(at 273.05 156.21 0)
 		(fields_autoplaced yes)
 		(effects
@@ -14321,7 +14321,7 @@
 		)
 		(uuid "cafff162-daff-4935-a574-8f81c9d80d5e")
 	)
-	(label "PWM3_PWM"
+	(label "PWM6_PWM"
 		(at 273.05 163.83 0)
 		(fields_autoplaced yes)
 		(effects
@@ -14420,7 +14420,7 @@
 		)
 		(uuid "dbd9dcd6-c79e-4250-a9cf-7e03a5b4ef08")
 	)
-	(label "PWM6_DIR"
+	(label "PWM2_PWM"
 		(at 318.77 151.13 180)
 		(fields_autoplaced yes)
 		(effects
@@ -14519,7 +14519,7 @@
 		)
 		(uuid "e265f5cc-687d-4352-a7f4-a47a8e12afcc")
 	)
-	(label "PWM7_STOP"
+	(label "PWM5_DIR"
 		(at 318.77 161.29 180)
 		(fields_autoplaced yes)
 		(effects
@@ -14552,7 +14552,7 @@
 		)
 		(uuid "e4285e35-aa87-4c25-8e5a-67a78c71e8b7")
 	)
-	(label "PWM9_PWM"
+	(label "PWM8_STOP"
 		(at 318.77 171.45 180)
 		(fields_autoplaced yes)
 		(effects
