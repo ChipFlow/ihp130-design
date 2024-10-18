@@ -63,7 +63,7 @@ private:
 
 struct uart_model {
     std::string name;
-    uart_model(const std::string &name, const value<1> &tx, value<1> &rx, unsigned baud_div = 25000000/115200) : name(name), tx(tx), rx(rx), baud_div(baud_div) {};
+    uart_model(const std::string &name, const value<1> &tx, value<1> &rx, unsigned baud_div = 48000000/115200) : name(name), tx(tx), rx(rx), baud_div(baud_div) {};
 
     void step(unsigned timestamp);
 private:
