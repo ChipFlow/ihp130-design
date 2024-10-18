@@ -77,15 +77,16 @@ class WishboneQSPIFlashController(wiring.Component):
                     with m.If(o_addr_count != 0):
                         m.d.sync += o_addr_count.eq(o_addr_count - 1)
                     with m.Else():
-                        m.next = "SPI-Dummy"
+                        # m.next = "SPI-Dummy"
+                        m.next = "SPI-Data-Read"
 
-            with m.State("SPI-Dummy"):
-                m.d.comb += self.spi_bus.o_octets.p.chip.eq(1)
-                # m.d.comb += self.spi_bus.o_octets.p.mode.eq(QSPIMode.PutX4) # FIXME
-                m.d.comb += self.spi_bus.o_octets.p.mode.eq(QSPIMode.PutX1)
-                m.d.comb += self.spi_bus.o_octets.valid.eq(1)
-                with m.If(self.spi_bus.o_octets.ready):
-                    m.next = "SPI-Data-Read"
+            # with m.State("SPI-Dummy"):
+            #     m.d.comb += self.spi_bus.o_octets.p.chip.eq(1)
+            #     # m.d.comb += self.spi_bus.o_octets.p.mode.eq(QSPIMode.PutX4) # FIXME
+            #     m.d.comb += self.spi_bus.o_octets.p.mode.eq(QSPIMode.PutX1)
+            #     m.d.comb += self.spi_bus.o_octets.valid.eq(1)
+            #     with m.If(self.spi_bus.o_octets.ready):
+            #         m.next = "SPI-Data-Read"
 
             with m.State("SPI-Data-Read"):
                 m.d.comb += self.spi_bus.o_octets.p.chip.eq(1)
