@@ -34,8 +34,8 @@ class _GlasgowTop(Elaboratable):
         ports.i2c.sda = GlasgowPlatformPort(io=a_ports[3].io, oe=a_ports[3].oe)
 
         ports.uart = PortGroup()
-        ports.uart.rx = GlasgowPlatformPort(io=a_ports[0].io, oe=a_ports[0].oe)
-        ports.uart.tx = GlasgowPlatformPort(io=a_ports[1].io, oe=a_ports[1].oe)
+        ports.uart.rx = GlasgowPlatformPort(io=a_ports[1].io, oe=a_ports[1].oe)
+        ports.uart.tx = GlasgowPlatformPort(io=a_ports[0].io, oe=a_ports[0].oe)
 
         m.submodules.soc = soc = MySoC(ports)
 
