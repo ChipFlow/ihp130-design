@@ -28,16 +28,16 @@ class RISCVMachineTimer(wiring.Component):
         self._bridge = csr.Bridge(regs.as_memory_map())
 
         super().__init__({
-            "bus": In(csr.Signature(addr_width=regs.addr_width, data_width=regs.data_width)),
+            "csr_bus": In(csr.Signature(addr_width=regs.addr_width, data_width=regs.data_width)),
             "irq": Out(1),
         })
-        self.bus.memory_map = self._bridge.bus.memory_map
+        self.csr_bus.memory_map = self._bridge.bus.memory_map
 
     def elaborate(self, platform):
         m = Module()
         m.submodules.bridge = self._bridge
 
-        connect(m, flipped(self.bus), self._bridge.bus)
+        connect(m, flipped(self.csr_bus), self._bridge.bus)
 
         mtime    = Signal(64)
         mtimecmp = Signal(64)

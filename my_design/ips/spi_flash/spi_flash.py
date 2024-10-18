@@ -7,7 +7,7 @@ from amaranth.utils import exact_log2
 from amaranth_soc import wishbone
 from amaranth_soc.memory import MemoryMap
 
-from .ports import PortGroup
+from ..ports import PortGroup
 from .qspi import QSPIMode, QSPIController
 
 
@@ -59,7 +59,8 @@ class WishboneQSPIFlashController(wiring.Component):
             with m.State("Wait"):
                 m.d.comb += self.spi_bus.o_octets.p.chip.eq(1)
                 m.d.comb += self.spi_bus.o_octets.p.mode.eq(QSPIMode.PutX1)
-                m.d.comb += self.spi_bus.o_octets.p.data.eq(QSPIFlashCommand.FastReadQuadInOut)
+                # m.d.comb += self.spi_bus.o_octets.p.data.eq(QSPIFlashCommand.FastReadQuadInOut) # FIXME
+                m.d.comb += self.spi_bus.o_octets.p.data.eq(QSPIFlashCommand.Read)
                 with m.If(self.wb_bus.cyc & self.wb_bus.stb & ~self.wb_bus.we):
                     m.d.comb += self.spi_bus.o_octets.valid.eq(1)
                     with m.If(self.spi_bus.o_octets.ready):
@@ -68,7 +69,8 @@ class WishboneQSPIFlashController(wiring.Component):
 
             with m.State("SPI-Address"):
                 m.d.comb += self.spi_bus.o_octets.p.chip.eq(1)
-                m.d.comb += self.spi_bus.o_octets.p.mode.eq(QSPIMode.PutX4)
+                # m.d.comb += self.spi_bus.o_octets.p.mode.eq(QSPIMode.PutX4) # FIXME
+                m.d.comb += self.spi_bus.o_octets.p.mode.eq(QSPIMode.PutX1)
                 m.d.comb += self.spi_bus.o_octets.p.data.eq(flash_addr.word_select(o_addr_count, 8))
                 m.d.comb += self.spi_bus.o_octets.valid.eq(1)
                 with m.If(self.spi_bus.o_octets.ready):
@@ -79,14 +81,16 @@ class WishboneQSPIFlashController(wiring.Component):
 
             with m.State("SPI-Dummy"):
                 m.d.comb += self.spi_bus.o_octets.p.chip.eq(1)
-                m.d.comb += self.spi_bus.o_octets.p.mode.eq(QSPIMode.PutX4)
+                # m.d.comb += self.spi_bus.o_octets.p.mode.eq(QSPIMode.PutX4) # FIXME
+                m.d.comb += self.spi_bus.o_octets.p.mode.eq(QSPIMode.PutX1)
                 m.d.comb += self.spi_bus.o_octets.valid.eq(1)
                 with m.If(self.spi_bus.o_octets.ready):
                     m.next = "SPI-Data-Read"
 
             with m.State("SPI-Data-Read"):
                 m.d.comb += self.spi_bus.o_octets.p.chip.eq(1)
-                m.d.comb += self.spi_bus.o_octets.p.mode.eq(QSPIMode.GetX4)
+                # m.d.comb += self.spi_bus.o_octets.p.mode.eq(QSPIMode.GetX4) # FIXME
+                m.d.comb += self.spi_bus.o_octets.p.mode.eq(QSPIMode.GetX1)
                 with m.If(o_data_count != wb_data_octets):
                     m.d.comb += self.spi_bus.o_octets.valid.eq(1)
                     with m.If(self.spi_bus.o_octets.ready):
