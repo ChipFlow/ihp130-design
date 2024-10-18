@@ -17,6 +17,7 @@ dependencies = [
   "glasgow @ git+https://github.com/GlasgowEmbedded/glasgow#subdirectory=software",
   "minerva @ git+https://github.com/minerva-cpu/minerva",
   "chipflow-lib @ git+https://github.com/ChipFlow/chipflow-lib.git@main",
+  "glasgow @ git+https://github.com/GlasgowEmbedded/glasgow#subdirectory=software",
   "ziglang==0.11.0",
 ]
 

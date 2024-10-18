@@ -2,7 +2,7 @@ from amaranth import *
 from amaranth.lib import enum, data, wiring, stream, io
 from amaranth.lib.wiring import In, Out, connect, flipped
 
-from .ports import PortGroup
+from ..ports import PortGroup
 from .iostream import IOStreamer, IOClocker
 
 
@@ -148,19 +148,18 @@ class QSPIDeframer(wiring.Component): # meow :3
 
 class QSPIController(wiring.Component):
     def __init__(self, ports, *, chip_count=1, use_ddr_buffers=False):
-        # assert len(ports.sck) == 1 and ports.sck.direction in (io.Direction.Output, io.Direction.Bidir)
-        # assert len(ports.io) == 4 and ports.io.direction == io.Direction.Bidir
-        # assert len(ports.cs) >= 1 and ports.cs.direction in (io.Direction.Output, io.Direction.Bidir)
+        assert len(ports.sck) == 1 and ports.sck.direction in (io.Direction.Output, io.Direction.Bidir)
+        assert len(ports.io) == 4 and ports.io.direction == io.Direction.Bidir
+        assert len(ports.cs) >= 1 and ports.cs.direction in (io.Direction.Output, io.Direction.Bidir)
 
-        # self._ports = PortGroup(
-        #     sck=ports.sck,
-        #     io0=ports.io[0],
-        #     io1=ports.io[1],
-        #     io2=ports.io[2],
-        #     io3=ports.io[3],
-        #     cs=~ports.cs,
-        # )
-        self._ports = ports
+        self._ports = PortGroup(
+            sck=ports.sck,
+            io0=ports.io[0],
+            io1=ports.io[1],
+            io2=ports.io[2],
+            io3=ports.io[3],
+            cs=~ports.cs,
+        )
 
         self._ddr = use_ddr_buffers
         self._chip_count = chip_count

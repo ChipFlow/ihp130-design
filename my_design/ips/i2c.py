@@ -66,7 +66,7 @@ class I2CPeripheral(wiring.Component):
 
         super().__init__({
             "i2c_pins": Out(I2CSignature),
-            "bus": In(csr.Signature(addr_width=regs.addr_width, data_width=regs.data_width)),
+            "csr_bus": In(csr.Signature(addr_width=regs.addr_width, data_width=regs.data_width)),
         })
         self.bus.memory_map = self._bridge.bus.memory_map
 
@@ -75,7 +75,7 @@ class I2CPeripheral(wiring.Component):
 
         m.submodules.bridge = self._bridge
 
-        connect(m, flipped(self.bus), self._bridge.bus)
+        connect(m, flipped(self.csr_bus), self._bridge.bus)
 
         i2c_rst = Signal()
 

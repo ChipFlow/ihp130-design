@@ -5,7 +5,7 @@
 groups = ["default", "test"]
 strategy = ["inherit_metadata"]
 lock_version = "4.5.0"
-content_hash = "sha256:050b98b055e88c2a749b4db709699fcd40dece09605da460f8a058d5568ad1aa"
+content_hash = "sha256:cae25b0fa42d22a7da7fe6873ab6387c25cede3319114872c842402532ef647e"
 
 [[metadata.targets]]
 requires_python = ">3.10.0,<3.10.1||>3.10.1,<3.10.2||>3.10.2,<4.0"
@@ -207,7 +207,7 @@ version = "0.1.1.dev111"
 requires_python = ">=3.9"
 git = "https://github.com/ChipFlow/chipflow-lib.git"
 ref = "main"
-revision = "4b3c6deda91bfe6802b44fcc3695dc980e9117bf"
+revision = "371fef214a836b8f87d7f550b1cff1a6a46e1c29"
 summary = "ChipFlow common tools."
 groups = ["default"]
 dependencies = [
@@ -753,14 +753,14 @@ files = [
 
 [[package]]
 name = "yowasp-nextpnr-ecp5"
-version = "0.7.0.11.post528.dev0"
+version = "0.7.0.0.post519"
 summary = "nextpnr-ecp5 FPGA place and route tool"
 groups = ["default"]
 dependencies = [
     "yowasp-runtime~=1.1",
 ]
 files = [
-    {file = "yowasp_nextpnr_ecp5-0.7.0.11.post528.dev0-py3-none-any.whl", hash = "sha256:102d3e81004c402e4422121197fa4eaf5090bd2d6d7e483312f2191233165e66"},
+    {file = "yowasp_nextpnr_ecp5-0.7.0.0.post519-py3-none-any.whl", hash = "sha256:0bab40d519525d17bf1b3e5961da1a23594594c2c3b25d404d3d7f95aebbeeef"},
 ]
 
 [[package]]

@@ -169,7 +169,7 @@ void spiflash_model::step(unsigned timestamp) {
                 if (s.byte_count <= 3) {
                     s.addr |= (uint32_t(s.curr_byte) << ((3 - s.byte_count) * 8));
                 }
-                if (s.byte_count >= 3) {
+                if (s.byte_count >= 4) {
                     s.out_buffer = data.at(s.addr);
                     s.addr = (s.addr + 1) & 0x00FFFFFF;
                 }
@@ -178,8 +178,7 @@ void spiflash_model::step(unsigned timestamp) {
                 if (s.byte_count <= 3) {
                     s.addr |= (uint32_t(s.curr_byte) << ((3 - s.byte_count) * 8));
                 }
-                /* if (s.byte_count >= 6) { // 1 mode, 2 dummy clocks */
-                if (s.byte_count >= 4) { // FIXME
+                if (s.byte_count >= 4) {
                     // read 4 bytes
                     s.out_buffer = data.at(s.addr);
                     s.addr = (s.addr + 1) & 0x00FFFFFF;
@@ -246,7 +245,7 @@ void uart_model::step(unsigned timestamp) {
             if (bit == 8) {
                 // print to console
                 log_event(timestamp, name, "tx", json(s.rx_sr));
-                if (name == "uart_0")
+                if (name == "uart")
                     fprintf(stderr, "%c", char(s.rx_sr));
             }
             if (bit == 9) {
