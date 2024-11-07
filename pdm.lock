@@ -362,11 +362,11 @@ files = [
 
 [[package]]
 name = "glasgow"
-version = "0.1.dev2214"
+version = "0.1.dev2220"
 requires_python = "!=3.10.0,!=3.10.1,!=3.10.2,~=3.9"
 subdirectory = "software"
 git = "https://github.com/GlasgowEmbedded/glasgow"
-revision = "2931221788fc23573834263976e03b73c473657f"
+revision = "b3eb5c7cb9fd823f2cd505247c5cc72fac257a33"
 summary = "Software for the Glasgow Interface Explorer, a digital interface multitool"
 groups = ["default"]
 dependencies = [
