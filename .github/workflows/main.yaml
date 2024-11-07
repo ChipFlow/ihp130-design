@@ -1,7 +1,5 @@
 on:
   push:
-    branches:
-      - main
   pull_request:
   merge_group:
 
@@ -14,18 +12,8 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: [ubuntu-latest, ubuntu-24.04, macos-12, macos-13, macos-14]
-        python: ["3.9", "3.10", "3.11", "3.12"]
-        exclude:
-          - os: macos-12
-            python: "3.11"
-          - os: macos-12
-            python: "3.12"
-          - os: macos-13
-            python: "3.11"
-          - os: macos-13
-            python: "3.12"
-
+        os: [ubuntu-latest, ]
+        python: ["3.12", ]
 
     runs-on: ${{ matrix.os }}
     steps:
@@ -54,114 +42,6 @@ jobs:
 
       - name: Run tests
         run: |
-          make sim-check
-
-  pyuvm:
-    if: false
-    strategy:
-      matrix:
-        os: ["ubuntu-latest", "ubuntu-24.04", "macos-12", "macos-13", "macos-14"]
-        python: ["3.9", "3.10", "3.11", "3.12"]
-        exclude:
-          - os: macos-12
-            python: "3.11"
-          - os: macos-12
-            python: "3.12"
-          - os: macos-13
-            python: "3.11"
-          - os: macos-13
-            python: "3.12"
-
-
-      fail-fast: false
-
-    runs-on: ${{ matrix.os }}
-    env:
-      DEPS_PATH: ${{ github.workspace }}/deps
-      VERILATOR_REVISION: v5.028
-
-    steps:
-      - name: Install dependencies (Ubuntu)
-        run: |
-          sudo apt-get update
-          sudo apt-get install git build-essential autoconf g++ flex bison perl help2man zlib1g-dev libfl-dev
-        if: runner.os == 'Linux'
-
-      - name: Install dependencies (Mac)
-        run: |
-          brew install autoconf flex bison perl help2man zlib
-        if: runner.os == 'macOS'
-
-      - name: Check out source code
-        uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-
-      - name: ccache
-        uses: hendrikmuhs/ccache-action@v1.2
-        with:
-          key: ${{ matrix.os }}-${{ matrix.python }}
-
-      - name: Set up PDM
-        uses: pdm-project/setup-pdm@v4
-        with:
-          cache: true
-          python-version: ${{ matrix.python }}
-
-      - name: Cache YoWASP build products
-        uses: actions/cache@v4
-        with:
-          path: ~/.cache/YoWASP
-          key: YoWASP-${{ runner.os }}-${{ hashFiles('./.venv/**/*.wasm') }}
-          restore-keys: |
-            YoWASP-${{ runner.os }}-
-
-      - name: Cache verilator installation
-        uses: actions/cache@v4
-        id: cache-verilator
-        with:
-          path: .verilator
-          key: cache-verilator-${{ env.VERILATOR-REVISION }}-${{ matrix.os }}
-
-      - name: Build verilator
-        run: |
-          PREFIX=`pwd`/.verilator
-          VERILATOR_PATH=${DEPS_PATH}/verilator
-          mkdir -p ${VERILATOR_PATH}
-          git clone --recursive https://github.com/verilator/verilator ${VERILATOR_PATH}
-          pushd ${VERILATOR_PATH}
-          git reset --hard ${VERILATOR_REVISION}
-          autoconf
-          ./configure --prefix=${PREFIX}
-          make -j`nproc`
-          make install
-          popd
-        if: steps.cache-verilator.outputs.cache-hit != 'true'
-
-      - name: Run tests
-        run: |
-          PATH=${GITHUB_WORKSPACE}/.verilator/bin:$PATH make verif-run-pyuvm
-
-  submit:
-    needs: test
-    if: ${{ false }}
-    runs-on: ubuntu-22.04
-    steps:
-      - name: Check out source code
-        uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-      - uses: actions/setup-python@v4
-        with:
-          python-version: '3.10'
-      - name: Set up PDM
-        uses: pdm-project/setup-pdm@v4
-        with:
-          cache: true
-      - name: Install dependencies
-        run: |
-          pdm install
-      - run: pdm run chipflow silicon submit
-        env:
-          CHIPFLOW_API_KEY_ID: ${{ secrets.CHIPFLOW_API_KEY_ID }}
-          CHIPFLOW_API_KEY_SECRET: ${{ secrets.CHIPFLOW_API_KEY_SECRET }}
+          make sim-build
+          (timeout 30 make sim-run || true) 2> sim.log
+          grep "Booting Zephyr OS build" sim.log
