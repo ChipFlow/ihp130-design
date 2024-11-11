@@ -32,15 +32,6 @@ sim-run: sim-build software-build
 sim-check: sim-run
 	pdm run python -m my_design.tools.json_compare my_design/tests/events_reference.json build/sim/events.json
 
-.PHONY: pyuvm-gen-verilog
-pyuvm-gen-verilog: init
-	pdm run python -m my_design.ips.spi
-
-.PHONY: verif-run-pyuvm
-verif-run-pyuvm: pyuvm-gen-verilog
-	AMARANTH_USE_YOSYS=builtin pdm run chipflow export --dir pyuvm_verif/verilog
-	pdm run make -C pyuvm_verif -j4 ARG=$(ARG)
-
 .PHONY: silicon-prepare # Build RTLIL for the design
 silicon-prepare:
 	pdm run chipflow silicon prepare
