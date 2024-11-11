@@ -16,7 +16,6 @@ dependencies = [
   "amaranth[builtin-yosys]>=0.5,<0.6",
   "amaranth-cv32e40p @ git+https://github.com/ChipFlow/amaranth-cv32e40p@main",
   "chipflow-lib @ git+https://github.com/ChipFlow/chipflow-lib.git@main",
-  "pyuvm~=2.9.1",
   "ziglang==0.11.0",
 ]
 
