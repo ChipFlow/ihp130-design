@@ -2,8 +2,8 @@
 # Project metadata
 
 [project]
-name = "gf130-design"
-version = "0.0.0"
+name = "ihp130-design"
+version = "0.1.0"
 description = ""
 authors = [
   {name = "Robert Taylor", email = "rob.taylor@chipflow.io" },

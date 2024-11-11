@@ -1,4 +1,4 @@
-# TODO: update with new padring and GF130
+# TODO: update with new padring and IHP130
 
 [chipflow]
 project_id = 12
@@ -11,7 +11,7 @@ software = "my_design.steps.software:MySoftwareStep"
 export = "my_design.steps.export_verilog:ExportVerilogStep"
 
 [chipflow.silicon]
-process = "gf130bcd"
+process = "ihp_sg13g2"
 pad_ring = "pga144"
 
 [chipflow.silicon.pads]
