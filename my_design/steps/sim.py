@@ -1,18 +1,47 @@
-from chipflow_lib.steps.sim import SimStep
-
-from amaranth import *
-from amaranth.lib import wiring
-from amaranth.lib.wiring import connect, flipped
-from amaranth.back import rtlil
-
-from ..design import MySoC
-from ..sim import doit_build
-
 import os
 from pathlib import Path
 
-class SimPlatform:
+from amaranth import *
+from amaranth.lib import io
+from amaranth.back import rtlil
 
+from doit.cmd_base import ModuleTaskLoader
+from doit.doit_cmd import DoitMain
+
+from chipflow_lib.steps.sim import SimStep
+
+from ..design import MySoC
+from ..sim import doit_build
+from ..ips.ports import PortGroup
+
+
+__all__ = ["MySimStep"]
+
+
+class _SimTop(Elaboratable):
+    def __init__(self):
+        self.ports = PortGroup()
+
+        self.ports.qspi = PortGroup()
+        self.ports.qspi.sck = io.SimulationPort("o",  1, name="qspi_sck")
+        self.ports.qspi.io  = io.SimulationPort("io", 4, name="qspi_io")
+        self.ports.qspi.cs  = io.SimulationPort("o",  1, name="qspi_cs")
+
+        self.ports.i2c = PortGroup()
+        self.ports.i2c.scl = io.SimulationPort("io", 1, name="i2c_scl")
+        self.ports.i2c.sda = io.SimulationPort("io", 1, name="i2c_sda")
+
+        self.ports.uart = PortGroup()
+        self.ports.uart.rx = io.SimulationPort("i", 1, name="uart_rx")
+        self.ports.uart.tx = io.SimulationPort("o", 1, name="uart_tx")
+
+    def elaborate(self, platform):
+        m = Module()
+        m.submodules.soc = soc = MySoC(self.ports)
+        return m
+
+
+class _SimPlatform:
     def __init__(self):
         self.build_dir = os.path.join(os.environ['CHIPFLOW_ROOT'], 'build', 'sim')
         self.extra_files = dict()
@@ -25,7 +54,18 @@ class SimPlatform:
     def build(self, e):
         Path(self.build_dir).mkdir(parents=True, exist_ok=True)
 
-        output = rtlil.convert(e, name="sim_top", ports=None, platform=self)
+        ports = [
+            e.ports.qspi.sck.o, e.ports.qspi.sck.oe,
+            e.ports.qspi.io.o, e.ports.qspi.io.oe, e.ports.qspi.io.i,
+            e.ports.qspi.cs.o, e.ports.qspi.cs.oe,
+
+            e.ports.i2c.scl.o, e.ports.i2c.scl.oe, e.ports.i2c.scl.i,
+            e.ports.i2c.sda.o, e.ports.i2c.sda.oe, e.ports.i2c.sda.i,
+
+            e.ports.uart.rx.i,
+            e.ports.uart.tx.o,
+        ]
+        output = rtlil.convert(e, name="sim_top", ports=ports, platform=self)
 
         top_rtlil = Path(self.build_dir) / "sim_soc.il"
         with open(top_rtlil, "w") as rtlil_file:
@@ -47,15 +87,32 @@ class SimPlatform:
 
 
 class MySimStep(SimStep):
-    doit_build_module = doit_build
-
     def __init__(self, config):
-        platform = SimPlatform()
-
+        platform = _SimPlatform()
         super().__init__(config, platform)
 
-    def build(self):
-        my_design = MySoC()
+    def build_cli_parser(self, parser):
+        action_argument = parser.add_subparsers(dest="action")
+        rtlil_subparser = action_argument.add_parser(
+            "build-rtlil", help="(internal) Build the RTLIL of the design.")
+        build_subparser = action_argument.add_parser(
+            "build", help="Build the CXXRTL simulation.")
+        run_subparser = action_argument.add_parser(
+            "run", help="Run the CXXRTL simulation.")
 
-        self.platform.build(my_design)
-        self.doit_build()
+    def run_cli(self, args):
+        if args.action == "build-rtlil":
+            self.build_rtlil()
+        if args.action == "build":
+            self.build()
+        if args.action == "run":
+            self.run()
+
+    def build_rtlil(self):
+        self.platform.build(_SimTop())
+
+    def build(self):
+        DoitMain(ModuleTaskLoader(doit_build)).run(["build_sim"])
+
+    def run(self):
+        DoitMain(ModuleTaskLoader(doit_build)).run(["run_sim"])

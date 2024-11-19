@@ -1,41 +1,50 @@
 from amaranth import *
 from amaranth.lib.cdc import FFSynchronizer
+from amaranth.lib import io, wiring
+from amaranth.lib.wiring import In, Out, flipped, connect
+
+
+__all__ = ["I2CInitiator"]
 
 
 # I2C Controller Implementation from Glasgow
 # https://github.com/GlasgowEmbedded/glasgow/blob/5e1f94dde6896e3adf2e8ebcfc0157d1fb950823/software/glasgow/gateware/i2c.py
 
-class I2CBus(Elaboratable):
+class _I2CBus(wiring.Component):
     """
     I2C bus.
 
     Decodes bus conditions (start, stop, sample and setup) and provides synchronization.
     """
-    def __init__(self, pads):
+    def __init__(self, ports):
+        self._ports = ports
 
-        self.pads = pads
+        super().__init__({
+            "scl_i":  In(1),
+            "scl_o":  Out(1, init=1),
+            "sda_i":  In(1),
+            "sda_o":  Out(1, init=1),
 
-        self.scl_i = Signal()
-        self.scl_o = Signal(init=1)
-        self.sda_i = Signal()
-        self.sda_o = Signal(init=1)
-
-        self.sample = Signal(name="bus_sample")
-        self.setup  = Signal(name="bus_setup")
-        self.start  = Signal(name="bus_start")
-        self.stop   = Signal(name="bus_stop")
+            "sample": Out(1),
+            "setup":  Out(1),
+            "start":  Out(1),
+            "stop":   Out(1),
+        })
 
     def elaborate(self, platform):
         m = Module()
+
+        m.submodules.io_scl = scl_t = io.Buffer("io", self._ports.scl)
+        m.submodules.io_sda = sda_t = io.Buffer("io", self._ports.sda)
 
         scl_r = Signal(init=1)
         sda_r = Signal(init=1)
 
         m.d.comb += [
-            self.pads.scl_o.eq(0),
-            self.pads.scl_oe.eq(~self.scl_o),
-            self.pads.sda_o.eq(0),
-            self.pads.sda_oe.eq(~self.sda_o),
+            scl_t.o.eq(0),
+            scl_t.oe.eq(~self.scl_o),
+            sda_t.o.eq(0),
+            sda_t.oe.eq(~self.sda_o),
 
             self.sample.eq(~scl_r & self.scl_i),
             self.setup.eq(scl_r & ~self.scl_i),
@@ -47,14 +56,14 @@ class I2CBus(Elaboratable):
             sda_r.eq(self.sda_i),
         ]
         m.submodules += [
-            FFSynchronizer(self.pads.scl_i, self.scl_i, init=1),
-            FFSynchronizer(self.pads.sda_i, self.sda_i, init=1),
+            FFSynchronizer(scl_t.i, self.scl_i, init=1),
+            FFSynchronizer(sda_t.i, self.sda_i, init=1),
         ]
 
         return m
 
 
-class I2CInitiator(Elaboratable):
+class I2CInitiator(wiring.Component):
     """
     Simple I2C transaction initiator.
 
@@ -94,34 +103,35 @@ class I2CInitiator(Elaboratable):
     :attr ack_i:
         Acknowledge bit to be transmitted. Latched immediately after ``read`` is asserted.
     """
-    def __init__(self, pads, clk_stretch=True):
-        self.clk_stretch = clk_stretch
+    def __init__(self, ports, clk_stretch=True):
+        self._clk_stretch = clk_stretch
+        self._bus = _I2CBus(ports)
 
-        self.period_cyc = Signal(12)
+        super().__init__({
+            "period_cyc": In(12),
 
-        self.busy   = Signal(init=1)
-        self.start  = Signal()
-        self.stop   = Signal()
-        self.read   = Signal()
-        self.data_i = Signal(8)
-        self.ack_o  = Signal()
-        self.write  = Signal()
-        self.data_o = Signal(8)
-        self.ack_i  = Signal()
-
-        self.bus = I2CBus(pads)
+            "busy":   Out(1, init=1),
+            "start":  In(1),
+            "stop":   In(1),
+            "read":   In(1),
+            "data_i": In(8),
+            "ack_o":  Out(1),
+            "write":  In(1),
+            "data_o": Out(8),
+            "ack_i":  In(1),
+        })
 
     def elaborate(self, platform):
         m = Module()
 
-        m.submodules.bus = self.bus
+        m.submodules.bus = self._bus
 
         timer = Signal(12)
         stb   = Signal()
 
         with m.If((timer == 0) | ~self.busy):
             m.d.sync += timer.eq(self.period_cyc)
-        with m.Elif((not self.clk_stretch) | (self.bus.scl_o == self.bus.scl_i)):
+        with m.Elif((not self._clk_stretch) | (self._bus.scl_o == self._bus.scl_i)):
             m.d.sync += timer.eq(timer - 1)
         m.d.comb += stb.eq(timer == 0)
 
@@ -135,16 +145,16 @@ class I2CInitiator(Elaboratable):
             def scl_l(state, next_state, *exprs):
                 with m.State(state):
                     with m.If(stb):
-                        m.d.sync += self.bus.scl_o.eq(0)
+                        m.d.sync += self._bus.scl_o.eq(0)
                         m.next = next_state
                         m.d.sync += exprs
 
             def scl_h(state, next_state, *exprs):
                 with m.State(state):
                     with m.If(stb):
-                        m.d.sync += self.bus.scl_o.eq(1)
-                    with m.Elif(self.bus.scl_o == 1):
-                        with m.If((not self.clk_stretch) | (self.bus.scl_i == 1)):
+                        m.d.sync += self._bus.scl_o.eq(1)
+                    with m.Elif(self._bus.scl_o == 1):
+                        with m.If((not self._clk_stretch) | (self._bus.scl_i == 1)):
                             m.next = next_state
                             m.d.sync += exprs
 
@@ -160,18 +170,18 @@ class I2CInitiator(Elaboratable):
             with m.State("IDLE"):
                 m.d.sync += self.busy.eq(1)
                 with m.If(self.start):
-                    with m.If(self.bus.scl_i & self.bus.sda_i):
+                    with m.If(self._bus.scl_i & self._bus.sda_i):
                         m.next = "START-SDA-L"
-                    with m.Elif(~self.bus.scl_i):
+                    with m.Elif(~self._bus.scl_i):
                         m.next = "START-SCL-H"
-                    with m.Elif(self.bus.scl_i):
+                    with m.Elif(self._bus.scl_i):
                         m.next = "START-SCL-L"
                 with m.Elif(self.stop):
-                    with m.If(self.bus.scl_i & ~self.bus.sda_o):
+                    with m.If(self._bus.scl_i & ~self._bus.sda_o):
                         m.next = "STOP-SDA-H"
-                    with m.Elif(~self.bus.scl_i):
+                    with m.Elif(~self._bus.scl_i):
                         m.next = "STOP-SCL-H"
-                    with m.Elif(self.bus.scl_i):
+                    with m.Elif(self._bus.scl_i):
                         m.next = "STOP-SCL-L"
                 with m.Elif(self.write):
                     m.d.sync += w_shreg.eq(self.data_i)
@@ -185,25 +195,25 @@ class I2CInitiator(Elaboratable):
             # start
             scl_l("START-SCL-L", "START-SDA-H")
             stb_x("START-SDA-H", "START-SCL-H",
-                self.bus.sda_o.eq(1)
+                self._bus.sda_o.eq(1)
             )
             scl_h("START-SCL-H", "START-SDA-L")
             stb_x("START-SDA-L", "IDLE",
-                self.bus.sda_o.eq(0)
+                self._bus.sda_o.eq(0)
             )
             # stop
             scl_l("STOP-SCL-L",  "STOP-SDA-L")
             stb_x("STOP-SDA-L",  "STOP-SCL-H",
-                self.bus.sda_o.eq(0)
+                self._bus.sda_o.eq(0)
             )
             scl_h("STOP-SCL-H",  "STOP-SDA-H")
             stb_x("STOP-SDA-H",  "IDLE",
-                self.bus.sda_o.eq(1)
+                self._bus.sda_o.eq(1)
             )
             # write data
             scl_l("WRITE-DATA-SCL-L", "WRITE-DATA-SDA-X")
             stb_x("WRITE-DATA-SDA-X", "WRITE-DATA-SCL-H",
-                self.bus.sda_o.eq(w_shreg[7])
+                self._bus.sda_o.eq(w_shreg[7])
             )
             scl_h("WRITE-DATA-SCL-H", "WRITE-DATA-SDA-N",
                 w_shreg.eq(Cat(C(0, 1), w_shreg[0:7]))
@@ -215,19 +225,19 @@ class I2CInitiator(Elaboratable):
             # write ack
             scl_l("WRITE-ACK-SCL-L", "WRITE-ACK-SDA-H")
             stb_x("WRITE-ACK-SDA-H", "WRITE-ACK-SCL-H",
-                self.bus.sda_o.eq(1)
+                self._bus.sda_o.eq(1)
             )
             scl_h("WRITE-ACK-SCL-H", "WRITE-ACK-SDA-N",
-                self.ack_o.eq(~self.bus.sda_i)
+                self.ack_o.eq(~self._bus.sda_i)
             )
             stb_x("WRITE-ACK-SDA-N", "IDLE")
             # read data
             scl_l("READ-DATA-SCL-L", "READ-DATA-SDA-H")
             stb_x("READ-DATA-SDA-H", "READ-DATA-SCL-H",
-                self.bus.sda_o.eq(1)
+                self._bus.sda_o.eq(1)
             )
             scl_h("READ-DATA-SCL-H", "READ-DATA-SDA-N",
-                r_shreg.eq(Cat(self.bus.sda_i, r_shreg[0:7]))
+                r_shreg.eq(Cat(self._bus.sda_i, r_shreg[0:7]))
             )
             stb_x("READ-DATA-SDA-N", "READ-DATA-SCL-L",
                 bitno.eq(bitno + 1),
@@ -236,7 +246,7 @@ class I2CInitiator(Elaboratable):
             # read ack
             scl_l("READ-ACK-SCL-L", "READ-ACK-SDA-X")
             stb_x("READ-ACK-SDA-X", "READ-ACK-SCL-H",
-                self.bus.sda_o.eq(~r_ack)
+                self._bus.sda_o.eq(~r_ack)
             )
             scl_h("READ-ACK-SCL-H", "READ-ACK-SDA-N",
                 self.data_o.eq(r_shreg)
