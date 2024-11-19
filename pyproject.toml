@@ -36,3 +36,12 @@ test = [
 [tool.pdm.scripts]
 _.env_file = ".env.toolchain"
 test.cmd = "pytest"
+lint = {shell = "echo Linting wit Ruff && ruff check"}
+style = {shell = "echo Checking code style && pycodestyle check"}
+check.composite = ["lint", "style"]
+
+[tool.pdm.resolution.overrides]
+yowasp-yosys = "0.40.0.68.post721.dev0"
+
+[tool.ruff.lint]
+ignore = ["F403", "F405", "F541"]
