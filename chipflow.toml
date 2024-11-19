@@ -143,11 +143,11 @@ sc_jtag_trst = { type = "i", loc = "111" }
 # x1 reserved
 
 # System
-sys_clk   = { type = "i", loc = "114" }
-sys_rst_n = { type = "i", loc = "115" }
-test_clk  = { type = "i", loc = "116" }
-test_mode = { type = "i", loc = "117" }
-heartbeat = { type = "o", loc = "118" }
+sys_clk   = { type = "clk", loc = "114" }
+sys_rst_n = { type = "i",   loc = "115" }
+test_clk  = { type = "i",   loc = "116" }
+test_mode = { type = "i",   loc = "117" }
+heartbeat = { type = "o",   loc = "118" }
 
 # x17 reserved (T1S PHY)
 
