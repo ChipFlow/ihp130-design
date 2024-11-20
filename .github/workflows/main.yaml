@@ -12,13 +12,9 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: [ubuntu-latest, ubuntu-24.04, macos-12, macos-13, macos-14]
-        python: ["3.9", "3.10", "3.11", "3.12"]
+        os: [ubuntu-latest, ubuntu-24.04, macos-13, macos-14]
+        python: ["3.10", "3.11", "3.12"]
         exclude:
-          - os: macos-12
-            python: "3.11"
-          - os: macos-12
-            python: "3.12"
           - os: macos-13
             python: "3.11"
           - os: macos-13
@@ -52,7 +48,7 @@ jobs:
 
       - name: Run tests
         run: |
-          make sim-check
+          pdm test
 
   submit:
     needs: test
@@ -73,7 +69,7 @@ jobs:
       - name: Install dependencies
         run: |
           pdm install
-      - run: pdm run chipflow silicon submit
+      - run: pdm submit
         env:
           CHIPFLOW_API_KEY_ID: ${{ secrets.CHIPFLOW_API_KEY_ID }}
           CHIPFLOW_API_KEY_SECRET: ${{ secrets.CHIPFLOW_API_KEY_SECRET }}

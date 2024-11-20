@@ -39,6 +39,7 @@ test.cmd = "pytest"
 lint = {shell = "echo Linting wit Ruff && ruff check"}
 style = {shell = "echo Checking code style && pycodestyle check"}
 check.composite = ["lint", "style"]
+submit = "chipflow silicon submit"
 
 [tool.pdm.resolution.overrides]
 yowasp-yosys = "0.40.0.68.post721.dev0"
