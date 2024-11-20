@@ -17,7 +17,7 @@ dependencies = [
   "minerva @ git+https://github.com/minerva-cpu/minerva",
   "chipflow-lib @ git+https://github.com/ChipFlow/chipflow-lib.git",
   "glasgow @ git+https://github.com/GlasgowEmbedded/glasgow#subdirectory=software",
-  "ziglang==0.11.0",
+  "ziglang~=0.13.0",
 ]
 
 # Build system configuration
