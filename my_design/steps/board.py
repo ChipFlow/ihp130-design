@@ -9,10 +9,10 @@ from doit.doit_cmd import DoitMain
 
 from chipflow_lib.steps.board import BoardStep
 
-from glasgow.device import GlasgowDeviceError
-from glasgow.device.hardware import GlasgowHardwareDevice, REQ_FPGA_CFG, REQ_BITSTREAM_ID
 from glasgow.platform.generic import GlasgowPlatformPort
 from glasgow.platform.rev_c import GlasgowRevC123Platform
+from glasgow.target.hardware import GlasgowBuildPlan
+from glasgow.target.toolchain import find_toolchain
 
 from ..design import MySoC
 from ..board import doit_glasgow
@@ -75,7 +75,10 @@ class GlasgowBoardStep(BoardStep):
             self.flash_software()
 
     def build_bitstream(self):
-        self.platform.build(_GlasgowTop(), nextpnr_opts="--timing-allow-fail", do_program=False)
+        plan = GlasgowBuildPlan(
+            find_toolchain(),
+            self.platform.prepare(_GlasgowTop(), nextpnr_opts="--timing-allow-fail"))
+        plan.execute(build_dir="build/board", debug=True)
 
     def load_bitstream(self):
         DoitMain(ModuleTaskLoader(doit_glasgow)).run(["load_bitstream"])

@@ -1,5 +1,8 @@
 import importlib.resources
 
+from doit.tools import run_once
+
+
 TOOLS_DIR = importlib.resources.files("my_design") / "tools"
 
 
@@ -9,7 +12,10 @@ def task_build_bitstream():
 	        "pdm run chipflow board build-bitstream",
         ],
         "targets": [
-            "build/top.bin",
+            "build/board/top.bin",
+        ],
+        "uptodate": [
+            run_once,
         ],
     }
 
@@ -17,10 +23,13 @@ def task_build_bitstream():
 def task_load_bitstream():
     return {
         "actions": [
-            f"pdm run python {TOOLS_DIR}/glasgow_load.py build/top.bin",
+            f"pdm run python {TOOLS_DIR}/glasgow_load.py build/board/top.bin",
         ],
         "file_dep": [
-            "build/top.bin",
+            "build/board/top.bin",
+        ],
+        "uptodate": [
+            False,
         ],
     }
 
