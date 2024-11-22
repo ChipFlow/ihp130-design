@@ -51,8 +51,6 @@ jobs:
           pdm test
 
   submit:
-    needs: test
-    if: ${{ false }}
     runs-on: ubuntu-22.04
     steps:
       - name: Check out source code
