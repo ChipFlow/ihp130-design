@@ -1,7 +1,7 @@
 # TODO: update with new padring and IHP130
 
 [chipflow]
-project_id = 12
+project_id = 13
 
 [chipflow.steps]
 sim      = "my_design.steps.sim:MySimStep"
