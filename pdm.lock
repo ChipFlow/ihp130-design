@@ -5,7 +5,7 @@
 groups = ["default", "test"]
 strategy = ["inherit_metadata"]
 lock_version = "4.5.0"
-content_hash = "sha256:6cad74f4a57eac3ca3157be48aa11486e59cdf45a53b09734c760bf52e4e981e"
+content_hash = "sha256:86fc17fbab929cce9e41e5e77868db7b69952ae3c604c8a06b4583dfbcb6fe33"
 
 [[metadata.targets]]
 requires_python = ">3.10.0,<3.10.1||>3.10.1,<3.10.2||>3.10.2,<4.0"
@@ -303,11 +303,11 @@ files = [
 
 [[package]]
 name = "glasgow"
-version = "0.1.dev2224"
+version = "0.1.dev2225+g490480f"
 requires_python = "!=3.10.0,!=3.10.1,!=3.10.2,~=3.9"
 subdirectory = "software"
 git = "https://github.com/GlasgowEmbedded/glasgow"
-revision = "c743b8f747c8d11321d790748524409aa8d1fbad"
+revision = "490480fa696039d7f9534100a1b715b71566e0ec"
 summary = "Software for the Glasgow Interface Explorer, a digital interface multitool"
 groups = ["default"]
 dependencies = [
@@ -318,6 +318,24 @@ dependencies = [
     "platformdirs<5,>=3.0.0",
     "pyvcd<0.5,>=0.2",
     "typing-extensions<5,>=4.8",
+]
+
+[[package]]
+name = "glasgow"
+version = "0.1.dev2225"
+extras = ["builtin-toolchain"]
+requires_python = "!=3.10.0,!=3.10.1,!=3.10.2,~=3.9"
+subdirectory = "software"
+git = "https://github.com/GlasgowEmbedded/glasgow"
+revision = "490480fa696039d7f9534100a1b715b71566e0ec"
+summary = "Software for the Glasgow Interface Explorer, a digital interface multitool"
+groups = ["default"]
+dependencies = [
+    "amaranth-yosys",
+    "glasgow @ git+https://github.com/GlasgowEmbedded/glasgow#subdirectory=software",
+    "yowasp-nextpnr-ice40>=0.1",
+    "yowasp-runtime>=1.42",
+    "yowasp-yosys>=0.31.0.13",
 ]
 
 [[package]]
@@ -760,6 +778,18 @@ dependencies = [
 ]
 files = [
     {file = "yowasp_nextpnr_ecp5-0.7.0.11.post528.dev0-py3-none-any.whl", hash = "sha256:102d3e81004c402e4422121197fa4eaf5090bd2d6d7e483312f2191233165e66"},
+]
+
+[[package]]
+name = "yowasp-nextpnr-ice40"
+version = "0.7.0.0.post519"
+summary = "nextpnr-ice40 FPGA place and route tool"
+groups = ["default"]
+dependencies = [
+    "yowasp-runtime~=1.1",
+]
+files = [
+    {file = "yowasp_nextpnr_ice40-0.7.0.0.post519-py3-none-any.whl", hash = "sha256:abd245a20de0517526be670f78e645a7d0aff56165a674a501c39e69a2f102b3"},
 ]
 
 [[package]]

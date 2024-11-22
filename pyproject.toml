@@ -16,7 +16,7 @@ dependencies = [
   "amaranth[builtin-yosys]>=0.5,<0.6",
   "minerva @ git+https://github.com/minerva-cpu/minerva",
   "chipflow-lib @ git+https://github.com/ChipFlow/chipflow-lib.git",
-  "glasgow @ git+https://github.com/GlasgowEmbedded/glasgow#subdirectory=software",
+  "glasgow[builtin-toolchain] @ git+https://github.com/GlasgowEmbedded/glasgow#subdirectory=software",
   "ziglang~=0.13.0",
 ]
 
