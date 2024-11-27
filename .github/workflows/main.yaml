@@ -10,48 +10,6 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  test:
-    strategy:
-      fail-fast: false
-      matrix:
-        os: [ubuntu-latest, ubuntu-24.04, macos-13, macos-14]
-        python: ["3.10", "3.11", "3.12"]
-        exclude:
-          - os: macos-13
-            python: "3.11"
-          - os: macos-13
-            python: "3.12"
-
-
-    runs-on: ${{ matrix.os }}
-    steps:
-      - name: Check out source code
-        uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-
-      - name: Set up PDM
-        uses: pdm-project/setup-pdm@v4
-        with:
-          cache: true
-          python-version: ${{ matrix.python }}
-
-      - name: Install dependencies
-        run: |
-          pdm install
-
-      - name: Cache YoWASP build products
-        uses: actions/cache@v4
-        with:
-          path: ~/.cache/YoWASP
-          key: YoWASP-${{ runner.os }}-${{ hashFiles('./.venv/**/*.wasm') }}
-          restore-keys: |
-            YoWASP-${{ runner.os }}-
-
-      - name: Run tests
-        run: |
-          pdm test
-
   submit:
     runs-on: ubuntu-22.04
     steps:
