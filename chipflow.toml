@@ -13,7 +13,109 @@ software = "my_design.steps.software:MySoftwareStep"
 process = "ihp_sg13g2"
 pad_ring = "pga144"
 
+[chipflow.wiring.top]
+  reset = 145
+
+[chipflow.wiring.clocks]
+  sync = 144
+
+[chipflow.wiring.components]
+  soc =  'MySoC'
+  heartbeat = 'Heartbeat'
+
+[chipflow.wiring.components.soc]
+   my_config = "be_magical"
+
+[chipflow.wiring.ports.qspi]
+  sck = 2
+  io = [4,5,6,7]
+  cs = 3
+
+[chipflow.wiring.ports.i2c0]
+  scl = 26
+  sda = 27
+
+[chipflow.wiring.ports.i2c1]
+  scl = 28
+  sda = 29
+
+[chipflow.wiring.ports.uart]
+  rx = 78
+  tx = 79
+
+[chipflow.wiring]
+    reset = { pin = 145, type = 'i' }
+
+[chipflow.wiring.clocks]
+    sync = {pin = 144, type = 'i' }
+
+[chipflow.wiring.components]
+    soc =  'MySoC'
+    heartbeat = 'Heartbeat'
+
+[chipflow.wiring.components.soc]
+   my_config = "be_magical"
+
+[chipflow.wiring.ports.qspi]
+    sck = { pin = 2, type = 'o' }
+    io =  { pins = [ 4,5,6,7 ], type = 'io' }
+    cs =  { pin = 3, type = 'o' }
+
+
+[chipflow.wiring]
+    reset="sys_rst_n"
+
+[chipflow.wiring.clocks]
+    sync = 'sys_clk'
+
+[chipflow.wiring.componentsd]
+    soc =  'MySoC'
+    heartbeat = 'Heartbeat'
+
+[chipflow.wiring.ports.qspi]
+    sck ='flash_clk'
+    io = 'flash_d0,flash_d1,flash_d2,flash_d3'
+    cs = 'flash_csn'
+
+[chipflow.wiring.ports.i2c]
+    scl = 'i2c0_scl'
+    sda = 'i2c0_sda'
+
+[chipflow.wiring.ports.uart]
+    rx = 'uart0_rx'
+    tx = 'uart0_tx'
+
+[chipflow.wiring.ports.flash]
+clk = { type = "o",  loc = "2" }
+csn = { type = "o",  loc = "3" }
+d0  = { type = "io",  loc = "4" }
+d1  = { type = "io",  loc = "5" }
+d2  = { type = "io",  loc = "6" }
+d3  = { type = "io",  loc = "7" }
+
 [chipflow.silicon.pads]
+
+    clocks ={'sync': 'sys_clk'},
+    reset="sys_rst_n",
+    features=[Heartbeat("heartbeat")],
+    ports={
+        'qspi': {
+            'sck': 'flash_clk',
+            'io': 'flash_d0,flash_d1,flash_d2,flash_d3',
+            'cs': 'flash_csn',
+        },
+        'i2c': {
+            'scl': 'i2c0_scl',
+            'sda': 'i2c0_sda',
+        },
+        'uart': {
+            'rx': 'uart0_rx',
+            'tx': 'uart0_tx',
+        },
+    },
+    components={'soc': MySoC}
+)
+
 
 # QSPI flash
 flash_clk = { type = "o",  loc = "2" }
