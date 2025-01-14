@@ -1,5 +1,5 @@
 from dataclasses import dataclass
-from typing import List, Dict
+from typing import Dict, Union, Any
 
 from amaranth import (
         Module,
@@ -21,43 +21,52 @@ from ..ips.ports import PortGroup
 
 __all__ = ["MySiliconStep"]
 
-PortMapping = Dict[str, str]
+PortMap = Dict[str, Union[str, 'PortMap']]
+
+def make_hashable(cls):
+    def __hash__(self):
+        return hash(id(self))
+
+    def __eq__(self, obj):
+        return id(self) == id(obj)
+
+    cls.__hash__ = __hash__
+    cls.__eq__ = __eq__
+    return cls
 
 
+@make_hashable
 @dataclass
-class Feature:
-    name: str
-
-
-@dataclass
-class Heartbeat:
-    pin: str
+class Heartbeat(Elaboratable):
+    ports: PortGroup
     clock_domain: str = "sync"
     counter_size: int = 23
     name: str = "heartbeat"
 
-    def install(self, m, platform):
+    def elaborate(self, platform):
+        m = Module()
         # Heartbeat LED (to confirm clock/reset alive)
         heartbeat_ctr = Signal(self.counter_size)
         getattr(m.d, self.clock_domain).__iadd__(heartbeat_ctr.eq(heartbeat_ctr + 1))
 
-        heartbeat_buffer = io.Buffer("o", platform.request(self.pin))
-        setattr(m.submodules, "heartbeat_buffer_" + self.pin, heartbeat_buffer)
+        heartbeat_buffer = io.Buffer("o", self.ports.heartbeat)
+        m.submodules.heartbeat_buffer = heartbeat_buffer
         m.d.comb += heartbeat_buffer.o.eq(heartbeat_ctr[-1])
+        return m
 
 
 @dataclass
-class SiliconTop(Elaboratable):
+class SiliconConf:
     clocks: Dict[str, str]
     reset: str
-    features: List[Feature]
-    ports: Dict[str, PortMapping]
-    components: Dict[str, [type[Component]]]
+    portmap: PortMap
 
-    def elaborate(self, platform):
+
+class SiliconTop(Elaboratable):
+    def configure(self, platform):
         m = Module()
 
-        for clock, pin in self.clocks.items():
+        for clock, pin in self.config.clocks.items():
             if clock == '':
                 clock = 'sync'
             setattr(m.domains, clock,  ClockDomain(name=clock))
@@ -65,53 +74,56 @@ class SiliconTop(Elaboratable):
             setattr(m.submodules, "clk_buffer_" + clock, clk_buffer)
             m.d.comb += ClockSignal().eq(clk_buffer.i)
 
-        rst_buffer = io.Buffer("i", ~platform.request(self.reset))
+        rst_buffer = io.Buffer("i", ~platform.request(self.config.reset))
         m.submodules.rst_buffer = rst_buffer
         m.submodules.rst_sync = FFSynchronizer(rst_buffer.i, ResetSignal())
 
-        ports = PortGroup()
-        for group, mapping in self.ports.items():
-            pg = PortGroup()
-            setattr(ports, group, pg)
-            for port, pin_str in mapping.items():
-                pin_names = pin_str.split(',')
-                start = platform.request(pin_names[0])
-                pins = sum(map(lambda x: platform.request(x), pin_names[1:]), start=start)
-                setattr(pg, port, pins)
+        def _map_ports(ports: PortMap, parent: PortGroup):
+            for name, mapping in ports.items():
+                match mapping:
+                    case str():
+                        pin_names = mapping.split(',')
+                        start = platform.request(pin_names[0])
+                        pins = sum(map(lambda x: platform.request(x), pin_names[1:]), start=start)
+                        setattr(parent, name, pins)
+                    case PortMap:
+                        pg = PortGroup()
+                        setattr(parent, name, pg)
+                        _map_ports(mapping, pg)
 
-        for name, cls in self.components.items():
-            setattr(m.submodules, name, cls(ports))
+        self.ports = PortGroup()
+        _map_ports(self.config.portmap, self.ports)
 
         return m
 
-    def __hash__(self):
-        return hash(id(self))
 
-    def __eq__(self, obj):
-        return id(self) == id(obj)
+class _Top(SiliconTop):
+    config = SiliconConf(
+        clocks={'sync': 'sys_clk'},
+        reset="sys_rst_n",
+        portmap={
+            'heartbeat': 'heartbeat',
+            'qspi': {
+                'sck': 'flash_clk',
+                'io': 'flash_d0,flash_d1,flash_d2,flash_d3',
+                'cs': 'flash_csn',
+            },
+            'i2c': {
+                'scl': 'i2c0_scl',
+                'sda': 'i2c0_sda',
+            },
+            'uart': {
+                'rx': 'uart0_rx',
+                'tx': 'uart0_tx',
+            },
+        })
 
+    def elaborate(self, platform):
+        m = self.configure(platform)
+        m.submodules.soc = MySoC(self.ports)
+        m.submodules.heartbeat = Heartbeat(self.ports, counter_size=24)
+        return m
 
-TOP = SiliconTop(
-    clocks={'sync': 'sys_clk'},
-    reset="sys_rst_n",
-    features=[Heartbeat("heartbeat")],
-    ports={
-        'qspi': {
-            'sck': 'flash_clk',
-            'io': 'flash_d0,flash_d1,flash_d2,flash_d3',
-            'cs': 'flash_csn',
-        },
-        'i2c': {
-            'scl': 'i2c0_scl',
-            'sda': 'i2c0_sda',
-        },
-        'uart': {
-            'rx': 'uart0_rx',
-            'tx': 'uart0_tx',
-        },
-    },
-    components={'soc': MySoC}
-)
 
 '''
 class _ChipflowTop(Elaboratable):
@@ -157,6 +169,7 @@ class _ChipflowTop(Elaboratable):
         return m
 '''
 
+
 class MySiliconStep(SiliconStep):
     def prepare(self):
-        return self.platform.build(TOP, name="testchip_top")
+        return self.platform.build(_Top(), name="testchip_top")
