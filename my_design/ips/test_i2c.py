@@ -1,7 +1,7 @@
 from amaranth import *
 from amaranth.sim import Simulator, Tick
 
-from .i2c import I2CPeripheral
+from my_design.ips.i2c import I2CPeripheral
 import unittest
 
 class _I2CHarness(Elaboratable):

@@ -1,7 +1,7 @@
 from amaranth import *
 from amaranth.sim import Simulator, Tick
 
-from .spi import SPIPeripheral, SPISignature
+from my_design.ips.spi import SPIPeripheral, SPISignature
 import unittest
 
 class TestSpiPeripheral(unittest.TestCase):
