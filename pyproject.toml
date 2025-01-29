@@ -18,6 +18,7 @@ dependencies = [
   "chipflow-lib @ git+https://github.com/ChipFlow/chipflow-lib.git@main",
   "pyuvm~=2.9.1",
   "ziglang==0.11.0",
+  "cocotb>=1.9.2",
 ]
 
 # Build system configuration
@@ -36,6 +37,3 @@ test = [
 [tool.pdm.scripts]
 _.env_file = ".env.toolchain"
 test.cmd = "pytest"
-
-[tool.pdm.resolution.overrides]
-yowasp-yosys = "0.40.0.68.post721.dev0"
