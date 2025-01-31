@@ -11,9 +11,9 @@ class I2CBus(Elaboratable):
 
     Decodes bus conditions (start, stop, sample and setup) and provides synchronization.
     """
-    def __init__(self, pads):
+    def __init__(self, pins):
 
-        self.pads = pads
+        self.pins = pins
 
         self.scl_i = Signal()
         self.scl_o = Signal(init=1)
@@ -32,10 +32,10 @@ class I2CBus(Elaboratable):
         sda_r = Signal(init=1)
 
         m.d.comb += [
-            self.pads.scl_o.eq(0),
-            self.pads.scl_oe.eq(~self.scl_o),
-            self.pads.sda_o.eq(0),
-            self.pads.sda_oe.eq(~self.sda_o),
+            self.pins.scl.o.eq(0),
+            self.pins.scl.oe.eq(~self.scl_o),
+            self.pins.sda.o.eq(0),
+            self.pins.sda.oe.eq(~self.sda_o),
 
             self.sample.eq(~scl_r & self.scl_i),
             self.setup.eq(scl_r & ~self.scl_i),
@@ -47,8 +47,8 @@ class I2CBus(Elaboratable):
             sda_r.eq(self.sda_i),
         ]
         m.submodules += [
-            FFSynchronizer(self.pads.scl_i, self.scl_i, init=1),
-            FFSynchronizer(self.pads.sda_i, self.sda_i, init=1),
+            FFSynchronizer(self.pins.scl.i, self.scl_i, init=1),
+            FFSynchronizer(self.pins.sda.i, self.sda_i, init=1),
         ]
 
         return m
@@ -94,7 +94,7 @@ class I2CInitiator(Elaboratable):
     :attr ack_i:
         Acknowledge bit to be transmitted. Latched immediately after ``read`` is asserted.
     """
-    def __init__(self, pads, clk_stretch=True):
+    def __init__(self, pins, clk_stretch=True):
         self.clk_stretch = clk_stretch
 
         self.period_cyc = Signal(12)
@@ -109,7 +109,7 @@ class I2CInitiator(Elaboratable):
         self.data_o = Signal(8)
         self.ack_i  = Signal()
 
-        self.bus = I2CBus(pads)
+        self.bus = I2CBus(pins)
 
     def elaborate(self, platform):
         m = Module()

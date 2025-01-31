@@ -21,3 +21,6 @@ __pycache__/
 # testbenches
 *.vcd
 *.gtkw
+
+# misc
+log

@@ -16,11 +16,11 @@ class _I2CHarness(Elaboratable):
         m.submodules.i2c = self.i2c
         # Simulate the open-drain I2C bus
         m.d.comb += [
-            self.sda.eq(~self.i2c.i2c_pins.sda_oe & self.sda_i),
-            self.scl.eq(~self.i2c.i2c_pins.scl_oe & self.scl_i),
+            self.sda.eq(~self.i2c.i2c_pins.sda.oe & self.sda_i),
+            self.scl.eq(~self.i2c.i2c_pins.scl.oe & self.scl_i),
 
-            self.i2c.i2c_pins.sda_i.eq(self.sda),
-            self.i2c.i2c_pins.scl_i.eq(self.scl),
+            self.i2c.i2c_pins.sda.i.eq(self.sda),
+            self.i2c.i2c_pins.scl.i.eq(self.scl),
         ]
         return m
 

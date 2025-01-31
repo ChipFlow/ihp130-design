@@ -1,4 +1,3 @@
-
 from amaranth import *
 from amaranth import Elaboratable, Module
 from amaranth.build import Platform
@@ -7,8 +6,11 @@ from amaranth.lib import wiring
 from amaranth.lib.wiring import In, Out, flipped, connect
 from amaranth_soc import csr
 
+from chipflow_lib.platforms import OutputPinSignature
+
 __all__ = ["PDMPeripheral"]
-     
+
+
 class PDMPeripheral(wiring.Component):
     class OutVal(csr.Register, access="rw"):
         """Analog sample value"""
@@ -18,10 +20,13 @@ class PDMPeripheral(wiring.Component):
         """Configuration register """
         en: csr.Field(csr.action.RW, unsigned(1))
 
+    Signature = wiring.Signature({
+        "bus": In(csr.Signature(addr_width=regs.addr_width, data_width=regs.data_width)),
+        "pdm": Out(OutputPinSignature(1))
+        })
 
     def __init__(self, *, name, bitwidth):
         self._bitwidth = bitwidth
-
 
         regs = csr.Builder(addr_width=3, data_width=8, name=name)
 
@@ -30,10 +35,7 @@ class PDMPeripheral(wiring.Component):
 
         self._bridge = csr.Bridge(regs.as_memory_map())
 
-        super().__init__({
-            "bus": In(csr.Signature(addr_width=regs.addr_width, data_width=regs.data_width)),
-            "pdm_ao": Out(1),
-        })
+        super().__init__(PDMPeripheral.Signature)
         self.bus.memory_map = self._bridge.bus.memory_map
 
     @property

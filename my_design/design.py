@@ -1,7 +1,7 @@
 from chipflow_lib.platforms.sim import SimPlatform
 from chipflow_lib.software.soft_gen import SoftwareGenerator
 
-from amaranth import *
+from amaranth import Module
 from amaranth.lib import wiring
 from amaranth.lib.wiring import In, Out, flipped, connect
 
@@ -12,24 +12,23 @@ from amaranth_orchard.base.gpio import GPIOPeripheral, GPIOPins
 from amaranth_orchard.memory.spimemio import SPIMemIO, QSPIPins
 from amaranth_orchard.io.uart import UARTPeripheral, UARTPins
 from amaranth_orchard.memory.sram import SRAMPeripheral
-from amaranth_orchard.base.platform_timer import PlatformTimer
 from amaranth_orchard.base.soc_id import SoCID
 
 from amaranth_cv32e40p.cv32e40p import CV32E40P, DebugModule
-
+from chipflow_lib.platforms import InputPinSignature, OutputPinSignature
 from .ips.spi import SPISignature, SPIPeripheral
 from .ips.i2c import I2CSignature, I2CPeripheral
 from .ips.pwm import PWMPins, PWMPeripheral
-from .ips.pdm import PDMPeripheral
+# from .ips.pdm import PDMPeripheral
 
 __all__ = ["JTAGSignature", "MySoC"]
 
 JTAGSignature = wiring.Signature({
-    "trst_i": In(1),
-    "tck_i": In(1),
-    "tms_i": In(1),
-    "tdi_i": In(1),
-    "tdo_o": Out(1),
+    "trst": In(InputPinSignature(1)),
+    "tck": In(InputPinSignature(1)),
+    "tms": In(InputPinSignature(1)),
+    "tdi": In(InputPinSignature(1)),
+    "tdo": Out(OutputPinSignature(1)),
 })
 
 # ---------
@@ -61,8 +60,8 @@ class MySoC(wiring.Component):
         for i in range(self.motor_count):
             interfaces[f"motor_pwm{i}"] = Out(PWMPins.Signature())
 
-        for i in range(self.pdm_ao_count):
-            interfaces[f"pdm_ao_{i}"] = Out(1)
+#        for i in range(self.pdm_ao_count):
+#            interfaces[f"pdm_ao_{i}"] = Out(PDMPins.Signature())
 
         for i in range(self.uart_count):
             interfaces[f"uart_{i}"] = Out(UARTPins.Signature())
@@ -134,11 +133,11 @@ class MySoC(wiring.Component):
         m.d.comb += cpu.debug_req.eq(debug.debug_req)
 
         m.d.comb += [
-            debug.jtag_tck.eq(self.cpu_jtag.tck_i),
-            debug.jtag_tms.eq(self.cpu_jtag.tms_i),
-            debug.jtag_tdi.eq(self.cpu_jtag.tdi_i),
-            debug.jtag_trst.eq(self.cpu_jtag.trst_i),
-            self.cpu_jtag.tdo_o.eq(debug.jtag_tdo),
+            debug.jtag_tck.eq(self.cpu_jtag.tck.i),
+            debug.jtag_tms.eq(self.cpu_jtag.tms.i),
+            debug.jtag_tdi.eq(self.cpu_jtag.tdi.i),
+            debug.jtag_trst.eq(self.cpu_jtag.trst.i),
+            self.cpu_jtag.tdo.o.eq(debug.jtag_tdo),
         ]
         # TODO: TRST
 
@@ -216,15 +215,15 @@ class MySoC(wiring.Component):
             sw.add_periph("motor_pwm", f"MOTOR_PWM{i}", base_addr)
             setattr(m.submodules, f"motor_pwm{i}", motor_pwm)
 
-        # pdm_ao
-        for i in range(self.pdm_ao_count):
-            pdm = PDMPeripheral(name=f"pdm{i}", bitwidth=10)
-            base_addr = self.csr_pdm_ao_base + i * self.pdm_ao_offset
-            csr_decoder.add(pdm.bus, addr=base_addr  - self.csr_base)
-        
-            sw.add_periph("pdm", f"PDM{i}", base_addr)
-            setattr(m.submodules, f"pdm{i}", pdm)          
-            m.d.comb += getattr(self, f"pdm_ao_{i}").eq(pdm.pdm_ao)
+        # # pdm_ao
+        # for i in range(self.pdm_ao_count):
+        #     pdm = PDMPeripheral(name=f"pdm{i}", bitwidth=10)
+        #     base_addr = self.csr_pdm_ao_base + i * self.pdm_ao_offset
+        #     csr_decoder.add(pdm.bus, addr=base_addr  - self.csr_base)
+        # 
+        #     sw.add_periph("pdm", f"PDM{i}", base_addr)
+        #     setattr(m.submodules, f"pdm{i}", pdm)          
+        #     m.d.comb += getattr(self, f"pdm_ao_{i}").eq(pdm.pdm_ao)
 
         # SoC ID
 

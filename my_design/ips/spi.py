@@ -1,18 +1,22 @@
-from amaranth import *
+from amaranth import Module, Signal, Cat, C, unsigned
 from amaranth.lib import wiring
 from amaranth.lib.wiring import In, Out, connect, flipped
 
 from amaranth_soc import csr
+from chipflow_lib.platforms import InputPinSignature, OutputPinSignature
+
 
 
 __all__ = ["SPISignature", "SPISignature"]
 
+
 SPISignature = wiring.Signature({
-    "sck_o": Out(1),
-    "mosi_o": Out(1),
-    "miso_i": In(1),
-    "csn_o": Out(1),
+    "sck": Out(OutputPinSignature(1)),
+    "mosi": Out(OutputPinSignature(1)),
+    "miso": Out(InputPinSignature(1)),
+    "csn": Out(OutputPinSignature(1)),
 })
+
 
 class SPIController(wiring.Component):
     def __init__(self):
@@ -29,10 +33,10 @@ class SPIController(wiring.Component):
             "busy": Out(1),
             "done": Out(1),
         })
+
     def elaborate(self, platform):
         m = Module()
         sck = Signal()
-        sck_r = Signal()
 
         setup = Signal()
         latch = Signal()
@@ -43,8 +47,8 @@ class SPIController(wiring.Component):
         bit_count = Signal(6)
 
         m.d.comb += [
-            self.spi.sck_o.eq(sck ^ self.sck_idle),
-            self.spi.csn_o.eq(~self.cs),
+            self.spi.sck.o.eq(sck ^ self.sck_idle),
+            self.spi.csn.o.eq(~self.cs),
         ]
 
         # defaults for strobes
@@ -100,11 +104,11 @@ class SPIController(wiring.Component):
         with m.If(setup):
             m.d.sync += sr_o.eq(Cat(C(0, 1), sr_o))
         with m.If(latch):
-            m.d.sync += sr_i.eq(Cat(self.spi.miso_i, sr_i))
+            m.d.sync += sr_i.eq(Cat(self.spi.miso.i, sr_i))
 
         m.d.comb += [
             self.d_recv.eq(sr_i),
-            self.spi.mosi_o.eq(sr_o[-1])
+            self.spi.mosi.o.eq(sr_o[-1])
         ]
 
         return m
