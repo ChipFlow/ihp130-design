@@ -1,173 +1,47 @@
 [chipflow]
-project_id = 10
+project_name = "chipflow-examples"
+
+[chipflow.top]
+soc = "my_design.design:MySoC"
 
 [chipflow.steps]
 sim = "my_design.steps.sim:MySimStep"
-board = "my_design.steps.board:MyBoardStep"
-silicon = "my_design.steps.silicon:MySiliconStep"
+# board = "my_design.steps.board:MyBoardStep"
+silicon = "chipflow_lib.steps.silicon:SiliconStep"
 software = "my_design.steps.software:MySoftwareStep"
 export = "my_design.steps.export_verilog:ExportVerilogStep"
 
+[chipflow.clocks]
+default = 'sys_clk'
+
+[chipflow.resets]
+default = 'sys_rst_n'
+
 [chipflow.silicon]
 process = "gf130bcd"
-pad_ring = "pga144"
+package = "pga144"
 
 [chipflow.silicon.pads]
-
-# QSPI flash
-flash_clk = { type = "o",  loc = "2" }
-flash_csn = { type = "o",  loc = "3" }
-flash_d0  = { type = "io",  loc = "4" }
-flash_d1  = { type = "io",  loc = "5" }
-flash_d2  = { type = "io",  loc = "6" }
-flash_d3  = { type = "io",  loc = "7" }
-
-# User SPI 0
-user_spi0_sck  = { type = "o", loc =  "8" }
-user_spi0_mosi = { type = "o", loc = "10" }
-user_spi0_miso = { type = "i", loc = "11" }
-user_spi0_csn  = { type = "o", loc = "12" }
-# User SPI 1
-user_spi1_sck  = { type = "o", loc = "13" }
-user_spi1_mosi = { type = "o", loc = "14" }
-user_spi1_miso = { type = "i", loc = "15" }
-user_spi1_csn  = { type = "o", loc = "16" }
-# User SPI 2
-user_spi2_sck  = { type = "o", loc = "18" }
-user_spi2_mosi = { type = "o", loc = "19" }
-user_spi2_miso = { type = "i", loc = "20" }
-user_spi2_csn  = { type = "o", loc = "21" }
-
-# spare x3
-
-# I2C 0
-i2c0_scl = { type = "io", loc = "26" }
-i2c0_sda = { type = "io", loc = "27" }
-# I2C 1
-i2c1_scl = { type = "io", loc = "28" }
-i2c1_sda = { type = "io", loc = "29" }
-
-# Motor PWM 0
-motor_pwm0_pwm  = { type = "o", loc = "30" }
-motor_pwm0_dir  = { type = "o", loc = "31" }
-motor_pwm0_stop = { type = "i", loc = "32" }
-# Motor PWM 1
-motor_pwm1_pwm  = { type = "o", loc = "34" }
-motor_pwm1_dir  = { type = "o", loc = "35" }
-motor_pwm1_stop = { type = "i", loc = "36" }
-# Motor PWM 2
-motor_pwm2_pwm  = { type = "o", loc = "37" }
-motor_pwm2_dir  = { type = "o", loc = "38" }
-motor_pwm2_stop = { type = "i", loc = "39" }
-# Motor PWM 3
-motor_pwm3_pwm  = { type = "o", loc = "40" }
-motor_pwm3_dir  = { type = "o", loc = "42" }
-motor_pwm3_stop = { type = "i", loc = "43" }
-# Motor PWM 4
-motor_pwm4_pwm  = { type = "o", loc = "44" }
-motor_pwm4_dir  = { type = "o", loc = "45" }
-motor_pwm4_stop = { type = "i", loc = "46" }
-# Motor PWM 5
-motor_pwm5_pwm  = { type = "o", loc = "47" }
-motor_pwm5_dir  = { type = "o", loc = "48" }
-motor_pwm5_stop = { type = "i", loc = "50" }
-# Motor PWM 6
-motor_pwm6_pwm  = { type = "o", loc = "51" }
-motor_pwm6_dir  = { type = "o", loc = "52" }
-motor_pwm6_stop = { type = "i", loc = "53" }
-# Motor PWM 7
-motor_pwm7_pwm  = { type = "o", loc = "54" }
-motor_pwm7_dir  = { type = "o", loc = "55" }
-motor_pwm7_stop = { type = "i", loc = "56" }
-# Motor PWM 8
-motor_pwm8_pwm  = { type = "o", loc = "58" }
-motor_pwm8_dir  = { type = "o", loc = "59" }
-motor_pwm8_stop = { type = "i", loc = "60" }
-# Motor PWM 9
-motor_pwm9_pwm  = { type = "o", loc = "61" }
-motor_pwm9_dir  = { type = "o", loc = "62" }
-motor_pwm9_stop = { type = "i", loc = "63" }
-
-# PDM analog output
-pdm_ao_0 = { type = "o", loc = "64" }
-pdm_ao_1 = { type = "o", loc = "66" }
-pdm_ao_2 = { type = "o", loc = "67" }
-pdm_ao_3 = { type = "o", loc = "68" }
-pdm_ao_4 = { type = "o", loc = "69" }
-pdm_ao_5 = { type = "o", loc = "70" }
-
-# x 6 reserved analog input
-
-# UART 0
-uart0_rx = {type = "i", loc = "78" }
-uart0_tx = {type = "o", loc = "79" }
-# UART 1
-uart1_rx = {type = "i", loc = "80" }
-uart1_tx = {type = "o", loc = "82" }
-
-# x1 reserved
-
-# GPIO
-gpio0_0 = { type = "io", loc = "83" }
-gpio0_1 = { type = "io", loc = "84" }
-gpio0_2 = { type = "io", loc = "85" }
-gpio0_3 = { type = "io", loc = "86" }
-gpio0_4 = { type = "io", loc = "87" }
-gpio0_5 = { type = "io", loc = "88" }
-gpio0_6 = { type = "io", loc = "90" }
-gpio0_7 = { type = "io", loc = "91" }
-gpio1_0 = { type = "io", loc = "92" }
-gpio1_1 = { type = "io", loc = "93" }
-gpio1_2 = { type = "io", loc = "94" }
-gpio1_3 = { type = "io", loc = "95" }
-gpio1_4 = { type = "io", loc = "96" }
-gpio1_5 = { type = "io", loc = "98" }
-gpio1_6 = { type = "io", loc = "99" }
-gpio1_7 = { type = "io", loc = "100" }
-
-# CPU JTAG
-cpu_jtag_tck  = { type = "i", loc = "101" }
-cpu_jtag_tms  = { type = "i", loc = "102" }
-cpu_jtag_tdi  = { type = "i", loc = "103" }
-cpu_jtag_tdo  = { type = "o", loc = "104" }
-cpu_jtag_trst = { type = "i", loc = "106" }
-
-# Scan chain JTAG
-sc_jtag_tck  = { type = "i", loc = "107" }
-sc_jtag_tms  = { type = "i", loc = "108" }
-sc_jtag_tdi  = { type = "i", loc = "109" }
-sc_jtag_tdo  = { type = "o", loc = "110" }
-sc_jtag_trst = { type = "i", loc = "111" }
-
-# x1 reserved
-
 # System
-sys_clk   = { type = "clk", loc = "114" }
-sys_rst_n = { type = "i", loc = "115" }
-test_clk  = { type = "i", loc = "116" }
-test_mode = { type = "i", loc = "117" }
-heartbeat = { type = "o", loc = "118" }
-
-# x17 reserved (T1S PHY)
-
-# x2 reserved (SENT angle sensors)
+sys_clk   = { type = "clock", loc = "114" }
+sys_rst_n = { type = "reset", loc = "115" }
 
 [chipflow.silicon.power]
-dvss0        = { loc =   "1" }
-dvdd0        = { loc =   "9" }
-vss0         = { loc =  "17" }
-vdd0         = { loc =  "25" }
-dvss1        = { loc =  "33" }
-dvdd1        = { loc =  "41" }
-vss1         = { loc =  "49" }
-vdd1         = { loc =  "57" }
-dvss2        = { loc =  "65" }
-dvdd2        = { loc =  "73" }
-vss2         = { loc =  "81" }
-vdd2         = { loc =  "89" }
-dvss3        = { loc =  "97" }
-dvdd3        = { loc = "105" }
-vss3         = { loc = "113" }
-vdd3         = { loc = "121" }
-dvss4        = { loc = "129" }
-dvdd4        = { loc = "137" }
+dvss0        = { type = "power",  loc =   "1" }
+dvdd0        = { type = "ground", loc =   "9" }
+vss0         = { type = "power",  loc =  "17" }
+vdd0         = { type = "ground", loc =  "25" }
+dvss1        = { type = "power",  loc =  "33" }
+dvdd1        = { type = "ground", loc =  "41" }
+vss1         = { type = "power",  loc =  "49" }
+vdd1         = { type = "ground", loc =  "57" }
+dvss2        = { type = "power",  loc =  "65" }
+dvdd2        = { type = "ground", loc =  "73" }
+vss2         = { type = "power",  loc =  "81" }
+vdd2         = { type = "ground", loc =  "89" }
+dvss3        = { type = "power",  loc =  "97" }
+dvdd3        = { type = "ground", loc = "105" }
+vss3         = { type = "power",  loc = "113" }
+vdd3         = { type = "ground", loc = "121" }
+dvss4        = { type = "power",  loc = "129" }
+dvdd4        = { type = "ground", loc = "137" }

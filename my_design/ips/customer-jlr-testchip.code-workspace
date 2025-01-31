@@ -1,0 +1,19 @@
+{
+	"folders": [
+		{
+			"path": "../.."
+		},
+		{
+			"path": "../../../../chipflow-lib"
+		}
+	],
+	"settings": {
+		"rtlDebugger.command": [
+			"${workspaceFolder}/build/sim/sim_soc"
+		],
+		"rtlDebugger.cwd": "${workspaceFolder}/build/sim",
+		"rtlDebugger.env": {
+			"DEBUG": ""
+		}
+	}
+}

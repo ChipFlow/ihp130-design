@@ -10,11 +10,13 @@ class ExportVerilogStep:
     """Export Verilog for a Verilator simulation"""
 
     def __init__(self, config):
-        self.silicon_config = config["chipflow"]["silicon"]
-        self.platform = SiliconPlatform(pads=self.silicon_config["pads"])
+        self.platform = SiliconPlatform(config)
 
     def _export_verilog(self, name, elab, export_dir):
         # Verilog export for Verilator verification
+
+        self.platform.instantiate_ports()
+
         Path(export_dir).mkdir(parents=True, exist_ok=True)
         fragment = self.platform._prepare(elab, name)
         verilog_text, _ = verilog.convert_fragment(fragment, name)

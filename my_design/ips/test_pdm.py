@@ -28,22 +28,22 @@ class TestPdmPeripheral(unittest.TestCase):
         yield dut.bus.r_stb.eq(0)
         self.assertEqual(result, value)
 
-    def test_pdm_ao(self):
+    def test_pdm.o(self):
         dut = PDMPeripheral(name="dut", bitwidth=10)
         def testbench():
             yield from self._write_reg(dut, self.REG_OUTVAL, 0xFF, 4)
             yield Tick()
             yield from self._write_reg(dut, self.REG_CONF, 0x1, 1)
             for i in range(6): yield Tick()
-            self.assertEqual((yield dut.pdm_ao), 1) # assert two cycles of logic '1' (4us)
+            self.assertEqual((yield dut.pdm.o), 1) # assert two cycles of logic '1' (4us)
             yield Tick()
-            self.assertEqual((yield dut.pdm_ao), 1)
+            self.assertEqual((yield dut.pdm.o), 1)
             yield Tick()
-            self.assertEqual((yield dut.pdm_ao), 0) # assert 6 cycles of logic '0' (12us)
+            self.assertEqual((yield dut.pdm.o), 0) # assert 6 cycles of logic '0' (12us)
             for i in range(5): yield Tick()
-            self.assertEqual((yield dut.pdm_ao), 0)
+            self.assertEqual((yield dut.pdm.o), 0)
             yield Tick()
-            self.assertEqual((yield dut.pdm_ao), 1) # assert start of the next pulse
+            self.assertEqual((yield dut.pdm.o), 1) # assert start of the next pulse
             for i in range(50): yield Tick()
         sim = Simulator(dut)
         sim.add_clock(2e-6)
@@ -58,10 +58,10 @@ class TestPdmPeripheral(unittest.TestCase):
             yield Tick()
             yield from self._write_reg(dut, self.REG_CONF, 0x1, 1)
             for i in range(6): yield Tick()
-            self.assertEqual((yield dut.pdm_ao), 1)
+            self.assertEqual((yield dut.pdm.o), 1)
             yield from self._write_reg(dut, self.REG_CONF, 0x0, 1)
             yield Tick()
-            self.assertEqual((yield dut.pdm_ao), 0)
+            self.assertEqual((yield dut.pdm.o), 0)
             for i in range(50): yield Tick()
         sim = Simulator(dut)
         sim.add_clock(2e-6)

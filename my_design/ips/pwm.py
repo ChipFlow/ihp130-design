@@ -7,16 +7,18 @@ from amaranth.lib.wiring import In, Out, flipped, connect
 from amaranth.lib.cdc import FFSynchronizer
 from amaranth_soc import csr
 
+from chipflow_lib.platforms import OutputPinSignature, InputPinSignature
+
 __all__ = ["PWMPeripheral", "PWMPins"]
-     
+
 
 class PWMPins(wiring.PureInterface):
     class Signature(wiring.Signature):
         def __init__(self):
             super().__init__({
-                "pwm_o":  Out(1),
-                "dir_o":  Out(1),
-                "stop_i":  In(1),
+                "pwm":  Out(OutputPinSignature(1)),
+                "dir":  Out(OutputPinSignature(1)),
+                "stop":  In(InputPinSignature(1)),
             })
 
         def create(self, *, path=(), src_loc_at=0):
@@ -25,7 +27,7 @@ class PWMPins(wiring.PureInterface):
     def __init__(self, *, path=(), src_loc_at=0):
         super().__init__(self.Signature(), path=path, src_loc_at=1 + src_loc_at)
 
-        
+
 class PWMPeripheral(wiring.Component):
     class Numr(csr.Register, access="rw"):
         """Numerator value for PWM duty cycle"""
@@ -79,7 +81,7 @@ class PWMPeripheral(wiring.Component):
         
         #synchronizer
         stop = Signal()
-        m.submodules += FFSynchronizer(i=self.pins.stop_i, o=stop)
+        m.submodules += FFSynchronizer(i=self.pins.stop.i, o=stop)
         m.d.comb += self._stop_int.f.stopped.set.eq(stop)
 
         with m.If((self._conf.f.en.data == 1) & (self._stop_int.f.stopped.data == 0) ):
@@ -88,14 +90,14 @@ class PWMPeripheral(wiring.Component):
             m.d.sync += count.eq(0)
             
         with m.If((self._numr.f.val.data > 0) & (count <= self._numr.f.val.data) & (self._conf.f.en.data == 1) & (self._stop_int.f.stopped.data == 0 )):
-            m.d.comb += self.pins.pwm_o.eq(1)
+            m.d.comb += self.pins.pwm.o.eq(1)
         with m.Else():
-            m.d.comb += self.pins.pwm_o.eq(0)
+            m.d.comb += self.pins.pwm.o.eq(0)
             
         with m.If(count >= self._denom.f.val.data):
             m.d.sync += count.eq(0)
 
-        m.d.comb += self.pins.dir_o.eq(self._conf.f.dir.data)
+        m.d.comb += self.pins.dir.o.eq(self._conf.f.dir.data)
         m.d.comb += self._status.f.stop_pin.r_data.eq(stop)
 
         return m

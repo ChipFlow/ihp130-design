@@ -1,0 +1,412 @@
+{
+  "interfaces": {
+    "cpu_jtag": {
+      "end": 5,
+      "start": 0,
+      "top": true
+    },
+    "flash": {
+      "end": 14,
+      "start": 0,
+      "top": true
+    },
+    "gpio_0": {
+      "end": 24,
+      "start": 0,
+      "top": true
+    },
+    "gpio_1": {
+      "end": 24,
+      "start": 0,
+      "top": true
+    },
+    "i2c_0": {
+      "end": 6,
+      "start": 0,
+      "top": true
+    },
+    "i2c_1": {
+      "end": 6,
+      "start": 0,
+      "top": true
+    },
+    "motor_pwm0": {
+      "end": 3,
+      "start": 0,
+      "top": true
+    },
+    "motor_pwm1": {
+      "end": 3,
+      "start": 0,
+      "top": true
+    },
+    "motor_pwm2": {
+      "end": 3,
+      "start": 0,
+      "top": true
+    },
+    "motor_pwm3": {
+      "end": 3,
+      "start": 0,
+      "top": true
+    },
+    "motor_pwm4": {
+      "end": 3,
+      "start": 0,
+      "top": true
+    },
+    "motor_pwm5": {
+      "end": 3,
+      "start": 0,
+      "top": true
+    },
+    "motor_pwm6": {
+      "end": 3,
+      "start": 0,
+      "top": true
+    },
+    "motor_pwm7": {
+      "end": 3,
+      "start": 0,
+      "top": true
+    },
+    "motor_pwm8": {
+      "end": 3,
+      "start": 0,
+      "top": true
+    },
+    "motor_pwm9": {
+      "end": 3,
+      "start": 0,
+      "top": true
+    },
+    "pdm_ao_0": {
+      "end": 1,
+      "start": 0,
+      "top": true
+    },
+    "pdm_ao_1": {
+      "end": 1,
+      "start": 0,
+      "top": true
+    },
+    "pdm_ao_2": {
+      "end": 1,
+      "start": 0,
+      "top": true
+    },
+    "pdm_ao_3": {
+      "end": 1,
+      "start": 0,
+      "top": true
+    },
+    "pdm_ao_4": {
+      "end": 1,
+      "start": 0,
+      "top": true
+    },
+    "pdm_ao_5": {
+      "end": 1,
+      "start": 0,
+      "top": true
+    },
+    "uart_0": {
+      "end": 2,
+      "start": 0,
+      "top": true
+    },
+    "uart_1": {
+      "end": 2,
+      "start": 0,
+      "top": true
+    },
+    "user_spi_0": {
+      "end": 4,
+      "start": 0,
+      "top": true
+    },
+    "user_spi_1": {
+      "end": 4,
+      "start": 0,
+      "top": true
+    },
+    "user_spi_2": {
+      "end": 4,
+      "start": 0,
+      "top": true
+    }
+  },
+  "map": {
+    "cpu_jtag_tck_i": {
+      "pin": 15
+    },
+    "cpu_jtag_tdi_i": {
+      "pin": 17
+    },
+    "cpu_jtag_tdo_o": {
+      "pin": 18
+    },
+    "cpu_jtag_tms_i": {
+      "pin": 16
+    },
+    "cpu_jtag_trst_i": {
+      "pin": 14
+    },
+    "dvdd0": "9",
+    "dvdd1": "41",
+    "dvdd2": "73",
+    "dvdd3": "105",
+    "dvdd4": "137",
+    "dvss0": "1",
+    "dvss1": "33",
+    "dvss2": "65",
+    "dvss3": "97",
+    "dvss4": "129",
+    "flash_clk_o": {
+      "pin": 0
+    },
+    "flash_csn_o": {
+      "pin": 1
+    },
+    "flash_d_i": {
+      "end": 13,
+      "start": 10
+    },
+    "flash_d_o": {
+      "end": 5,
+      "start": 2
+    },
+    "flash_d_oe": {
+      "end": 9,
+      "start": 6
+    },
+    "gpio_0_i": {
+      "end": 106,
+      "start": 99
+    },
+    "gpio_0_o": {
+      "end": 90,
+      "start": 83
+    },
+    "gpio_0_oe": {
+      "end": 98,
+      "start": 91
+    },
+    "gpio_1_i": {
+      "end": 130,
+      "start": 123
+    },
+    "gpio_1_o": {
+      "end": 114,
+      "start": 107
+    },
+    "gpio_1_oe": {
+      "end": 122,
+      "start": 115
+    },
+    "i2c_0_scl_i": {
+      "pin": 33
+    },
+    "i2c_0_scl_o": {
+      "pin": 31
+    },
+    "i2c_0_scl_oe": {
+      "pin": 32
+    },
+    "i2c_0_sda_i": {
+      "pin": 36
+    },
+    "i2c_0_sda_o": {
+      "pin": 34
+    },
+    "i2c_0_sda_oe": {
+      "pin": 35
+    },
+    "i2c_1_scl_i": {
+      "pin": 39
+    },
+    "i2c_1_scl_o": {
+      "pin": 37
+    },
+    "i2c_1_scl_oe": {
+      "pin": 38
+    },
+    "i2c_1_sda_i": {
+      "pin": 42
+    },
+    "i2c_1_sda_o": {
+      "pin": 40
+    },
+    "i2c_1_sda_oe": {
+      "pin": 41
+    },
+    "motor_pwm0_dir_o": {
+      "pin": 44
+    },
+    "motor_pwm0_pwm_o": {
+      "pin": 43
+    },
+    "motor_pwm0_stop_i": {
+      "pin": 45
+    },
+    "motor_pwm1_dir_o": {
+      "pin": 47
+    },
+    "motor_pwm1_pwm_o": {
+      "pin": 46
+    },
+    "motor_pwm1_stop_i": {
+      "pin": 48
+    },
+    "motor_pwm2_dir_o": {
+      "pin": 50
+    },
+    "motor_pwm2_pwm_o": {
+      "pin": 49
+    },
+    "motor_pwm2_stop_i": {
+      "pin": 51
+    },
+    "motor_pwm3_dir_o": {
+      "pin": 53
+    },
+    "motor_pwm3_pwm_o": {
+      "pin": 52
+    },
+    "motor_pwm3_stop_i": {
+      "pin": 54
+    },
+    "motor_pwm4_dir_o": {
+      "pin": 56
+    },
+    "motor_pwm4_pwm_o": {
+      "pin": 55
+    },
+    "motor_pwm4_stop_i": {
+      "pin": 57
+    },
+    "motor_pwm5_dir_o": {
+      "pin": 59
+    },
+    "motor_pwm5_pwm_o": {
+      "pin": 58
+    },
+    "motor_pwm5_stop_i": {
+      "pin": 60
+    },
+    "motor_pwm6_dir_o": {
+      "pin": 62
+    },
+    "motor_pwm6_pwm_o": {
+      "pin": 61
+    },
+    "motor_pwm6_stop_i": {
+      "pin": 63
+    },
+    "motor_pwm7_dir_o": {
+      "pin": 65
+    },
+    "motor_pwm7_pwm_o": {
+      "pin": 64
+    },
+    "motor_pwm7_stop_i": {
+      "pin": 66
+    },
+    "motor_pwm8_dir_o": {
+      "pin": 68
+    },
+    "motor_pwm8_pwm_o": {
+      "pin": 67
+    },
+    "motor_pwm8_stop_i": {
+      "pin": 69
+    },
+    "motor_pwm9_dir_o": {
+      "pin": 71
+    },
+    "motor_pwm9_pwm_o": {
+      "pin": 70
+    },
+    "motor_pwm9_stop_i": {
+      "pin": 72
+    },
+    "pdm_ao_0": {
+      "pin": 73
+    },
+    "pdm_ao_1": {
+      "pin": 74
+    },
+    "pdm_ao_2": {
+      "pin": 75
+    },
+    "pdm_ao_3": {
+      "pin": 76
+    },
+    "pdm_ao_4": {
+      "pin": 77
+    },
+    "pdm_ao_5": {
+      "pin": 78
+    },
+    "sys_clk": "114",
+    "sys_rst_n": "115",
+    "test_clk": "116",
+    "test_mode": "117",
+    "uart_0_rx_i": {
+      "pin": 80
+    },
+    "uart_0_tx_o": {
+      "pin": 79
+    },
+    "uart_1_rx_i": {
+      "pin": 82
+    },
+    "uart_1_tx_o": {
+      "pin": 81
+    },
+    "user_spi_0_csn_o": {
+      "pin": 22
+    },
+    "user_spi_0_miso_i": {
+      "pin": 21
+    },
+    "user_spi_0_mosi_o": {
+      "pin": 20
+    },
+    "user_spi_0_sck_o": {
+      "pin": 19
+    },
+    "user_spi_1_csn_o": {
+      "pin": 26
+    },
+    "user_spi_1_miso_i": {
+      "pin": 25
+    },
+    "user_spi_1_mosi_o": {
+      "pin": 24
+    },
+    "user_spi_1_sck_o": {
+      "pin": 23
+    },
+    "user_spi_2_csn_o": {
+      "pin": 30
+    },
+    "user_spi_2_miso_i": {
+      "pin": 29
+    },
+    "user_spi_2_mosi_o": {
+      "pin": 28
+    },
+    "user_spi_2_sck_o": {
+      "pin": 27
+    },
+    "vdd0": "25",
+    "vdd1": "57",
+    "vdd2": "89",
+    "vdd3": "121",
+    "vss0": "17",
+    "vss1": "49",
+    "vss2": "81",
+    "vss3": "113"
+  }
+}

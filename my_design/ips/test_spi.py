@@ -35,10 +35,10 @@ class TestSpiPeripheral(unittest.TestCase):
         def testbench():
             yield from self._write_reg(dut, self.REG_CONFIG, 1<<2, 1)
             yield Tick()
-            self.assertEqual((yield dut.spi_pins.csn_o), 0)
+            self.assertEqual((yield dut.spi_pins.csn.o), 0)
             yield from self._write_reg(dut, self.REG_CONFIG, 0<<2, 1)
             yield Tick()
-            self.assertEqual((yield dut.spi_pins.csn_o), 1)
+            self.assertEqual((yield dut.spi_pins.csn.o), 1)
 
         sim = Simulator(dut)
         sim.add_clock(1e-5)
@@ -66,18 +66,18 @@ class TestSpiPeripheral(unittest.TestCase):
                         if sck_edge:
                             yield dut.spi_pins.miso_i.eq((d_recv >> i) & 0x1)
                         else:
-                            self.assertEqual((yield dut.spi_pins.mosi_o), (d_send >> i) & 0x1)
-                        self.assertEqual((yield dut.spi_pins.sck_o), 0 ^ sck_idle)
+                            self.assertEqual((yield dut.spi_pins.mosi.o), (d_send >> i) & 0x1)
+                        self.assertEqual((yield dut.spi_pins.sck.o), 0 ^ sck_idle)
                         yield Tick()
-                        self.assertEqual((yield dut.spi_pins.sck_o), 0 ^ sck_idle)
+                        self.assertEqual((yield dut.spi_pins.sck.o), 0 ^ sck_idle)
                         if sck_edge:
-                            self.assertEqual((yield dut.spi_pins.mosi_o), (d_send >> i) & 0x1)
+                            self.assertEqual((yield dut.spi_pins.mosi.o), (d_send >> i) & 0x1)
                         else:
-                            yield dut.spi_pins.miso_i.eq((d_recv >> i) & 0x1)
+                            yield dut.spi_pins.miso.i.eq((d_recv >> i) & 0x1)
                         yield Tick()
-                        self.assertEqual((yield dut.spi_pins.sck_o), 1 ^ sck_idle)
+                        self.assertEqual((yield dut.spi_pins.sck.o), 1 ^ sck_idle)
                         yield Tick()
-                        self.assertEqual((yield dut.spi_pins.sck_o), 1 ^ sck_idle)
+                        self.assertEqual((yield dut.spi_pins.sck.o), 1 ^ sck_idle)
                         yield Tick()
                     yield Tick()
                     yield Tick()
@@ -106,10 +106,10 @@ class TestSpiPeripheral(unittest.TestCase):
             yield from self._write_reg(dut, self.REG_SEND_DATA, (d_send << (32 - width)), 4)
             yield Tick()
             for i in reversed(range(width)):
-                self.assertEqual((yield dut.spi_pins.mosi_o),(d_send >> i) & 0x1)
-                self.assertEqual((yield dut.spi_pins.sck_o), 0)
+                self.assertEqual((yield dut.spi_pins.mosi.o),(d_send >> i) & 0x1)
+                self.assertEqual((yield dut.spi_pins.sck.o), 0)
                 for j in range(divide+1): yield Tick()
-                self.assertEqual((yield dut.spi_pins.sck_o), 1)
+                self.assertEqual((yield dut.spi_pins.sck.o), 1)
                 for j in range(divide+1): yield Tick()
             yield Tick()
             yield Tick()

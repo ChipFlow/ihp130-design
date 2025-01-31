@@ -36,15 +36,15 @@ class TestPwmPeripheral(unittest.TestCase):
             yield from self._write_reg(dut, self.REG_NUMR, 0x1F, 4)
             yield from self._write_reg(dut, self.REG_DENOM, 0xFF, 4)
             yield from self._write_reg(dut, self.REG_CONF, 0x03, 4)
-            self.assertEqual((yield dut.pins.pwm_o), 1) # assert 32 cycles of logic '1'; 3 cycles go into writing conf register
+            self.assertEqual((yield dut.pins.pwm.o), 1) # assert 32 cycles of logic '1'; 3 cycles go into writing conf register
             for i in range(29): yield Tick()
-            self.assertEqual((yield dut.pins.pwm_o), 1)
+            self.assertEqual((yield dut.pins.pwm.o), 1)
             yield Tick()
-            self.assertEqual((yield dut.pins.pwm_o), 0) # assert 224 cylces of logic '0'
+            self.assertEqual((yield dut.pins.pwm.o), 0) # assert 224 cylces of logic '0'
             for i in range(223): yield Tick()
-            self.assertEqual((yield dut.pins.pwm_o), 0)
+            self.assertEqual((yield dut.pins.pwm.o), 0)
             yield Tick()
-            self.assertEqual((yield dut.pins.pwm_o), 1) # assert start of the next pulse
+            self.assertEqual((yield dut.pins.pwm.o), 1) # assert start of the next pulse
             for i in range(1000): yield Tick()
         sim = Simulator(dut)
         sim.add_clock(2e-6)
@@ -58,7 +58,7 @@ class TestPwmPeripheral(unittest.TestCase):
             yield from self._write_reg(dut, self.REG_NUMR, 0x1F, 4)
             yield from self._write_reg(dut, self.REG_DENOM, 0xFF, 4)
             yield from self._write_reg(dut, self.REG_CONF, 0x0, 4)
-            self.assertEqual((yield dut.pins.pwm_o), 0) # assert pwm_o to remain '0', when not enabled
+            self.assertEqual((yield dut.pins.pwm.o), 0) # assert pwm_o to remain '0', when not enabled
             for i in range(1000): yield Tick()
         sim = Simulator(dut)
         sim.add_clock(2e-6)
@@ -72,10 +72,10 @@ class TestPwmPeripheral(unittest.TestCase):
             yield from self._write_reg(dut, self.REG_NUMR, 0x1F, 4)
             yield from self._write_reg(dut, self.REG_DENOM, 0xFF, 4)
             yield from self._write_reg(dut, self.REG_CONF, 0x03, 4)
-            self.assertEqual((yield dut.pins.dir_o), 1) # assert direction to be '1'
+            self.assertEqual((yield dut.pins.dir.o), 1) # assert direction to be '1'
             for i in range(10): yield Tick()
             yield from self._write_reg(dut, self.REG_CONF, 0x01, 4)
-            self.assertEqual((yield dut.pins.dir_o), 0) # assert direction to be '0'
+            self.assertEqual((yield dut.pins.dir.o), 0) # assert direction to be '0'
         sim = Simulator(dut)
         sim.add_clock(2e-6)
         sim.add_testbench(testbench)

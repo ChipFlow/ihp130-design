@@ -11,14 +11,16 @@ authors = [
 ]
 license = {file = "LICENSE.md"}
 
-requires-python = "~=3.9"
+requires-python = ">=3.13"
 dependencies = [
-  "amaranth[builtin-yosys] @ git+https://github.com/amaranth-lang/amaranth",
-  "amaranth-cv32e40p @ git+https://github.com/ChipFlow/amaranth-cv32e40p@main",
-  "chipflow-lib @ git+https://github.com/ChipFlow/chipflow-lib.git@main",
-  "pyuvm~=2.9.1",
-  "ziglang==0.11.0",
-  "cocotb>=1.9.2",
+    "amaranth[builtin-yosys]>=0.5.1",
+    "amaranth-cv32e40p @ git+https://github.com/ChipFlow/amaranth-cv32e40p@update-amaranth-deps",
+    "amaranth-orchard @ git+https://github.com/ChipFlow/amaranth-orchard@replace-providers",
+    "chipflow-lib @ git+https://github.com/ChipFlow/chipflow-lib.git",
+    "cocotb>=1.9.2",
+    "pyuvm~=3.0.0",
+    "ziglang==0.11.0",
+    "amaranth-soc @ git+https://github.com/amaranth-lang/amaranth-soc@0ad5e245dd130d66a0a16663116ad0c1fe7a8956",
 ]
 
 # Build system configuration
@@ -33,7 +35,30 @@ build-backend = "pdm.backend"
 test = [
   "pytest~=7.2.0",
 ]
+#dev = [
+#    "-e file:///${PROJECT_ROOT}/../chipflow-lib#egg=chipflow-lib"
+#]
 
 [tool.pdm.scripts]
 _.env_file = ".env.toolchain"
 test.cmd = "pytest"
+
+[tool.pdm.resolution]
+allow-prereleases = true
+
+[tool.pyright]
+include = ['my_design/**']
+diagnosticMode=false
+typeCheckingMode = "off"
+reportInvalidTypeForm = false
+reportUnboundVariable = false
+reportAttributeAccessIssue = false
+reportGeneralTypeIssues = false
+reportWildcardImportFromLibrary = false
+reportMissingImports = "none"
+
+[tool.ruff]
+include = ["pyproject.toml", "**/*.py", "chipflow.toml"]
+
+[tool.ruff.lint]
+ignore = ['F403', 'F405']

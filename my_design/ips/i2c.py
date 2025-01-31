@@ -4,18 +4,15 @@ from amaranth.lib.wiring import In, Out, connect, flipped
 from amaranth.lib.cdc import FFSynchronizer
 
 from amaranth_soc import csr
+from chipflow_lib.platforms import BidirPinSignature
 from .glasgow_i2c import I2CInitiator
 
 __all__ = ["I2CPeripheral", "I2CSignature"]
 
 I2CSignature = wiring.Signature({
-    "scl_o": Out(1),
-    "scl_oe": Out(1),
-    "scl_i": In(1),
-    "sda_o": Out(1),
-    "sda_oe": Out(1),
-    "sda_i": In(1),
-})
+    "scl": Out(BidirPinSignature(1)),
+    "sda": Out(BidirPinSignature(1))
+    })
 
 
 class I2CPeripheral(wiring.Component):

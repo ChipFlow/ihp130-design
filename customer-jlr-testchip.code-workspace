@@ -1,0 +1,28 @@
+{
+	"folders": [
+		{
+			"path": "."
+		},
+		{
+			"path": "../chipflow-lib"
+		},
+		{
+			"path": "../amaranth"
+		},
+		{
+			"path": "../amaranth-orchard"
+		}
+	],
+	"settings": {
+		"rtlDebugger.command": [
+			"${workspaceFolder}/build/sim/sim_soc"
+		],
+		"rtlDebugger.cwd": "${workspaceFolder}/build/sim",
+		"rtlDebugger.env": {
+			"DEBUG": ""
+		},
+		"cline.vsCodeLmModelSelector": {
+			
+		}
+	}
+}
