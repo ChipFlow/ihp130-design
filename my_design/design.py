@@ -15,7 +15,7 @@ from amaranth_orchard.memory.sram import SRAMPeripheral
 from amaranth_orchard.base.platform_timer import PlatformTimer
 from amaranth_orchard.base.soc_id import SoCID
 
-from amaranth_cv32e40p.cv32e40p import CV32E40P, DebugModule
+from minerva.core import Minerva
 
 from .ips.spi import SPISignature, SPIPeripheral
 from .ips.i2c import I2CSignature, I2CPeripheral
@@ -37,9 +37,6 @@ class MySoC(wiring.Component):
 
         super().__init__(interfaces)
 
-
-        # Debug region
-        self.debug_base        = 0xa0000000
 
         # CSR regions:
         self.csr_base          = 0xb0000000
@@ -66,22 +63,14 @@ class MySoC(wiring.Component):
 
 
         # CPU
-
-        cpu = CV32E40P(config="default", reset_vector=self.bios_start, dm_haltaddress=self.debug_base+0x800)
+        cpu = Minerva(reset_address=self.bios_start)
         wb_arbiter.add(cpu.ibus)
         wb_arbiter.add(cpu.dbus)
 
         m.submodules.cpu = cpu
 
-        # Debug
-        debug = DebugModule()
-        wb_arbiter.add(debug.initiator)
-        wb_decoder.add(debug.target, addr=self.debug_base)
-        m.d.comb += cpu.debug_req.eq(debug.debug_req)
-
         # TODO: TRST
 
-        m.submodules.debug = debug
 
         # UART
         for i in range(self.uart_count):
