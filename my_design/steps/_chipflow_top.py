@@ -39,35 +39,7 @@ class ChipflowTop(Elaboratable):
 
         m.submodules.soc = soc = MySoC()
 
-        _connect_interface(soc.flash, "flash")
-
-        _connect_interface(soc.user_spi_0, "user_spi0")
-        _connect_interface(soc.user_spi_1, "user_spi1")
-        _connect_interface(soc.user_spi_2, "user_spi2")
-
-        _connect_interface(soc.i2c_0, "i2c0")
-        _connect_interface(soc.i2c_1, "i2c1")
-
-        for pwm_idx in range(10):
-            _connect_interface(getattr(soc, f"motor_pwm{pwm_idx}"), f"motor_pwm{pwm_idx}")
-
-        for ao_idx in range(6):
-            m.d.comb += platform.request(f"pdm_ao_{ao_idx}").o.eq(getattr(soc, f"pdm_ao_{ao_idx}"))
-
-        for gpio_bank in range(2):
-            gpio = getattr(soc, f"gpio_{gpio_bank}")
-            for i in range(8):
-                platform_pin = platform.request(f"gpio{gpio_bank}_{i}")
-                m.d.comb += [
-                    platform_pin.o.eq(gpio[i].o),
-                    platform_pin.oe.eq(gpio[i].oe),
-                    gpio[i].i.eq(platform_pin.i),
-                ]
-
         _connect_interface(soc.uart_0, "uart0")
-        _connect_interface(soc.uart_1, "uart1")
-
-        _connect_interface(soc.cpu_jtag, "cpu_jtag")
 
         return m
 

@@ -22,79 +22,31 @@ from .ips.i2c import I2CSignature, I2CPeripheral
 from .ips.pwm import PWMPins, PWMPeripheral
 from .ips.pdm import PDMPeripheral
 
-__all__ = ["JTAGSignature", "MySoC"]
+__all__ = ["MySoC"]
 
-JTAGSignature = wiring.Signature({
-    "trst_i": In(1),
-    "tck_i": In(1),
-    "tms_i": In(1),
-    "tdi_i": In(1),
-    "tdo_o": Out(1),
-})
-
-# ---------
 
 class MySoC(wiring.Component):
     def __init__(self):
         # Top level interfaces
 
-        interfaces = {
-            "flash" : Out(QSPIPins.Signature()),
-            "cpu_jtag": Out(JTAGSignature)
-        }
-
-        self.user_spi_count = 3
-        self.i2c_count = 2
-        self.motor_count = 10
-        self.pdm_ao_count = 6
-        self.uart_count = 2
-
-        self.gpio_banks = 2
-        self.gpio_width = 8
-
-        for i in range(self.user_spi_count):
-            interfaces[f"user_spi_{i}"] = Out(SPISignature)
-
-        for i in range(self.i2c_count):
-            interfaces[f"i2c_{i}"] = Out(I2CSignature)
-
-        for i in range(self.motor_count):
-            interfaces[f"motor_pwm{i}"] = Out(PWMPins.Signature())
-
-        for i in range(self.pdm_ao_count):
-            interfaces[f"pdm_ao_{i}"] = Out(1)
+        interfaces = {}
+        self.uart_count = 1
 
         for i in range(self.uart_count):
             interfaces[f"uart_{i}"] = Out(UARTPins.Signature())
 
-        for i in range(self.gpio_banks):
-            interfaces[f"gpio_{i}"] = Out(gpio.PinSignature()).array(self.gpio_width)
-
         super().__init__(interfaces)
 
-        # Memory regions:
-        self.mem_spiflash_base = 0x00000000
-        self.mem_sram_base     = 0x10000000
 
         # Debug region
         self.debug_base        = 0xa0000000
 
         # CSR regions:
         self.csr_base          = 0xb0000000
-        self.csr_spiflash_base = 0xb0000000
-
-        self.csr_gpio_base     = 0xb1000000
-        self.csr_uart_base     = 0xb2000000
-        self.csr_soc_id_base   = 0xb4000000
-
-        self.csr_user_spi_base = 0xb5000000
-        self.csr_i2c_base      = 0xb6000000
-        self.csr_motor_base    = 0xb7000000
-        self.csr_pdm_ao_base   = 0xb8000000
-
         self.periph_offset     = 0x00100000
-        self.motor_offset      = 0x00000100
-        self.pdm_ao_offset     = 0x00000010
+         
+        self.csr_uart_base     = 0xb1000000
+        self.csr_soc_id_base   = 0xb4000000
 
         self.sram_size  = 0x800 # 2KiB
         self.bios_start = 0x100000 # 1MiB into spiflash to make room for a bitstream
@@ -112,12 +64,6 @@ class MySoC(wiring.Component):
 
         connect(m, wb_arbiter.bus, wb_decoder.bus)
 
-        # Software
-
-        sw = SoftwareGenerator(rom_start=self.bios_start, rom_size=0x00100000,
-                               # place BIOS data in SRAM
-                               ram_start=self.mem_sram_base, ram_size=self.sram_size)
-
 
         # CPU
 
@@ -133,59 +79,9 @@ class MySoC(wiring.Component):
         wb_decoder.add(debug.target, addr=self.debug_base)
         m.d.comb += cpu.debug_req.eq(debug.debug_req)
 
-        m.d.comb += [
-            debug.jtag_tck.eq(self.cpu_jtag.tck_i),
-            debug.jtag_tms.eq(self.cpu_jtag.tms_i),
-            debug.jtag_tdi.eq(self.cpu_jtag.tdi_i),
-            debug.jtag_trst.eq(self.cpu_jtag.trst_i),
-            self.cpu_jtag.tdo_o.eq(debug.jtag_tdo),
-        ]
         # TODO: TRST
 
         m.submodules.debug = debug
-        # SPI flash
-
-        spiflash = SPIMemIO(flash=self.flash)
-        wb_decoder .add(spiflash.data_bus, name="spiflash", addr=self.mem_spiflash_base)
-        csr_decoder.add(spiflash.ctrl_bus, name="spiflash", addr=self.csr_spiflash_base - self.csr_base)
-
-        m.submodules.spiflash = spiflash
-
-        sw.add_periph("spiflash",   "SPIFLASH", self.csr_spiflash_base)
-
-        # SRAM
-
-        sram = SRAMPeripheral(size=self.sram_size)
-        wb_decoder.add(sram.bus, name="sram", addr=self.mem_sram_base)
-
-        m.submodules.sram = sram
-
-        # User SPI
-        for i in range(self.user_spi_count):
-            user_spi = SPIPeripheral()
-
-            base_addr = self.csr_user_spi_base + i * self.periph_offset
-            csr_decoder.add(user_spi.bus, name=f"user_spi_{i}", addr=base_addr  - self.csr_base)
-            sw.add_periph("spi", f"USER_SPI_{i}", base_addr)
-
-            # FIXME: These assignments will disappear once we have a relevant peripheral available
-            spi_pins = getattr(self, f"user_spi_{i}")
-            connect(m, flipped(spi_pins), user_spi.spi_pins)
-
-            setattr(m.submodules, f"user_spi_{i}", user_spi)
-
-        # GPIOs
-        for i in range(self.gpio_banks):
-            gpio_bank = gpio.Peripheral(pin_count=8, addr_width=4, data_width=8)
-            base_addr = self.csr_gpio_base + i * self.periph_offset
-            csr_decoder.add(gpio_bank.bus, name=f"gpio_{i}", addr=base_addr - self.csr_base)
-
-            gpio_bank_pins = getattr(self, f"gpio_{i}")
-            for n in range(8):
-                connect(m, gpio_bank.pins[n], flipped(gpio_bank_pins[n]))
-
-            sw.add_periph("gpio", f"GPIO_{i}", base_addr)
-            setattr(m.submodules, f"gpio_{i}", gpio_bank)
 
         # UART
         for i in range(self.uart_count):
@@ -193,41 +89,7 @@ class MySoC(wiring.Component):
             base_addr = self.csr_uart_base + i * self.periph_offset
             csr_decoder.add(uart.bus, name=f"uart_{i}", addr=base_addr - self.csr_base)
 
-            sw.add_periph("uart", f"UART_{i}", base_addr)
             setattr(m.submodules, f"uart_{i}", uart)
-
-        # I2Cs
-        for i in range(self.i2c_count):
-            # TODO: create a I2C peripheral and replace this GPIO
-            i2c = I2CPeripheral()
-
-            base_addr = self.csr_i2c_base + i * self.periph_offset
-            csr_decoder.add(i2c.bus, name=f"i2c_{i}", addr=base_addr  - self.csr_base)
-            sw.add_periph("i2c", f"I2C_{i}", base_addr)
-
-            i2c_pins = getattr(self, f"i2c_{i}")
-            connect(m, flipped(i2c_pins), i2c.i2c_pins)
-
-            setattr(m.submodules, f"i2c_{i}", i2c)
-
-        # Motor drivers
-        for i in range(self.motor_count):
-            motor_pwm = PWMPeripheral(pins=getattr(self, f"motor_pwm{i}"))
-            base_addr = self.csr_motor_base + i * self.motor_offset
-            csr_decoder.add(motor_pwm.bus, name=f"motor_pwm{i}", addr=base_addr  - self.csr_base)
-
-            sw.add_periph("motor_pwm", f"MOTOR_PWM{i}", base_addr)
-            setattr(m.submodules, f"motor_pwm{i}", motor_pwm)
-
-        # pdm_ao
-        for i in range(self.pdm_ao_count):
-            pdm = PDMPeripheral(bitwidth=10)
-            base_addr = self.csr_pdm_ao_base + i * self.pdm_ao_offset
-            csr_decoder.add(pdm.bus, name=f"pdm{i}", addr=base_addr  - self.csr_base)
-
-            sw.add_periph("pdm", f"PDM{i}", base_addr)
-            setattr(m.submodules, f"pdm{i}", pdm)
-            m.d.comb += getattr(self, f"pdm_ao_{i}").eq(pdm.pdm_ao)
 
         # SoC ID
 
@@ -244,18 +106,10 @@ class MySoC(wiring.Component):
 
         m.submodules.wb_to_csr = wb_to_csr
 
-        # Debug support
-
-        # m.submodules.jtag_provider = platform.providers.JTAGProvider(debug)
 
         if isinstance(platform, SimPlatform):
             m.submodules.wb_mon = platform.add_monitor("wb_mon", wb_decoder.bus)
 
-
-        sw.add_periph("soc_id",     "SOC_ID",   self.csr_soc_id_base)
-        #sw.add_periph("gpio",       "BTN_GPIO", self.csr_btn_gpio_base)
-
-        sw.generate("build/software/generated")
 
         return m
 
