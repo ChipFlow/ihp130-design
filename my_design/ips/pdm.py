@@ -25,10 +25,10 @@ class PDMPeripheral(wiring.Component):
         "pdm": Out(OutputPinSignature(1))
         })
 
-    def __init__(self, *, name, bitwidth):
+    def __init__(self, *, bitwidth):
         self._bitwidth = bitwidth
 
-        regs = csr.Builder(addr_width=3, data_width=8, name=name)
+        regs = csr.Builder(addr_width=3, data_width=8)
 
         self._outval = regs.add("outval", self.OutVal(), offset=0x0)
         self._conf = regs.add("conf", self.Conf(), offset=0x4)

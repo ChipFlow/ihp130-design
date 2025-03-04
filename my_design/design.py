@@ -129,7 +129,7 @@ class MySoC(wiring.Component):
         # Debug
         debug = DebugModule()
         wb_arbiter.add(debug.initiator)
-        wb_decoder.add(debug.target, addr=self.debug_base)
+        wb_decoder.add(debug.target, name="debug", addr=self.debug_base)
         m.d.comb += cpu.debug_req.eq(debug.debug_req)
 
         m.d.comb += [
@@ -144,9 +144,9 @@ class MySoC(wiring.Component):
         m.submodules.debug = debug
         # SPI flash
 
-        spiflash = SPIMemIO(name="spiflash", flash=self.flash)
+        spiflash = SPIMemIO(flash=self.flash)
         wb_decoder .add(spiflash.data_bus, addr=self.mem_spiflash_base)
-        csr_decoder.add(spiflash.ctrl_bus, addr=self.csr_spiflash_base - self.csr_base)
+        csr_decoder.add(spiflash.ctrl_bus, name="spiflash", addr=self.csr_spiflash_base - self.csr_base)
 
         m.submodules.spiflash = spiflash
 
@@ -154,17 +154,17 @@ class MySoC(wiring.Component):
 
         # SRAM
 
-        sram = SRAMPeripheral(name="sram", size=self.sram_size)
-        wb_decoder.add(sram.bus, addr=self.mem_sram_base)
+        sram = SRAMPeripheral(size=self.sram_size)
+        wb_decoder.add(sram.bus, name="sram", addr=self.mem_sram_base)
 
         m.submodules.sram = sram
 
         # User SPI
         for i in range(self.user_spi_count):
-            user_spi = SPIPeripheral(name=f"user_spi_{i}")
+            user_spi = SPIPeripheral()
 
             base_addr = self.csr_user_spi_base + i * self.periph_offset
-            csr_decoder.add(user_spi.bus, addr=base_addr  - self.csr_base)
+            csr_decoder.add(user_spi.bus, name=f"user_spi_{i}", addr=base_addr  - self.csr_base)
             sw.add_periph("spi", f"USER_SPI_{i}", base_addr)
 
             # FIXME: These assignments will disappear once we have a relevant peripheral available
@@ -175,18 +175,18 @@ class MySoC(wiring.Component):
 
         # GPIOs
         for i in range(self.gpio_banks):
-            gpio = GPIOPeripheral(name=f"gpio_{i}", pins=getattr(self, f"gpio_{i}"))
+            gpio = GPIOPeripheral(pins=getattr(self, f"gpio_{i}"))
             base_addr = self.csr_gpio_base + i * self.periph_offset
-            csr_decoder.add(gpio.bus, addr=base_addr - self.csr_base)
+            csr_decoder.add(gpio.bus, name=f"gpio_{i}", addr=base_addr - self.csr_base)
             sw.add_periph("gpio", f"GPIO_{i}", base_addr)
 
             setattr(m.submodules, f"gpio_{i}", gpio)
 
         # UART
         for i in range(self.uart_count):
-            uart = UARTPeripheral(name=f"uart_{i}", init_divisor=int(25e6//115200), pins=getattr(self, f"uart_{i}"))
+            uart = UARTPeripheral(init_divisor=int(25e6//115200), pins=getattr(self, f"uart_{i}"))
             base_addr = self.csr_uart_base + i * self.periph_offset
-            csr_decoder.add(uart.bus, addr=base_addr - self.csr_base)
+            csr_decoder.add(uart.bus, name=f"uart_{i}", addr=base_addr - self.csr_base)
 
             sw.add_periph("uart", f"UART_{i}", base_addr)
             setattr(m.submodules, f"uart_{i}", uart)
@@ -194,10 +194,10 @@ class MySoC(wiring.Component):
         # I2Cs
         for i in range(self.i2c_count):
             # TODO: create a I2C peripheral and replace this GPIO
-            i2c = I2CPeripheral(name=f"i2c_{i}")
+            i2c = I2CPeripheral()
 
             base_addr = self.csr_i2c_base + i * self.periph_offset
-            csr_decoder.add(i2c.bus, addr=base_addr  - self.csr_base)
+            csr_decoder.add(i2c.bus, name=f"i2c_{i}", addr=base_addr - self.csr_base)
             sw.add_periph("i2c", f"I2C_{i}", base_addr)
 
             i2c_pins = getattr(self, f"i2c_{i}")
@@ -205,38 +205,36 @@ class MySoC(wiring.Component):
 
             setattr(m.submodules, f"i2c_{i}", i2c)
 
-            
         # Motor drivers
         for i in range(self.motor_count):
-            motor_pwm = PWMPeripheral(name=f"motor_pwm{i}", pins=getattr(self, f"motor_pwm{i}"))
+            motor_pwm = PWMPeripheral(pins=getattr(self, f"motor_pwm{i}"))
             base_addr = self.csr_motor_base + i * self.motor_offset
-            csr_decoder.add(motor_pwm.bus, addr=base_addr  - self.csr_base)
-        
+            csr_decoder.add(motor_pwm.bus, name=f"motor_pwm{i}", addr=base_addr - self.csr_base)
+
             sw.add_periph("motor_pwm", f"MOTOR_PWM{i}", base_addr)
             setattr(m.submodules, f"motor_pwm{i}", motor_pwm)
 
         # # pdm_ao
         # for i in range(self.pdm_ao_count):
-        #     pdm = PDMPeripheral(name=f"pdm{i}", bitwidth=10)
+        #     pdm = PDMPeripheral(bitwidth=10)
         #     base_addr = self.csr_pdm_ao_base + i * self.pdm_ao_offset
-        #     csr_decoder.add(pdm.bus, addr=base_addr  - self.csr_base)
+        #     csr_decoder.add(pdm.bus, name=f"pdm{i}", addr=base_addr  - self.csr_base)
         # 
         #     sw.add_periph("pdm", f"PDM{i}", base_addr)
-        #     setattr(m.submodules, f"pdm{i}", pdm)          
+        #     setattr(m.submodules, f"pdm{i}", pdm)
         #     m.d.comb += getattr(self, f"pdm_ao_{i}").eq(pdm.pdm_ao)
 
         # SoC ID
 
-        soc_id = SoCID(name="soc_id", type_id=0xCA7F100F)
-        csr_decoder.add(soc_id.bus, addr=self.csr_soc_id_base - self.csr_base)
+        soc_id = SoCID(type_id=0xCA7F100F)
+        csr_decoder.add(soc_id.bus, name="soc_id", addr=self.csr_soc_id_base - self.csr_base)
 
         m.submodules.soc_id = soc_id
 
-
         # Wishbone-CSR bridge
 
-        wb_to_csr = WishboneCSRBridge(csr_decoder.bus, data_width=32, name="csr")
-        wb_decoder.add(wb_to_csr.wb_bus, addr=self.csr_base, sparse=False)
+        wb_to_csr = WishboneCSRBridge(csr_decoder.bus, data_width=32)
+        wb_decoder.add(wb_to_csr.wb_bus, name="csr", addr=self.csr_base, sparse=False)
 
         m.submodules.wb_to_csr = wb_to_csr
 
@@ -246,7 +244,6 @@ class MySoC(wiring.Component):
 
         if isinstance(platform, SimPlatform):
             m.submodules.wb_mon = platform.add_monitor("wb_mon", wb_decoder.bus)
-
 
         sw.add_periph("soc_id",     "SOC_ID",   self.csr_soc_id_base)
         #sw.add_periph("gpio",       "BTN_GPIO", self.csr_btn_gpio_base)
