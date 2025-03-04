@@ -76,7 +76,7 @@ class PWMPeripheral(wiring.Component):
     def elaborate(self, platform):
         m = Module()
         m.submodules.bridge = self._bridge       
-        count = Signal(unsigned(16), reset=0x0)
+        count = Signal(unsigned(16), init=0x0)
         connect(m, flipped(self.bus), self._bridge.bus)
         
         #synchronizer

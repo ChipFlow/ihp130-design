@@ -31,7 +31,7 @@ class TestSpiPeripheral(unittest.TestCase):
         self.assertEqual(result, value)
 
     def test_chip_select(self):
-        dut = SPIPeripheral(name="dut")
+        dut = SPIPeripheral()
         def testbench():
             yield from self._write_reg(dut, self.REG_CONFIG, 1<<2, 1)
             yield Tick()
@@ -47,7 +47,7 @@ class TestSpiPeripheral(unittest.TestCase):
             sim.run()
 
     def test_xfer(self):
-        dut = SPIPeripheral(name="dut")
+        dut = SPIPeripheral()
         tests = [
             (13, 0x1C3, 0x333),
             (8, 0x66, 0x5A),
@@ -64,7 +64,7 @@ class TestSpiPeripheral(unittest.TestCase):
                     yield Tick()
                     for i in reversed(range(width)):
                         if sck_edge:
-                            yield dut.spi_pins.miso_i.eq((d_recv >> i) & 0x1)
+                            yield dut.spi_pins.miso.i.eq((d_recv >> i) & 0x1)
                         else:
                             self.assertEqual((yield dut.spi_pins.mosi.o), (d_send >> i) & 0x1)
                         self.assertEqual((yield dut.spi_pins.sck.o), 0 ^ sck_idle)
@@ -92,7 +92,7 @@ class TestSpiPeripheral(unittest.TestCase):
             sim.run()
 
     def test_divider(self):
-        dut = SPIPeripheral(name="dut")
+        dut = SPIPeripheral()
 
         def testbench():
             width = 8
