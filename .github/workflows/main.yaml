@@ -8,6 +8,29 @@ on:
 name: CI
 jobs:
 
+  submit:
+    runs-on: ubuntu-22.04
+    steps:
+      - name: Check out source code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
+      - name: Set up PDM
+        uses: pdm-project/setup-pdm@v4
+        with:
+          cache: true
+      - name: Install dependencies
+        run: |
+          pdm install
+      - run: pdm run chipflow silicon submit
+        env:
+          CHIPFLOW_API_ENDPOINT: 'https://build-staging.chipflow.org/build/submit'
+          CHIPFLOW_API_KEY_ID: ${{ secrets.CHIPFLOW_API_KEY_ID }}
+          CHIPFLOW_API_KEY_SECRET: ${{ secrets.CHIPFLOW_API_KEY_SECRET }}
+
   test:
     runs-on: ubuntu-latest
     steps:
@@ -32,26 +55,3 @@ jobs:
       - name: Run tests
         run: |
           make sim-check
-
-  submit:
-    needs: [test, pyuvm]
-    runs-on: ubuntu-22.04
-    steps:
-      - name: Check out source code
-        uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-      - uses: actions/setup-python@v4
-        with:
-          python-version: '3.10'
-      - name: Set up PDM
-        uses: pdm-project/setup-pdm@v4
-        with:
-          cache: true
-      - name: Install dependencies
-        run: |
-          pdm install
-      - run: pdm run chipflow silicon submit
-        env:
-          CHIPFLOW_API_KEY_ID: ${{ secrets.CHIPFLOW_API_KEY_ID }}
-          CHIPFLOW_API_KEY_SECRET: ${{ secrets.CHIPFLOW_API_KEY_SECRET }}
