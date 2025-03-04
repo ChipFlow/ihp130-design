@@ -149,8 +149,8 @@ class SPIPeripheral(wiring.Component):
     """
     A custom, minimal SPI controller
     """
-    def __init__(self, *, name):
-        regs = csr.Builder(addr_width=5, data_width=8, name=name)
+    def __init__(self):
+        regs = csr.Builder(addr_width=5, data_width=8)
 
         self._config       = regs.add("config",       self.Config(),      offset=0x00)
         self._divider      = regs.add("divider",      self.Divider(),     offset=0x04)

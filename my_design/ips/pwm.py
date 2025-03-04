@@ -55,10 +55,10 @@ class PWMPeripheral(wiring.Component):
         stop_pin: csr.Field(csr.action.R, unsigned(1))   
       
     """pwm peripheral."""
-    def __init__(self, *, name, pins):
+    def __init__(self, *, pins):
         self.pins = pins
 
-        regs = csr.Builder(addr_width=5, data_width=8, name=name)
+        regs = csr.Builder(addr_width=5, data_width=8)
 
         self._numr = regs.add("numr", self.Numr(), offset=0x0)
         self._denom = regs.add("denom", self.Denom(), offset=0x4)

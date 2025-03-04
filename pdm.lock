@@ -5,7 +5,7 @@
 groups = ["default", "test"]
 strategy = []
 lock_version = "4.5.0"
-content_hash = "sha256:79bd5af858e2629baa28def8d6294371b24e7831b37a0b7b5b65c9f9e8406f15"
+content_hash = "sha256:3ba376e4404b94867ae987a5bfa5ecb2b9c28eb63addb7859c4a278e401d6a03"
 
 [[metadata.targets]]
 requires_python = "~=3.13"
@@ -74,14 +74,14 @@ dependencies = [
 
 [[package]]
 name = "amaranth-orchard"
-version = "0.1.dev43"
+version = "0.1.dev45"
 requires_python = ">=3.10"
 git = "https://github.com/ChipFlow/amaranth-orchard"
 ref = "replace-providers"
-revision = "e51cd63bea02588ea570fb0a97d22221222e7fa7"
+revision = "ff161f2b7062319066fac5a42cad060962ffd654"
 summary = "curated collection of Amaranth cores"
 dependencies = [
-    "amaranth-soc @ git+https://github.com/amaranth-lang/amaranth-soc@0ad5e245dd130d66a0a16663116ad0c1fe7a8956",
+    "amaranth-soc @ git+https://github.com/amaranth-lang/amaranth-soc",
     "amaranth-stdio @ git+https://github.com/amaranth-lang/amaranth-stdio",
     "amaranth<0.6,>=0.5",
     "chipflow-lib @ git+https://github.com/ChipFlow/chipflow-lib.git",
@@ -89,11 +89,10 @@ dependencies = [
 
 [[package]]
 name = "amaranth-soc"
-version = "0.1a1.dev16"
-requires_python = "~=3.8"
+version = "0.1a1.dev24"
+requires_python = "~=3.9"
 git = "https://github.com/amaranth-lang/amaranth-soc"
-ref = "0ad5e245dd130d66a0a16663116ad0c1fe7a8956"
-revision = "0ad5e245dd130d66a0a16663116ad0c1fe7a8956"
+revision = "5c43cf58f15d9cd9c69ff83c97997708d386b2dc"
 summary = "System on Chip toolkit for Amaranth HDL"
 dependencies = [
     "amaranth<0.6,>=0.5",
@@ -236,10 +235,11 @@ files = [
 
 [[package]]
 name = "chipflow-lib"
-version = "0.1.1.dev128"
+version = "0.1.1.dev129"
 requires_python = ">=3.10"
 git = "https://github.com/ChipFlow/chipflow-lib.git"
-revision = "354c48853f428ff8fc415f3a346e23fcbd4999f2"
+ref = "debug-submit"
+revision = "7c0874599142aa80f66594da1b61e6d7c1fb79b1"
 summary = "ChipFlow common tools."
 dependencies = [
     "amaranth-boards @ git+https://github.com/amaranth-lang/amaranth-boards",

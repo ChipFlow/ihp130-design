@@ -19,7 +19,7 @@ class SPIMemIOWrapper(wiring.Component):
         })
     def elaborate(self, platform):
         m = Module()
-        m.submodules.memio = memio = SPIMemIO(name="spiflash", flash=self.flash)
+        m.submodules.memio = memio = SPIMemIO(flash=self.flash)
         wiring.connect(m, flipped(self.ctrl_bus), memio.ctrl_bus)
         wiring.connect(m, flipped(self.data_bus), memio.data_bus)
         return m
