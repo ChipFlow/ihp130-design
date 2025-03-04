@@ -41,7 +41,7 @@ class SimPlatform:
                 else:
                     # FIXME: use -defer (workaround for YosysHQ/yosys#4059)
                     print(f"read_verilog {extra_path}", file=yosys_file)
-            print("read_ilang sim_soc.il", file=yosys_file)
+            print("read_rtlil sim_soc.il", file=yosys_file)
             print("hierarchy -top sim_top", file=yosys_file)
             print("write_cxxrtl -header sim_soc.cc", file=yosys_file)
 
