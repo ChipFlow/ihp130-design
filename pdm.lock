@@ -5,7 +5,7 @@
 groups = ["default", "test"]
 strategy = []
 lock_version = "4.5.0"
-content_hash = "sha256:3ba376e4404b94867ae987a5bfa5ecb2b9c28eb63addb7859c4a278e401d6a03"
+content_hash = "sha256:e8cccbcbfc0a411e9fe82d4fc133df1909ea2d7ff4684b84f3e4265702b5c583"
 
 [[metadata.targets]]
 requires_python = "~=3.13"
@@ -235,11 +235,11 @@ files = [
 
 [[package]]
 name = "chipflow-lib"
-version = "0.1.1.dev129"
+version = "0.1.1.dev130"
 requires_python = ">=3.10"
 git = "https://github.com/ChipFlow/chipflow-lib.git"
-ref = "debug-submit"
-revision = "7c0874599142aa80f66594da1b61e6d7c1fb79b1"
+ref = "old-backend-api"
+revision = "463c1e39aae2a2c1cabe2c87137c5e7a127082c0"
 summary = "ChipFlow common tools."
 dependencies = [
     "amaranth-boards @ git+https://github.com/amaranth-lang/amaranth-boards",
