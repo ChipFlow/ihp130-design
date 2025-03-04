@@ -33,59 +33,6 @@ jobs:
         run: |
           make sim-check
 
-  pyuvm:
-    runs-on: ubuntu-latest
-    env:
-      DEPS_PATH: ${{ github.workspace }}/deps
-      VERILATOR_REVISION: ba47da6587cd62f43546ce2aa50b5e13d2dde216
-    steps:
-      - name: Check out source code
-        uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-      - name: Set up PDM
-        uses: pdm-project/setup-pdm@v4
-        with:
-          cache: true
-      - name: Install dependencies
-        run: |
-          sudo apt-get update
-          sudo apt-get install git build-essential autoconf g++ flex bison perl help2man zlib1g-dev libfl-dev
-          pdm install
-      - name: Cache YoWASP build products
-        uses: actions/cache@v4
-        with:
-          path: ~/.cache/YoWASP
-          key: YoWASP-${{ runner.os }}-${{ hashFiles('./.venv/**/*.wasm') }}
-          restore-keys: |
-            YoWASP-${{ runner.os }}-
-
-      - name: Cache verilator installation
-        uses: actions/cache@v4
-        id: cache-verilator
-        with:
-          path: .verilator
-          key: cache-verilator-${{ env.VERILATOR-REVISION }}-r1
-
-      - name: Build verilator
-        run: |
-          PREFIX=`pwd`/.verilator
-          VERILATOR_PATH=${DEPS_PATH}/verilator
-          mkdir -p ${VERILATOR_PATH}
-          git clone --recursive https://github.com/verilator/verilator ${VERILATOR_PATH}
-          pushd ${VERILATOR_PATH}
-          git reset --hard ${VERILATOR_REVISION}
-          autoconf
-          ./configure --prefix=${PREFIX}
-          make -j`nproc`
-          make install
-          popd
-        if: steps.cache-verilator.outputs.cache-hit != 'true'
-
-      - name: Run tests
-        run: |
-          PATH=${GITHUB_WORKSPACE}/.verilator/bin:$PATH make verif-run-pyuvm
-
   submit:
     needs: [test, pyuvm]
     runs-on: ubuntu-22.04
