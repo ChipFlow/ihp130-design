@@ -12,126 +12,144 @@
         "pins": [
           "1"
         ],
-        "direction": null
+        "direction": null,
+        "options": null
       },
       "dvdd0": {
         "type": "ground",
         "pins": [
           "9"
         ],
-        "direction": null
+        "direction": null,
+        "options": null
       },
       "vss0": {
         "type": "power",
         "pins": [
           "17"
         ],
-        "direction": null
+        "direction": null,
+        "options": null
       },
       "vdd0": {
         "type": "ground",
         "pins": [
           "25"
         ],
-        "direction": null
+        "direction": null,
+        "options": null
       },
       "dvss1": {
         "type": "power",
         "pins": [
           "33"
         ],
-        "direction": null
+        "direction": null,
+        "options": null
       },
       "dvdd1": {
         "type": "ground",
         "pins": [
           "41"
         ],
-        "direction": null
+        "direction": null,
+        "options": null
       },
       "vss1": {
         "type": "power",
         "pins": [
           "49"
         ],
-        "direction": null
+        "direction": null,
+        "options": null
       },
       "vdd1": {
         "type": "ground",
         "pins": [
           "57"
         ],
-        "direction": null
+        "direction": null,
+        "options": null
       },
       "dvss2": {
         "type": "power",
         "pins": [
           "65"
         ],
-        "direction": null
+        "direction": null,
+        "options": null
       },
       "dvdd2": {
         "type": "ground",
         "pins": [
           "73"
         ],
-        "direction": null
+        "direction": null,
+        "options": null
       },
       "vss2": {
         "type": "power",
         "pins": [
           "81"
         ],
-        "direction": null
+        "direction": null,
+        "options": null
       },
       "vdd2": {
         "type": "ground",
         "pins": [
           "89"
         ],
-        "direction": null
+        "direction": null,
+        "options": null
       },
       "dvss3": {
         "type": "power",
         "pins": [
           "97"
         ],
-        "direction": null
+        "direction": null,
+        "options": null
       },
       "dvdd3": {
         "type": "ground",
         "pins": [
           "105"
         ],
-        "direction": null
+        "direction": null,
+        "options": null
       },
       "vss3": {
         "type": "power",
         "pins": [
           "113"
         ],
-        "direction": null
+        "direction": null,
+        "options": null
       },
       "vdd3": {
         "type": "ground",
         "pins": [
           "121"
         ],
-        "direction": null
+        "direction": null,
+        "options": null
       },
       "dvss4": {
         "type": "power",
         "pins": [
           "129"
         ],
-        "direction": null
+        "direction": null,
+        "options": null
       },
       "dvdd4": {
         "type": "ground",
         "pins": [
           "137"
         ],
-        "direction": null
+        "direction": null,
+        "options": null
       }
     },
     "clocks": {
@@ -140,7 +158,8 @@
         "pins": [
           "114"
         ],
-        "direction": "i"
+        "direction": "i",
+        "options": null
       }
     },
     "resets": {
@@ -149,7 +168,8 @@
         "pins": [
           "115"
         ],
-        "direction": "i"
+        "direction": "i",
+        "options": null
       }
     }
   },
@@ -161,21 +181,36 @@
             "122"
           ],
           "direction": "o",
-          "type": "io"
+          "type": "io",
+          "options": {
+            "all_have_oe": true,
+            "init": null
+          }
         },
         "flash_csn": {
           "pins": [
             "123"
           ],
           "direction": "o",
-          "type": "io"
+          "type": "io",
+          "options": {
+            "all_have_oe": true,
+            "init": null
+          }
         },
         "flash_d": {
           "pins": [
-            "124"
+            "124",
+            "125",
+            "126",
+            "127"
           ],
           "direction": "io",
-          "type": "io"
+          "type": "io",
+          "options": {
+            "all_have_oe": true,
+            "init": null
+          }
         }
       },
       "cpu_jtag": {
@@ -184,35 +219,55 @@
             "138"
           ],
           "direction": "i",
-          "type": "io"
+          "type": "io",
+          "options": {
+            "all_have_oe": true,
+            "init": null
+          }
         },
         "cpu_jtag_tck": {
           "pins": [
             "139"
           ],
           "direction": "i",
-          "type": "io"
+          "type": "io",
+          "options": {
+            "all_have_oe": true,
+            "init": null
+          }
         },
         "cpu_jtag_tms": {
           "pins": [
             "14"
           ],
           "direction": "i",
-          "type": "io"
+          "type": "io",
+          "options": {
+            "all_have_oe": true,
+            "init": null
+          }
         },
         "cpu_jtag_tdi": {
           "pins": [
             "140"
           ],
           "direction": "i",
-          "type": "io"
+          "type": "io",
+          "options": {
+            "all_have_oe": true,
+            "init": null
+          }
         },
         "cpu_jtag_tdo": {
           "pins": [
             "141"
           ],
           "direction": "o",
-          "type": "io"
+          "type": "io",
+          "options": {
+            "all_have_oe": true,
+            "init": null
+          }
         }
       },
       "user_spi_0": {
@@ -221,28 +276,44 @@
             "98"
           ],
           "direction": "o",
-          "type": "io"
+          "type": "io",
+          "options": {
+            "all_have_oe": true,
+            "init": null
+          }
         },
         "user_spi_0_mosi": {
           "pins": [
             "99"
           ],
           "direction": "o",
-          "type": "io"
+          "type": "io",
+          "options": {
+            "all_have_oe": true,
+            "init": null
+          }
         },
         "user_spi_0_miso": {
           "pins": [
             "10"
           ],
           "direction": "i",
-          "type": "io"
+          "type": "io",
+          "options": {
+            "all_have_oe": true,
+            "init": null
+          }
         },
         "user_spi_0_csn": {
           "pins": [
             "100"
           ],
           "direction": "o",
-          "type": "io"
+          "type": "io",
+          "options": {
+            "all_have_oe": true,
+            "init": null
+          }
         }
       },
       "user_spi_1": {
@@ -251,28 +322,44 @@
             "42"
           ],
           "direction": "o",
-          "type": "io"
+          "type": "io",
+          "options": {
+            "all_have_oe": true,
+            "init": null
+          }
         },
         "user_spi_1_mosi": {
           "pins": [
             "43"
           ],
           "direction": "o",
-          "type": "io"
+          "type": "io",
+          "options": {
+            "all_have_oe": true,
+            "init": null
+          }
         },
         "user_spi_1_miso": {
           "pins": [
             "44"
           ],
           "direction": "i",
-          "type": "io"
+          "type": "io",
+          "options": {
+            "all_have_oe": true,
+            "init": null
+          }
         },
         "user_spi_1_csn": {
           "pins": [
             "45"
           ],
           "direction": "o",
-          "type": "io"
+          "type": "io",
+          "options": {
+            "all_have_oe": true,
+            "init": null
+          }
         }
       },
       "user_spi_2": {
@@ -281,28 +368,44 @@
             "82"
           ],
           "direction": "o",
-          "type": "io"
+          "type": "io",
+          "options": {
+            "all_have_oe": true,
+            "init": null
+          }
         },
         "user_spi_2_mosi": {
           "pins": [
             "83"
           ],
           "direction": "o",
-          "type": "io"
+          "type": "io",
+          "options": {
+            "all_have_oe": true,
+            "init": null
+          }
         },
         "user_spi_2_miso": {
           "pins": [
             "84"
           ],
           "direction": "i",
-          "type": "io"
+          "type": "io",
+          "options": {
+            "all_have_oe": true,
+            "init": null
+          }
         },
         "user_spi_2_csn": {
           "pins": [
             "85"
           ],
           "direction": "o",
-          "type": "io"
+          "type": "io",
+          "options": {
+            "all_have_oe": true,
+            "init": null
+          }
         }
       },
       "i2c_0": {
@@ -311,14 +414,22 @@
             "90"
           ],
           "direction": "io",
-          "type": "io"
+          "type": "io",
+          "options": {
+            "all_have_oe": true,
+            "init": null
+          }
         },
         "i2c_0_sda": {
           "pins": [
             "91"
           ],
           "direction": "io",
-          "type": "io"
+          "type": "io",
+          "options": {
+            "all_have_oe": true,
+            "init": null
+          }
         }
       },
       "i2c_1": {
@@ -327,14 +438,22 @@
             "92"
           ],
           "direction": "io",
-          "type": "io"
+          "type": "io",
+          "options": {
+            "all_have_oe": true,
+            "init": null
+          }
         },
         "i2c_1_sda": {
           "pins": [
             "93"
           ],
           "direction": "io",
-          "type": "io"
+          "type": "io",
+          "options": {
+            "all_have_oe": true,
+            "init": null
+          }
         }
       },
       "motor_pwm0": {
@@ -343,21 +462,33 @@
             "46"
           ],
           "direction": "o",
-          "type": "io"
+          "type": "io",
+          "options": {
+            "all_have_oe": true,
+            "init": null
+          }
         },
         "motor_pwm0_dir": {
           "pins": [
             "47"
           ],
           "direction": "o",
-          "type": "io"
+          "type": "io",
+          "options": {
+            "all_have_oe": true,
+            "init": null
+          }
         },
         "motor_pwm0_stop": {
           "pins": [
             "48"
           ],
           "direction": "i",
-          "type": "io"
+          "type": "io",
+          "options": {
+            "all_have_oe": true,
+            "init": null
+          }
         }
       },
       "motor_pwm1": {
@@ -366,21 +497,33 @@
             "86"
           ],
           "direction": "o",
-          "type": "io"
+          "type": "io",
+          "options": {
+            "all_have_oe": true,
+            "init": null
+          }
         },
         "motor_pwm1_dir": {
           "pins": [
             "87"
           ],
           "direction": "o",
-          "type": "io"
+          "type": "io",
+          "options": {
+            "all_have_oe": true,
+            "init": null
+          }
         },
         "motor_pwm1_stop": {
           "pins": [
             "88"
           ],
           "direction": "i",
-          "type": "io"
+          "type": "io",
+          "options": {
+            "all_have_oe": true,
+            "init": null
+          }
         }
       },
       "motor_pwm2": {
@@ -389,246 +532,366 @@
             "94"
           ],
           "direction": "o",
-          "type": "io"
+          "type": "io",
+          "options": {
+            "all_have_oe": true,
+            "init": null
+          }
         },
         "motor_pwm2_dir": {
           "pins": [
             "95"
           ],
           "direction": "o",
-          "type": "io"
+          "type": "io",
+          "options": {
+            "all_have_oe": true,
+            "init": null
+          }
         },
         "motor_pwm2_stop": {
           "pins": [
             "96"
           ],
           "direction": "i",
-          "type": "io"
+          "type": "io",
+          "options": {
+            "all_have_oe": true,
+            "init": null
+          }
         }
       },
       "motor_pwm3": {
         "motor_pwm3_pwm": {
           "pins": [
-            "116"
+            "128"
           ],
           "direction": "o",
-          "type": "io"
+          "type": "io",
+          "options": {
+            "all_have_oe": true,
+            "init": null
+          }
         },
         "motor_pwm3_dir": {
           "pins": [
-            "117"
+            "101"
           ],
           "direction": "o",
-          "type": "io"
+          "type": "io",
+          "options": {
+            "all_have_oe": true,
+            "init": null
+          }
         },
         "motor_pwm3_stop": {
           "pins": [
-            "118"
+            "102"
           ],
           "direction": "i",
-          "type": "io"
+          "type": "io",
+          "options": {
+            "all_have_oe": true,
+            "init": null
+          }
         }
       },
       "motor_pwm4": {
         "motor_pwm4_pwm": {
           "pins": [
-            "119"
+            "142"
           ],
           "direction": "o",
-          "type": "io"
+          "type": "io",
+          "options": {
+            "all_have_oe": true,
+            "init": null
+          }
         },
         "motor_pwm4_dir": {
           "pins": [
-            "12"
+            "143"
           ],
           "direction": "o",
-          "type": "io"
+          "type": "io",
+          "options": {
+            "all_have_oe": true,
+            "init": null
+          }
         },
         "motor_pwm4_stop": {
           "pins": [
-            "120"
+            "15"
           ],
           "direction": "i",
-          "type": "io"
+          "type": "io",
+          "options": {
+            "all_have_oe": true,
+            "init": null
+          }
         }
       },
       "motor_pwm5": {
         "motor_pwm5_pwm": {
           "pins": [
-            "106"
+            "16"
           ],
           "direction": "o",
-          "type": "io"
+          "type": "io",
+          "options": {
+            "all_have_oe": true,
+            "init": null
+          }
         },
         "motor_pwm5_dir": {
           "pins": [
-            "107"
+            "103"
           ],
           "direction": "o",
-          "type": "io"
+          "type": "io",
+          "options": {
+            "all_have_oe": true,
+            "init": null
+          }
         },
         "motor_pwm5_stop": {
           "pins": [
-            "108"
+            "104"
           ],
           "direction": "i",
-          "type": "io"
+          "type": "io",
+          "options": {
+            "all_have_oe": true,
+            "init": null
+          }
         }
       },
       "motor_pwm6": {
         "motor_pwm6_pwm": {
           "pins": [
-            "109"
+            "106"
           ],
           "direction": "o",
-          "type": "io"
+          "type": "io",
+          "options": {
+            "all_have_oe": true,
+            "init": null
+          }
         },
         "motor_pwm6_dir": {
           "pins": [
-            "11"
+            "107"
           ],
           "direction": "o",
-          "type": "io"
+          "type": "io",
+          "options": {
+            "all_have_oe": true,
+            "init": null
+          }
         },
         "motor_pwm6_stop": {
           "pins": [
-            "110"
+            "108"
           ],
           "direction": "i",
-          "type": "io"
+          "type": "io",
+          "options": {
+            "all_have_oe": true,
+            "init": null
+          }
         }
       },
       "motor_pwm7": {
         "motor_pwm7_pwm": {
           "pins": [
-            "111"
+            "116"
           ],
           "direction": "o",
-          "type": "io"
+          "type": "io",
+          "options": {
+            "all_have_oe": true,
+            "init": null
+          }
         },
         "motor_pwm7_dir": {
           "pins": [
-            "112"
+            "117"
           ],
           "direction": "o",
-          "type": "io"
+          "type": "io",
+          "options": {
+            "all_have_oe": true,
+            "init": null
+          }
         },
         "motor_pwm7_stop": {
           "pins": [
-            "13"
+            "118"
           ],
           "direction": "i",
-          "type": "io"
+          "type": "io",
+          "options": {
+            "all_have_oe": true,
+            "init": null
+          }
         }
       },
       "motor_pwm8": {
         "motor_pwm8_pwm": {
           "pins": [
-            "130"
+            "119"
           ],
           "direction": "o",
-          "type": "io"
+          "type": "io",
+          "options": {
+            "all_have_oe": true,
+            "init": null
+          }
         },
         "motor_pwm8_dir": {
           "pins": [
-            "131"
+            "12"
           ],
           "direction": "o",
-          "type": "io"
+          "type": "io",
+          "options": {
+            "all_have_oe": true,
+            "init": null
+          }
         },
         "motor_pwm8_stop": {
           "pins": [
-            "132"
+            "120"
           ],
           "direction": "i",
-          "type": "io"
+          "type": "io",
+          "options": {
+            "all_have_oe": true,
+            "init": null
+          }
         }
       },
       "motor_pwm9": {
         "motor_pwm9_pwm": {
           "pins": [
-            "18"
+            "13"
           ],
           "direction": "o",
-          "type": "io"
+          "type": "io",
+          "options": {
+            "all_have_oe": true,
+            "init": null
+          }
         },
         "motor_pwm9_dir": {
           "pins": [
-            "19"
+            "130"
           ],
           "direction": "o",
-          "type": "io"
+          "type": "io",
+          "options": {
+            "all_have_oe": true,
+            "init": null
+          }
         },
         "motor_pwm9_stop": {
           "pins": [
-            "2"
+            "131"
           ],
           "direction": "i",
-          "type": "io"
+          "type": "io",
+          "options": {
+            "all_have_oe": true,
+            "init": null
+          }
         }
       },
       "uart_0": {
         "uart_0_tx": {
           "pins": [
-            "20"
+            "18"
           ],
           "direction": "o",
-          "type": "io"
+          "type": "io",
+          "options": {
+            "all_have_oe": true,
+            "init": null
+          }
         },
         "uart_0_rx": {
           "pins": [
-            "21"
+            "19"
           ],
           "direction": "i",
-          "type": "io"
+          "type": "io",
+          "options": {
+            "all_have_oe": true,
+            "init": null
+          }
         }
       },
       "uart_1": {
         "uart_1_tx": {
           "pins": [
-            "22"
+            "2"
           ],
           "direction": "o",
-          "type": "io"
+          "type": "io",
+          "options": {
+            "all_have_oe": true,
+            "init": null
+          }
         },
         "uart_1_rx": {
           "pins": [
-            "23"
+            "20"
           ],
           "direction": "i",
-          "type": "io"
+          "type": "io",
+          "options": {
+            "all_have_oe": true,
+            "init": null
+          }
         }
       },
       "gpio_0": {
         "gpio_0_gpio": {
           "pins": [
+            "21",
+            "22",
+            "23",
             "24",
             "26",
             "27",
             "28",
-            "29",
-            "3",
-            "30",
-            "31"
+            "29"
           ],
           "direction": "io",
-          "type": "io"
+          "type": "io",
+          "options": {
+            "all_have_oe": true,
+            "init": null
+          }
         }
       },
       "gpio_1": {
         "gpio_1_gpio": {
           "pins": [
+            "3",
+            "30",
+            "31",
             "32",
             "34",
             "35",
             "36",
-            "37",
-            "38",
-            "39",
-            "4"
+            "37"
           ],
           "direction": "io",
-          "type": "io"
+          "type": "io",
+          "options": {
+            "all_have_oe": true,
+            "init": null
+          }
         }
       }
     }
@@ -655,7 +918,11 @@
                 "annotations": {
                   "https://api.chipflow.com/schemas/0/pin-annotation": {
                     "direction": "o",
-                    "width": 1
+                    "width": 1,
+                    "options": {
+                      "all_have_oe": true,
+                      "init": null
+                    }
                   }
                 }
               },
@@ -674,7 +941,11 @@
                 "annotations": {
                   "https://api.chipflow.com/schemas/0/pin-annotation": {
                     "direction": "o",
-                    "width": 1
+                    "width": 1,
+                    "options": {
+                      "all_have_oe": true,
+                      "init": null
+                    }
                   }
                 }
               },
@@ -685,7 +956,7 @@
                     "type": "port",
                     "name": "flash__d__o",
                     "dir": "out",
-                    "width": 1,
+                    "width": 4,
                     "signed": false,
                     "init": "0"
                   },
@@ -693,7 +964,7 @@
                     "type": "port",
                     "name": "flash__d__oe",
                     "dir": "out",
-                    "width": 1,
+                    "width": 4,
                     "signed": false,
                     "init": "0"
                   },
@@ -701,7 +972,7 @@
                     "type": "port",
                     "name": "flash__d__i",
                     "dir": "in",
-                    "width": 1,
+                    "width": 4,
                     "signed": false,
                     "init": "0"
                   }
@@ -709,7 +980,11 @@
                 "annotations": {
                   "https://api.chipflow.com/schemas/0/pin-annotation": {
                     "direction": "io",
-                    "width": 1
+                    "width": 4,
+                    "options": {
+                      "all_have_oe": true,
+                      "init": null
+                    }
                   }
                 }
               }
@@ -734,7 +1009,11 @@
                 "annotations": {
                   "https://api.chipflow.com/schemas/0/pin-annotation": {
                     "direction": "i",
-                    "width": 1
+                    "width": 1,
+                    "options": {
+                      "all_have_oe": true,
+                      "init": null
+                    }
                   }
                 }
               },
@@ -753,7 +1032,11 @@
                 "annotations": {
                   "https://api.chipflow.com/schemas/0/pin-annotation": {
                     "direction": "i",
-                    "width": 1
+                    "width": 1,
+                    "options": {
+                      "all_have_oe": true,
+                      "init": null
+                    }
                   }
                 }
               },
@@ -772,7 +1055,11 @@
                 "annotations": {
                   "https://api.chipflow.com/schemas/0/pin-annotation": {
                     "direction": "i",
-                    "width": 1
+                    "width": 1,
+                    "options": {
+                      "all_have_oe": true,
+                      "init": null
+                    }
                   }
                 }
               },
@@ -791,7 +1078,11 @@
                 "annotations": {
                   "https://api.chipflow.com/schemas/0/pin-annotation": {
                     "direction": "i",
-                    "width": 1
+                    "width": 1,
+                    "options": {
+                      "all_have_oe": true,
+                      "init": null
+                    }
                   }
                 }
               },
@@ -810,7 +1101,11 @@
                 "annotations": {
                   "https://api.chipflow.com/schemas/0/pin-annotation": {
                     "direction": "o",
-                    "width": 1
+                    "width": 1,
+                    "options": {
+                      "all_have_oe": true,
+                      "init": null
+                    }
                   }
                 }
               }
@@ -835,7 +1130,11 @@
                 "annotations": {
                   "https://api.chipflow.com/schemas/0/pin-annotation": {
                     "direction": "o",
-                    "width": 1
+                    "width": 1,
+                    "options": {
+                      "all_have_oe": true,
+                      "init": null
+                    }
                   }
                 }
               },
@@ -854,7 +1153,11 @@
                 "annotations": {
                   "https://api.chipflow.com/schemas/0/pin-annotation": {
                     "direction": "o",
-                    "width": 1
+                    "width": 1,
+                    "options": {
+                      "all_have_oe": true,
+                      "init": null
+                    }
                   }
                 }
               },
@@ -873,7 +1176,11 @@
                 "annotations": {
                   "https://api.chipflow.com/schemas/0/pin-annotation": {
                     "direction": "i",
-                    "width": 1
+                    "width": 1,
+                    "options": {
+                      "all_have_oe": true,
+                      "init": null
+                    }
                   }
                 }
               },
@@ -892,7 +1199,11 @@
                 "annotations": {
                   "https://api.chipflow.com/schemas/0/pin-annotation": {
                     "direction": "o",
-                    "width": 1
+                    "width": 1,
+                    "options": {
+                      "all_have_oe": true,
+                      "init": null
+                    }
                   }
                 }
               }
@@ -917,7 +1228,11 @@
                 "annotations": {
                   "https://api.chipflow.com/schemas/0/pin-annotation": {
                     "direction": "o",
-                    "width": 1
+                    "width": 1,
+                    "options": {
+                      "all_have_oe": true,
+                      "init": null
+                    }
                   }
                 }
               },
@@ -936,7 +1251,11 @@
                 "annotations": {
                   "https://api.chipflow.com/schemas/0/pin-annotation": {
                     "direction": "o",
-                    "width": 1
+                    "width": 1,
+                    "options": {
+                      "all_have_oe": true,
+                      "init": null
+                    }
                   }
                 }
               },
@@ -955,7 +1274,11 @@
                 "annotations": {
                   "https://api.chipflow.com/schemas/0/pin-annotation": {
                     "direction": "i",
-                    "width": 1
+                    "width": 1,
+                    "options": {
+                      "all_have_oe": true,
+                      "init": null
+                    }
                   }
                 }
               },
@@ -974,7 +1297,11 @@
                 "annotations": {
                   "https://api.chipflow.com/schemas/0/pin-annotation": {
                     "direction": "o",
-                    "width": 1
+                    "width": 1,
+                    "options": {
+                      "all_have_oe": true,
+                      "init": null
+                    }
                   }
                 }
               }
@@ -999,7 +1326,11 @@
                 "annotations": {
                   "https://api.chipflow.com/schemas/0/pin-annotation": {
                     "direction": "o",
-                    "width": 1
+                    "width": 1,
+                    "options": {
+                      "all_have_oe": true,
+                      "init": null
+                    }
                   }
                 }
               },
@@ -1018,7 +1349,11 @@
                 "annotations": {
                   "https://api.chipflow.com/schemas/0/pin-annotation": {
                     "direction": "o",
-                    "width": 1
+                    "width": 1,
+                    "options": {
+                      "all_have_oe": true,
+                      "init": null
+                    }
                   }
                 }
               },
@@ -1037,7 +1372,11 @@
                 "annotations": {
                   "https://api.chipflow.com/schemas/0/pin-annotation": {
                     "direction": "i",
-                    "width": 1
+                    "width": 1,
+                    "options": {
+                      "all_have_oe": true,
+                      "init": null
+                    }
                   }
                 }
               },
@@ -1056,7 +1395,11 @@
                 "annotations": {
                   "https://api.chipflow.com/schemas/0/pin-annotation": {
                     "direction": "o",
-                    "width": 1
+                    "width": 1,
+                    "options": {
+                      "all_have_oe": true,
+                      "init": null
+                    }
                   }
                 }
               }
@@ -1097,7 +1440,11 @@
                 "annotations": {
                   "https://api.chipflow.com/schemas/0/pin-annotation": {
                     "direction": "io",
-                    "width": 1
+                    "width": 1,
+                    "options": {
+                      "all_have_oe": true,
+                      "init": null
+                    }
                   }
                 }
               },
@@ -1132,7 +1479,11 @@
                 "annotations": {
                   "https://api.chipflow.com/schemas/0/pin-annotation": {
                     "direction": "io",
-                    "width": 1
+                    "width": 1,
+                    "options": {
+                      "all_have_oe": true,
+                      "init": null
+                    }
                   }
                 }
               }
@@ -1173,7 +1524,11 @@
                 "annotations": {
                   "https://api.chipflow.com/schemas/0/pin-annotation": {
                     "direction": "io",
-                    "width": 1
+                    "width": 1,
+                    "options": {
+                      "all_have_oe": true,
+                      "init": null
+                    }
                   }
                 }
               },
@@ -1208,7 +1563,11 @@
                 "annotations": {
                   "https://api.chipflow.com/schemas/0/pin-annotation": {
                     "direction": "io",
-                    "width": 1
+                    "width": 1,
+                    "options": {
+                      "all_have_oe": true,
+                      "init": null
+                    }
                   }
                 }
               }
@@ -1233,7 +1592,11 @@
                 "annotations": {
                   "https://api.chipflow.com/schemas/0/pin-annotation": {
                     "direction": "o",
-                    "width": 1
+                    "width": 1,
+                    "options": {
+                      "all_have_oe": true,
+                      "init": null
+                    }
                   }
                 }
               },
@@ -1252,7 +1615,11 @@
                 "annotations": {
                   "https://api.chipflow.com/schemas/0/pin-annotation": {
                     "direction": "o",
-                    "width": 1
+                    "width": 1,
+                    "options": {
+                      "all_have_oe": true,
+                      "init": null
+                    }
                   }
                 }
               },
@@ -1271,7 +1638,11 @@
                 "annotations": {
                   "https://api.chipflow.com/schemas/0/pin-annotation": {
                     "direction": "i",
-                    "width": 1
+                    "width": 1,
+                    "options": {
+                      "all_have_oe": true,
+                      "init": null
+                    }
                   }
                 }
               }
@@ -1296,7 +1667,11 @@
                 "annotations": {
                   "https://api.chipflow.com/schemas/0/pin-annotation": {
                     "direction": "o",
-                    "width": 1
+                    "width": 1,
+                    "options": {
+                      "all_have_oe": true,
+                      "init": null
+                    }
                   }
                 }
               },
@@ -1315,7 +1690,11 @@
                 "annotations": {
                   "https://api.chipflow.com/schemas/0/pin-annotation": {
                     "direction": "o",
-                    "width": 1
+                    "width": 1,
+                    "options": {
+                      "all_have_oe": true,
+                      "init": null
+                    }
                   }
                 }
               },
@@ -1334,7 +1713,11 @@
                 "annotations": {
                   "https://api.chipflow.com/schemas/0/pin-annotation": {
                     "direction": "i",
-                    "width": 1
+                    "width": 1,
+                    "options": {
+                      "all_have_oe": true,
+                      "init": null
+                    }
                   }
                 }
               }
@@ -1359,7 +1742,11 @@
                 "annotations": {
                   "https://api.chipflow.com/schemas/0/pin-annotation": {
                     "direction": "o",
-                    "width": 1
+                    "width": 1,
+                    "options": {
+                      "all_have_oe": true,
+                      "init": null
+                    }
                   }
                 }
               },
@@ -1378,7 +1765,11 @@
                 "annotations": {
                   "https://api.chipflow.com/schemas/0/pin-annotation": {
                     "direction": "o",
-                    "width": 1
+                    "width": 1,
+                    "options": {
+                      "all_have_oe": true,
+                      "init": null
+                    }
                   }
                 }
               },
@@ -1397,7 +1788,11 @@
                 "annotations": {
                   "https://api.chipflow.com/schemas/0/pin-annotation": {
                     "direction": "i",
-                    "width": 1
+                    "width": 1,
+                    "options": {
+                      "all_have_oe": true,
+                      "init": null
+                    }
                   }
                 }
               }
@@ -1422,7 +1817,11 @@
                 "annotations": {
                   "https://api.chipflow.com/schemas/0/pin-annotation": {
                     "direction": "o",
-                    "width": 1
+                    "width": 1,
+                    "options": {
+                      "all_have_oe": true,
+                      "init": null
+                    }
                   }
                 }
               },
@@ -1441,7 +1840,11 @@
                 "annotations": {
                   "https://api.chipflow.com/schemas/0/pin-annotation": {
                     "direction": "o",
-                    "width": 1
+                    "width": 1,
+                    "options": {
+                      "all_have_oe": true,
+                      "init": null
+                    }
                   }
                 }
               },
@@ -1460,7 +1863,11 @@
                 "annotations": {
                   "https://api.chipflow.com/schemas/0/pin-annotation": {
                     "direction": "i",
-                    "width": 1
+                    "width": 1,
+                    "options": {
+                      "all_have_oe": true,
+                      "init": null
+                    }
                   }
                 }
               }
@@ -1485,7 +1892,11 @@
                 "annotations": {
                   "https://api.chipflow.com/schemas/0/pin-annotation": {
                     "direction": "o",
-                    "width": 1
+                    "width": 1,
+                    "options": {
+                      "all_have_oe": true,
+                      "init": null
+                    }
                   }
                 }
               },
@@ -1504,7 +1915,11 @@
                 "annotations": {
                   "https://api.chipflow.com/schemas/0/pin-annotation": {
                     "direction": "o",
-                    "width": 1
+                    "width": 1,
+                    "options": {
+                      "all_have_oe": true,
+                      "init": null
+                    }
                   }
                 }
               },
@@ -1523,7 +1938,11 @@
                 "annotations": {
                   "https://api.chipflow.com/schemas/0/pin-annotation": {
                     "direction": "i",
-                    "width": 1
+                    "width": 1,
+                    "options": {
+                      "all_have_oe": true,
+                      "init": null
+                    }
                   }
                 }
               }
@@ -1548,7 +1967,11 @@
                 "annotations": {
                   "https://api.chipflow.com/schemas/0/pin-annotation": {
                     "direction": "o",
-                    "width": 1
+                    "width": 1,
+                    "options": {
+                      "all_have_oe": true,
+                      "init": null
+                    }
                   }
                 }
               },
@@ -1567,7 +1990,11 @@
                 "annotations": {
                   "https://api.chipflow.com/schemas/0/pin-annotation": {
                     "direction": "o",
-                    "width": 1
+                    "width": 1,
+                    "options": {
+                      "all_have_oe": true,
+                      "init": null
+                    }
                   }
                 }
               },
@@ -1586,7 +2013,11 @@
                 "annotations": {
                   "https://api.chipflow.com/schemas/0/pin-annotation": {
                     "direction": "i",
-                    "width": 1
+                    "width": 1,
+                    "options": {
+                      "all_have_oe": true,
+                      "init": null
+                    }
                   }
                 }
               }
@@ -1611,7 +2042,11 @@
                 "annotations": {
                   "https://api.chipflow.com/schemas/0/pin-annotation": {
                     "direction": "o",
-                    "width": 1
+                    "width": 1,
+                    "options": {
+                      "all_have_oe": true,
+                      "init": null
+                    }
                   }
                 }
               },
@@ -1630,7 +2065,11 @@
                 "annotations": {
                   "https://api.chipflow.com/schemas/0/pin-annotation": {
                     "direction": "o",
-                    "width": 1
+                    "width": 1,
+                    "options": {
+                      "all_have_oe": true,
+                      "init": null
+                    }
                   }
                 }
               },
@@ -1649,7 +2088,11 @@
                 "annotations": {
                   "https://api.chipflow.com/schemas/0/pin-annotation": {
                     "direction": "i",
-                    "width": 1
+                    "width": 1,
+                    "options": {
+                      "all_have_oe": true,
+                      "init": null
+                    }
                   }
                 }
               }
@@ -1674,7 +2117,11 @@
                 "annotations": {
                   "https://api.chipflow.com/schemas/0/pin-annotation": {
                     "direction": "o",
-                    "width": 1
+                    "width": 1,
+                    "options": {
+                      "all_have_oe": true,
+                      "init": null
+                    }
                   }
                 }
               },
@@ -1693,7 +2140,11 @@
                 "annotations": {
                   "https://api.chipflow.com/schemas/0/pin-annotation": {
                     "direction": "o",
-                    "width": 1
+                    "width": 1,
+                    "options": {
+                      "all_have_oe": true,
+                      "init": null
+                    }
                   }
                 }
               },
@@ -1712,7 +2163,11 @@
                 "annotations": {
                   "https://api.chipflow.com/schemas/0/pin-annotation": {
                     "direction": "i",
-                    "width": 1
+                    "width": 1,
+                    "options": {
+                      "all_have_oe": true,
+                      "init": null
+                    }
                   }
                 }
               }
@@ -1737,7 +2192,11 @@
                 "annotations": {
                   "https://api.chipflow.com/schemas/0/pin-annotation": {
                     "direction": "o",
-                    "width": 1
+                    "width": 1,
+                    "options": {
+                      "all_have_oe": true,
+                      "init": null
+                    }
                   }
                 }
               },
@@ -1756,7 +2215,11 @@
                 "annotations": {
                   "https://api.chipflow.com/schemas/0/pin-annotation": {
                     "direction": "o",
-                    "width": 1
+                    "width": 1,
+                    "options": {
+                      "all_have_oe": true,
+                      "init": null
+                    }
                   }
                 }
               },
@@ -1775,7 +2238,11 @@
                 "annotations": {
                   "https://api.chipflow.com/schemas/0/pin-annotation": {
                     "direction": "i",
-                    "width": 1
+                    "width": 1,
+                    "options": {
+                      "all_have_oe": true,
+                      "init": null
+                    }
                   }
                 }
               }
@@ -1800,7 +2267,11 @@
                 "annotations": {
                   "https://api.chipflow.com/schemas/0/pin-annotation": {
                     "direction": "o",
-                    "width": 1
+                    "width": 1,
+                    "options": {
+                      "all_have_oe": true,
+                      "init": null
+                    }
                   }
                 }
               },
@@ -1819,7 +2290,11 @@
                 "annotations": {
                   "https://api.chipflow.com/schemas/0/pin-annotation": {
                     "direction": "o",
-                    "width": 1
+                    "width": 1,
+                    "options": {
+                      "all_have_oe": true,
+                      "init": null
+                    }
                   }
                 }
               },
@@ -1838,7 +2313,11 @@
                 "annotations": {
                   "https://api.chipflow.com/schemas/0/pin-annotation": {
                     "direction": "i",
-                    "width": 1
+                    "width": 1,
+                    "options": {
+                      "all_have_oe": true,
+                      "init": null
+                    }
                   }
                 }
               }
@@ -1863,7 +2342,11 @@
                 "annotations": {
                   "https://api.chipflow.com/schemas/0/pin-annotation": {
                     "direction": "o",
-                    "width": 1
+                    "width": 1,
+                    "options": {
+                      "all_have_oe": true,
+                      "init": null
+                    }
                   }
                 }
               },
@@ -1873,7 +2356,7 @@
                   "i": {
                     "type": "port",
                     "name": "uart_0__rx__i",
-                    "dir": "out",
+                    "dir": "in",
                     "width": 1,
                     "signed": false,
                     "init": "0"
@@ -1882,7 +2365,11 @@
                 "annotations": {
                   "https://api.chipflow.com/schemas/0/pin-annotation": {
                     "direction": "i",
-                    "width": 1
+                    "width": 1,
+                    "options": {
+                      "all_have_oe": true,
+                      "init": null
+                    }
                   }
                 }
               }
@@ -1907,7 +2394,11 @@
                 "annotations": {
                   "https://api.chipflow.com/schemas/0/pin-annotation": {
                     "direction": "o",
-                    "width": 1
+                    "width": 1,
+                    "options": {
+                      "all_have_oe": true,
+                      "init": null
+                    }
                   }
                 }
               },
@@ -1917,7 +2408,7 @@
                   "i": {
                     "type": "port",
                     "name": "uart_1__rx__i",
-                    "dir": "out",
+                    "dir": "in",
                     "width": 1,
                     "signed": false,
                     "init": "0"
@@ -1926,7 +2417,11 @@
                 "annotations": {
                   "https://api.chipflow.com/schemas/0/pin-annotation": {
                     "direction": "i",
-                    "width": 1
+                    "width": 1,
+                    "options": {
+                      "all_have_oe": true,
+                      "init": null
+                    }
                   }
                 }
               }
@@ -1967,7 +2462,11 @@
                 "annotations": {
                   "https://api.chipflow.com/schemas/0/pin-annotation": {
                     "direction": "io",
-                    "width": 8
+                    "width": 8,
+                    "options": {
+                      "all_have_oe": true,
+                      "init": null
+                    }
                   }
                 }
               }
@@ -2008,7 +2507,11 @@
                 "annotations": {
                   "https://api.chipflow.com/schemas/0/pin-annotation": {
                     "direction": "io",
-                    "width": 8
+                    "width": 8,
+                    "options": {
+                      "all_have_oe": true,
+                      "init": null
+                    }
                   }
                 }
               }

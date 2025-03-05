@@ -74,11 +74,11 @@ dependencies = [
 
 [[package]]
 name = "amaranth-orchard"
-version = "0.1.dev47"
+version = "0.1.dev55"
 requires_python = ">=3.10"
 git = "https://github.com/ChipFlow/amaranth-orchard"
 ref = "multi-oe"
-revision = "2a463db7f23b721b7b751540ac8b359f1b965b54"
+revision = "4b557be44811d7e9a922ec7d37e0dc77d7eaeabe"
 summary = "curated collection of Amaranth cores"
 dependencies = [
     "amaranth-soc @ git+https://github.com/amaranth-lang/amaranth-soc",
