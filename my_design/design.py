@@ -8,11 +8,11 @@ from amaranth.lib.wiring import In, Out, flipped, connect
 from amaranth_soc import csr, wishbone
 from amaranth_soc.csr.wishbone import WishboneCSRBridge
 
-from amaranth_orchard.base.gpio import GPIOPeripheral, GPIOPins
-from amaranth_orchard.memory.spimemio import SPIMemIO, QSPIPins
-from amaranth_orchard.io.uart import UARTPeripheral, UARTPins
-from amaranth_orchard.memory.sram import SRAMPeripheral
-from amaranth_orchard.base.soc_id import SoCID
+from amaranth_orchard.base import SoCID
+from amaranth_orchard.memory import SPIMemIO
+from amaranth_orchard.memory import SRAMPeripheral
+from amaranth_orchard.io import GPIOPeripheral
+from amaranth_orchard.io import UARTPeripheral
 
 from amaranth_cv32e40p.cv32e40p import CV32E40P, DebugModule
 from chipflow_lib.platforms import InputPinSignature, OutputPinSignature
@@ -31,14 +31,13 @@ JTAGSignature = wiring.Signature({
     "tdo": Out(OutputPinSignature(1)),
 })
 
-# ---------
 
 class MySoC(wiring.Component):
     def __init__(self):
         # Top level interfaces
 
         interfaces = {
-            "flash" : Out(QSPIPins.Signature()),
+            "flash": Out(SPIMemIO.Signature()),
             "cpu_jtag": Out(JTAGSignature)
         }
 
@@ -64,10 +63,10 @@ class MySoC(wiring.Component):
 #            interfaces[f"pdm_ao_{i}"] = Out(PDMPins.Signature())
 
         for i in range(self.uart_count):
-            interfaces[f"uart_{i}"] = Out(UARTPins.Signature())
+            interfaces[f"uart_{i}"] = Out(UARTPeripheral.Signature())
 
         for i in range(self.gpio_banks):
-            interfaces[f"gpio_{i}"] = Out(GPIOPins.Signature(width=self.gpio_width))
+            interfaces[f"gpio_{i}"] = Out(GPIOPeripheral.Signature(pin_count=self.gpio_width))
 
         super().__init__(interfaces)
 
@@ -144,11 +143,12 @@ class MySoC(wiring.Component):
         m.submodules.debug = debug
         # SPI flash
 
-        spiflash = SPIMemIO(flash=self.flash)
+        spiflash = SPIMemIO()
         wb_decoder .add(spiflash.data_bus, addr=self.mem_spiflash_base)
         csr_decoder.add(spiflash.ctrl_bus, name="spiflash", addr=self.csr_spiflash_base - self.csr_base)
-
         m.submodules.spiflash = spiflash
+
+        connect(m, flipped(self.flash), spiflash.pins)
 
         sw.add_periph("spiflash",   "SPIFLASH", self.csr_spiflash_base)
 
@@ -168,27 +168,31 @@ class MySoC(wiring.Component):
             sw.add_periph("spi", f"USER_SPI_{i}", base_addr)
 
             # FIXME: These assignments will disappear once we have a relevant peripheral available
-            spi_pins = getattr(self, f"user_spi_{i}")
-            connect(m, flipped(spi_pins), user_spi.spi_pins)
+            pins = getattr(self, f"user_spi_{i}")
+            connect(m, flipped(pins), user_spi.spi_pins)
 
             setattr(m.submodules, f"user_spi_{i}", user_spi)
 
         # GPIOs
         for i in range(self.gpio_banks):
-            gpio = GPIOPeripheral(pins=getattr(self, f"gpio_{i}"))
+            gpio = GPIOPeripheral(pin_count=self.gpio_width)
             base_addr = self.csr_gpio_base + i * self.periph_offset
             csr_decoder.add(gpio.bus, name=f"gpio_{i}", addr=base_addr - self.csr_base)
             sw.add_periph("gpio", f"GPIO_{i}", base_addr)
 
+            pins = getattr(self, f"gpio_{i}")
+            connect(m, flipped(pins), gpio.pins)
             setattr(m.submodules, f"gpio_{i}", gpio)
 
         # UART
         for i in range(self.uart_count):
-            uart = UARTPeripheral(init_divisor=int(25e6//115200), pins=getattr(self, f"uart_{i}"))
+            uart = UARTPeripheral(init_divisor=int(25e6//115200))
             base_addr = self.csr_uart_base + i * self.periph_offset
             csr_decoder.add(uart.bus, name=f"uart_{i}", addr=base_addr - self.csr_base)
-
             sw.add_periph("uart", f"UART_{i}", base_addr)
+
+            pins = getattr(self, f"uart_{i}")
+            connect(m, flipped(pins), uart.pins)
             setattr(m.submodules, f"uart_{i}", uart)
 
         # I2Cs
