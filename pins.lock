@@ -157,583 +157,478 @@
     "soc": {
       "flash": {
         "flash_clk": {
-          "type": "io",
           "pins": [
-            "106"
+            "122"
           ],
-          "direction": "o"
+          "direction": "o",
+          "type": "io"
         },
         "flash_csn": {
-          "type": "io",
           "pins": [
-            "107"
+            "123"
           ],
-          "direction": "o"
+          "direction": "o",
+          "type": "io"
         },
-        "flash_d0": {
-          "type": "io",
+        "flash_d": {
           "pins": [
-            "108"
+            "124"
           ],
-          "direction": "io"
-        },
-        "flash_d1": {
-          "type": "io",
-          "pins": [
-            "109"
-          ],
-          "direction": "io"
-        },
-        "flash_d2": {
-          "type": "io",
-          "pins": [
-            "11"
-          ],
-          "direction": "io"
-        },
-        "flash_d3": {
-          "type": "io",
-          "pins": [
-            "110"
-          ],
-          "direction": "io"
+          "direction": "io",
+          "type": "io"
         }
       },
       "cpu_jtag": {
         "cpu_jtag_trst": {
-          "type": "io",
           "pins": [
-            "111"
+            "138"
           ],
-          "direction": "i"
+          "direction": "i",
+          "type": "io"
         },
         "cpu_jtag_tck": {
-          "type": "io",
           "pins": [
-            "112"
+            "139"
           ],
-          "direction": "i"
+          "direction": "i",
+          "type": "io"
         },
         "cpu_jtag_tms": {
-          "type": "io",
           "pins": [
-            "116"
+            "14"
           ],
-          "direction": "i"
+          "direction": "i",
+          "type": "io"
         },
         "cpu_jtag_tdi": {
-          "type": "io",
           "pins": [
-            "117"
+            "140"
           ],
-          "direction": "i"
+          "direction": "i",
+          "type": "io"
         },
         "cpu_jtag_tdo": {
-          "type": "io",
           "pins": [
-            "98"
+            "141"
           ],
-          "direction": "o"
+          "direction": "o",
+          "type": "io"
         }
       },
       "user_spi_0": {
         "user_spi_0_sck": {
-          "type": "io",
           "pins": [
-            "122"
+            "98"
           ],
-          "direction": "o"
+          "direction": "o",
+          "type": "io"
         },
         "user_spi_0_mosi": {
-          "type": "io",
           "pins": [
-            "123"
+            "99"
           ],
-          "direction": "o"
+          "direction": "o",
+          "type": "io"
         },
         "user_spi_0_miso": {
-          "type": "io",
           "pins": [
-            "124"
+            "10"
           ],
-          "direction": "i"
+          "direction": "i",
+          "type": "io"
         },
         "user_spi_0_csn": {
-          "type": "io",
           "pins": [
-            "125"
+            "100"
           ],
-          "direction": "o"
+          "direction": "o",
+          "type": "io"
         }
       },
       "user_spi_1": {
         "user_spi_1_sck": {
-          "type": "io",
           "pins": [
-            "138"
+            "42"
           ],
-          "direction": "o"
+          "direction": "o",
+          "type": "io"
         },
         "user_spi_1_mosi": {
-          "type": "io",
           "pins": [
-            "139"
+            "43"
           ],
-          "direction": "o"
+          "direction": "o",
+          "type": "io"
         },
         "user_spi_1_miso": {
-          "type": "io",
           "pins": [
-            "14"
+            "44"
           ],
-          "direction": "i"
+          "direction": "i",
+          "type": "io"
         },
         "user_spi_1_csn": {
-          "type": "io",
           "pins": [
-            "140"
+            "45"
           ],
-          "direction": "o"
+          "direction": "o",
+          "type": "io"
         }
       },
       "user_spi_2": {
         "user_spi_2_sck": {
-          "type": "io",
           "pins": [
-            "42"
+            "82"
           ],
-          "direction": "o"
+          "direction": "o",
+          "type": "io"
         },
         "user_spi_2_mosi": {
-          "type": "io",
           "pins": [
-            "43"
+            "83"
           ],
-          "direction": "o"
+          "direction": "o",
+          "type": "io"
         },
         "user_spi_2_miso": {
-          "type": "io",
           "pins": [
-            "44"
+            "84"
           ],
-          "direction": "i"
+          "direction": "i",
+          "type": "io"
         },
         "user_spi_2_csn": {
-          "type": "io",
           "pins": [
-            "45"
+            "85"
           ],
-          "direction": "o"
+          "direction": "o",
+          "type": "io"
         }
       },
       "i2c_0": {
         "i2c_0_scl": {
-          "type": "io",
           "pins": [
-            "82"
+            "90"
           ],
-          "direction": "io"
+          "direction": "io",
+          "type": "io"
         },
         "i2c_0_sda": {
-          "type": "io",
           "pins": [
-            "83"
+            "91"
           ],
-          "direction": "io"
+          "direction": "io",
+          "type": "io"
         }
       },
       "i2c_1": {
         "i2c_1_scl": {
-          "type": "io",
           "pins": [
-            "90"
+            "92"
           ],
-          "direction": "io"
+          "direction": "io",
+          "type": "io"
         },
         "i2c_1_sda": {
-          "type": "io",
           "pins": [
-            "91"
+            "93"
           ],
-          "direction": "io"
+          "direction": "io",
+          "type": "io"
         }
       },
       "motor_pwm0": {
         "motor_pwm0_pwm": {
-          "type": "io",
           "pins": [
-            "141"
+            "46"
           ],
-          "direction": "o"
+          "direction": "o",
+          "type": "io"
         },
         "motor_pwm0_dir": {
-          "type": "io",
           "pins": [
-            "142"
+            "47"
           ],
-          "direction": "o"
+          "direction": "o",
+          "type": "io"
         },
         "motor_pwm0_stop": {
-          "type": "io",
           "pins": [
-            "143"
+            "48"
           ],
-          "direction": "i"
+          "direction": "i",
+          "type": "io"
         }
       },
       "motor_pwm1": {
         "motor_pwm1_pwm": {
-          "type": "io",
-          "pins": [
-            "84"
-          ],
-          "direction": "o"
-        },
-        "motor_pwm1_dir": {
-          "type": "io",
-          "pins": [
-            "85"
-          ],
-          "direction": "o"
-        },
-        "motor_pwm1_stop": {
-          "type": "io",
           "pins": [
             "86"
           ],
-          "direction": "i"
+          "direction": "o",
+          "type": "io"
+        },
+        "motor_pwm1_dir": {
+          "pins": [
+            "87"
+          ],
+          "direction": "o",
+          "type": "io"
+        },
+        "motor_pwm1_stop": {
+          "pins": [
+            "88"
+          ],
+          "direction": "i",
+          "type": "io"
         }
       },
       "motor_pwm2": {
         "motor_pwm2_pwm": {
-          "type": "io",
-          "pins": [
-            "92"
-          ],
-          "direction": "o"
-        },
-        "motor_pwm2_dir": {
-          "type": "io",
-          "pins": [
-            "93"
-          ],
-          "direction": "o"
-        },
-        "motor_pwm2_stop": {
-          "type": "io",
           "pins": [
             "94"
           ],
-          "direction": "i"
+          "direction": "o",
+          "type": "io"
+        },
+        "motor_pwm2_dir": {
+          "pins": [
+            "95"
+          ],
+          "direction": "o",
+          "type": "io"
+        },
+        "motor_pwm2_stop": {
+          "pins": [
+            "96"
+          ],
+          "direction": "i",
+          "type": "io"
         }
       },
       "motor_pwm3": {
         "motor_pwm3_pwm": {
-          "type": "io",
           "pins": [
-            "15"
+            "116"
           ],
-          "direction": "o"
+          "direction": "o",
+          "type": "io"
         },
         "motor_pwm3_dir": {
-          "type": "io",
           "pins": [
-            "16"
+            "117"
           ],
-          "direction": "o"
+          "direction": "o",
+          "type": "io"
         },
         "motor_pwm3_stop": {
-          "type": "io",
           "pins": [
-            "87"
+            "118"
           ],
-          "direction": "i"
+          "direction": "i",
+          "type": "io"
         }
       },
       "motor_pwm4": {
         "motor_pwm4_pwm": {
-          "type": "io",
           "pins": [
-            "88"
+            "119"
           ],
-          "direction": "o"
+          "direction": "o",
+          "type": "io"
         },
         "motor_pwm4_dir": {
-          "type": "io",
           "pins": [
-            "99"
+            "12"
           ],
-          "direction": "o"
+          "direction": "o",
+          "type": "io"
         },
         "motor_pwm4_stop": {
-          "type": "io",
           "pins": [
-            "95"
+            "120"
           ],
-          "direction": "i"
+          "direction": "i",
+          "type": "io"
         }
       },
       "motor_pwm5": {
         "motor_pwm5_pwm": {
-          "type": "io",
           "pins": [
-            "13"
+            "106"
           ],
-          "direction": "o"
+          "direction": "o",
+          "type": "io"
         },
         "motor_pwm5_dir": {
-          "type": "io",
           "pins": [
-            "130"
+            "107"
           ],
-          "direction": "o"
+          "direction": "o",
+          "type": "io"
         },
         "motor_pwm5_stop": {
-          "type": "io",
           "pins": [
-            "131"
+            "108"
           ],
-          "direction": "i"
+          "direction": "i",
+          "type": "io"
         }
       },
       "motor_pwm6": {
         "motor_pwm6_pwm": {
-          "type": "io",
           "pins": [
-            "132"
+            "109"
           ],
-          "direction": "o"
+          "direction": "o",
+          "type": "io"
         },
         "motor_pwm6_dir": {
-          "type": "io",
           "pins": [
-            "133"
+            "11"
           ],
-          "direction": "o"
+          "direction": "o",
+          "type": "io"
         },
         "motor_pwm6_stop": {
-          "type": "io",
           "pins": [
-            "134"
+            "110"
           ],
-          "direction": "i"
+          "direction": "i",
+          "type": "io"
         }
       },
       "motor_pwm7": {
         "motor_pwm7_pwm": {
-          "type": "io",
           "pins": [
-            "135"
+            "111"
           ],
-          "direction": "o"
+          "direction": "o",
+          "type": "io"
         },
         "motor_pwm7_dir": {
-          "type": "io",
           "pins": [
-            "136"
+            "112"
           ],
-          "direction": "o"
+          "direction": "o",
+          "type": "io"
         },
         "motor_pwm7_stop": {
-          "type": "io",
           "pins": [
-            "18"
+            "13"
           ],
-          "direction": "i"
+          "direction": "i",
+          "type": "io"
         }
       },
       "motor_pwm8": {
         "motor_pwm8_pwm": {
-          "type": "io",
           "pins": [
-            "19"
+            "130"
           ],
-          "direction": "o"
+          "direction": "o",
+          "type": "io"
         },
         "motor_pwm8_dir": {
-          "type": "io",
           "pins": [
-            "2"
+            "131"
           ],
-          "direction": "o"
+          "direction": "o",
+          "type": "io"
         },
         "motor_pwm8_stop": {
-          "type": "io",
           "pins": [
-            "20"
+            "132"
           ],
-          "direction": "i"
+          "direction": "i",
+          "type": "io"
         }
       },
       "motor_pwm9": {
         "motor_pwm9_pwm": {
-          "type": "io",
           "pins": [
-            "21"
+            "18"
           ],
-          "direction": "o"
+          "direction": "o",
+          "type": "io"
         },
         "motor_pwm9_dir": {
-          "type": "io",
           "pins": [
-            "22"
+            "19"
           ],
-          "direction": "o"
+          "direction": "o",
+          "type": "io"
         },
         "motor_pwm9_stop": {
-          "type": "io",
           "pins": [
-            "23"
+            "2"
           ],
-          "direction": "i"
+          "direction": "i",
+          "type": "io"
         }
       },
       "uart_0": {
         "uart_0_tx": {
-          "type": "io",
           "pins": [
-            "119"
+            "20"
           ],
-          "direction": "o"
+          "direction": "o",
+          "type": "io"
         },
         "uart_0_rx": {
-          "type": "io",
           "pins": [
-            "12"
+            "21"
           ],
-          "direction": "i"
+          "direction": "i",
+          "type": "io"
         }
       },
       "uart_1": {
         "uart_1_tx": {
-          "type": "io",
           "pins": [
-            "120"
+            "22"
           ],
-          "direction": "o"
+          "direction": "o",
+          "type": "io"
         },
         "uart_1_rx": {
-          "type": "io",
           "pins": [
-            "24"
+            "23"
           ],
-          "direction": "i"
+          "direction": "i",
+          "type": "io"
         }
       },
       "gpio_0": {
-        "gpio_0_gpio0": {
-          "type": "io",
+        "gpio_0_gpio": {
           "pins": [
-            "26"
-          ],
-          "direction": "io"
-        },
-        "gpio_0_gpio1": {
-          "type": "io",
-          "pins": [
-            "27"
-          ],
-          "direction": "io"
-        },
-        "gpio_0_gpio2": {
-          "type": "io",
-          "pins": [
-            "28"
-          ],
-          "direction": "io"
-        },
-        "gpio_0_gpio3": {
-          "type": "io",
-          "pins": [
-            "29"
-          ],
-          "direction": "io"
-        },
-        "gpio_0_gpio4": {
-          "type": "io",
-          "pins": [
-            "3"
-          ],
-          "direction": "io"
-        },
-        "gpio_0_gpio5": {
-          "type": "io",
-          "pins": [
-            "30"
-          ],
-          "direction": "io"
-        },
-        "gpio_0_gpio6": {
-          "type": "io",
-          "pins": [
+            "24",
+            "26",
+            "27",
+            "28",
+            "29",
+            "3",
+            "30",
             "31"
           ],
-          "direction": "io"
-        },
-        "gpio_0_gpio7": {
-          "type": "io",
-          "pins": [
-            "32"
-          ],
-          "direction": "io"
+          "direction": "io",
+          "type": "io"
         }
       },
       "gpio_1": {
-        "gpio_1_gpio0": {
-          "type": "io",
+        "gpio_1_gpio": {
           "pins": [
-            "34"
-          ],
-          "direction": "io"
-        },
-        "gpio_1_gpio1": {
-          "type": "io",
-          "pins": [
-            "35"
-          ],
-          "direction": "io"
-        },
-        "gpio_1_gpio2": {
-          "type": "io",
-          "pins": [
-            "36"
-          ],
-          "direction": "io"
-        },
-        "gpio_1_gpio3": {
-          "type": "io",
-          "pins": [
-            "37"
-          ],
-          "direction": "io"
-        },
-        "gpio_1_gpio4": {
-          "type": "io",
-          "pins": [
-            "38"
-          ],
-          "direction": "io"
-        },
-        "gpio_1_gpio5": {
-          "type": "io",
-          "pins": [
-            "39"
-          ],
-          "direction": "io"
-        },
-        "gpio_1_gpio6": {
-          "type": "io",
-          "pins": [
+            "32",
+            "34",
+            "35",
+            "36",
+            "37",
+            "38",
+            "39",
             "4"
           ],
-          "direction": "io"
-        },
-        "gpio_1_gpio7": {
-          "type": "io",
-          "pins": [
-            "40"
-          ],
-          "direction": "io"
+          "direction": "io",
+          "type": "io"
         }
       }
     }
@@ -783,12 +678,12 @@
                   }
                 }
               },
-              "d0": {
+              "d": {
                 "type": "interface",
                 "members": {
                   "o": {
                     "type": "port",
-                    "name": "flash__d0__o",
+                    "name": "flash__d__o",
                     "dir": "out",
                     "width": 1,
                     "signed": false,
@@ -796,7 +691,7 @@
                   },
                   "oe": {
                     "type": "port",
-                    "name": "flash__d0__oe",
+                    "name": "flash__d__oe",
                     "dir": "out",
                     "width": 1,
                     "signed": false,
@@ -804,112 +699,7 @@
                   },
                   "i": {
                     "type": "port",
-                    "name": "flash__d0__i",
-                    "dir": "in",
-                    "width": 1,
-                    "signed": false,
-                    "init": "0"
-                  }
-                },
-                "annotations": {
-                  "https://api.chipflow.com/schemas/0/pin-annotation": {
-                    "direction": "io",
-                    "width": 1
-                  }
-                }
-              },
-              "d1": {
-                "type": "interface",
-                "members": {
-                  "o": {
-                    "type": "port",
-                    "name": "flash__d1__o",
-                    "dir": "out",
-                    "width": 1,
-                    "signed": false,
-                    "init": "0"
-                  },
-                  "oe": {
-                    "type": "port",
-                    "name": "flash__d1__oe",
-                    "dir": "out",
-                    "width": 1,
-                    "signed": false,
-                    "init": "0"
-                  },
-                  "i": {
-                    "type": "port",
-                    "name": "flash__d1__i",
-                    "dir": "in",
-                    "width": 1,
-                    "signed": false,
-                    "init": "0"
-                  }
-                },
-                "annotations": {
-                  "https://api.chipflow.com/schemas/0/pin-annotation": {
-                    "direction": "io",
-                    "width": 1
-                  }
-                }
-              },
-              "d2": {
-                "type": "interface",
-                "members": {
-                  "o": {
-                    "type": "port",
-                    "name": "flash__d2__o",
-                    "dir": "out",
-                    "width": 1,
-                    "signed": false,
-                    "init": "0"
-                  },
-                  "oe": {
-                    "type": "port",
-                    "name": "flash__d2__oe",
-                    "dir": "out",
-                    "width": 1,
-                    "signed": false,
-                    "init": "0"
-                  },
-                  "i": {
-                    "type": "port",
-                    "name": "flash__d2__i",
-                    "dir": "in",
-                    "width": 1,
-                    "signed": false,
-                    "init": "0"
-                  }
-                },
-                "annotations": {
-                  "https://api.chipflow.com/schemas/0/pin-annotation": {
-                    "direction": "io",
-                    "width": 1
-                  }
-                }
-              },
-              "d3": {
-                "type": "interface",
-                "members": {
-                  "o": {
-                    "type": "port",
-                    "name": "flash__d3__o",
-                    "dir": "out",
-                    "width": 1,
-                    "signed": false,
-                    "init": "0"
-                  },
-                  "oe": {
-                    "type": "port",
-                    "name": "flash__d3__oe",
-                    "dir": "out",
-                    "width": 1,
-                    "signed": false,
-                    "init": "0"
-                  },
-                  "i": {
-                    "type": "port",
-                    "name": "flash__d3__i",
+                    "name": "flash__d__i",
                     "dir": "in",
                     "width": 1,
                     "signed": false,
@@ -2146,30 +1936,30 @@
           "gpio_0": {
             "type": "interface",
             "members": {
-              "gpio0": {
+              "gpio": {
                 "type": "interface",
                 "members": {
                   "o": {
                     "type": "port",
-                    "name": "gpio_0__gpio0__o",
+                    "name": "gpio_0__gpio__o",
                     "dir": "out",
-                    "width": 1,
+                    "width": 8,
                     "signed": false,
                     "init": "0"
                   },
                   "oe": {
                     "type": "port",
-                    "name": "gpio_0__gpio0__oe",
+                    "name": "gpio_0__gpio__oe",
                     "dir": "out",
-                    "width": 1,
+                    "width": 8,
                     "signed": false,
                     "init": "0"
                   },
                   "i": {
                     "type": "port",
-                    "name": "gpio_0__gpio0__i",
+                    "name": "gpio_0__gpio__i",
                     "dir": "in",
-                    "width": 1,
+                    "width": 8,
                     "signed": false,
                     "init": "0"
                   }
@@ -2177,252 +1967,7 @@
                 "annotations": {
                   "https://api.chipflow.com/schemas/0/pin-annotation": {
                     "direction": "io",
-                    "width": 1
-                  }
-                }
-              },
-              "gpio1": {
-                "type": "interface",
-                "members": {
-                  "o": {
-                    "type": "port",
-                    "name": "gpio_0__gpio1__o",
-                    "dir": "out",
-                    "width": 1,
-                    "signed": false,
-                    "init": "0"
-                  },
-                  "oe": {
-                    "type": "port",
-                    "name": "gpio_0__gpio1__oe",
-                    "dir": "out",
-                    "width": 1,
-                    "signed": false,
-                    "init": "0"
-                  },
-                  "i": {
-                    "type": "port",
-                    "name": "gpio_0__gpio1__i",
-                    "dir": "in",
-                    "width": 1,
-                    "signed": false,
-                    "init": "0"
-                  }
-                },
-                "annotations": {
-                  "https://api.chipflow.com/schemas/0/pin-annotation": {
-                    "direction": "io",
-                    "width": 1
-                  }
-                }
-              },
-              "gpio2": {
-                "type": "interface",
-                "members": {
-                  "o": {
-                    "type": "port",
-                    "name": "gpio_0__gpio2__o",
-                    "dir": "out",
-                    "width": 1,
-                    "signed": false,
-                    "init": "0"
-                  },
-                  "oe": {
-                    "type": "port",
-                    "name": "gpio_0__gpio2__oe",
-                    "dir": "out",
-                    "width": 1,
-                    "signed": false,
-                    "init": "0"
-                  },
-                  "i": {
-                    "type": "port",
-                    "name": "gpio_0__gpio2__i",
-                    "dir": "in",
-                    "width": 1,
-                    "signed": false,
-                    "init": "0"
-                  }
-                },
-                "annotations": {
-                  "https://api.chipflow.com/schemas/0/pin-annotation": {
-                    "direction": "io",
-                    "width": 1
-                  }
-                }
-              },
-              "gpio3": {
-                "type": "interface",
-                "members": {
-                  "o": {
-                    "type": "port",
-                    "name": "gpio_0__gpio3__o",
-                    "dir": "out",
-                    "width": 1,
-                    "signed": false,
-                    "init": "0"
-                  },
-                  "oe": {
-                    "type": "port",
-                    "name": "gpio_0__gpio3__oe",
-                    "dir": "out",
-                    "width": 1,
-                    "signed": false,
-                    "init": "0"
-                  },
-                  "i": {
-                    "type": "port",
-                    "name": "gpio_0__gpio3__i",
-                    "dir": "in",
-                    "width": 1,
-                    "signed": false,
-                    "init": "0"
-                  }
-                },
-                "annotations": {
-                  "https://api.chipflow.com/schemas/0/pin-annotation": {
-                    "direction": "io",
-                    "width": 1
-                  }
-                }
-              },
-              "gpio4": {
-                "type": "interface",
-                "members": {
-                  "o": {
-                    "type": "port",
-                    "name": "gpio_0__gpio4__o",
-                    "dir": "out",
-                    "width": 1,
-                    "signed": false,
-                    "init": "0"
-                  },
-                  "oe": {
-                    "type": "port",
-                    "name": "gpio_0__gpio4__oe",
-                    "dir": "out",
-                    "width": 1,
-                    "signed": false,
-                    "init": "0"
-                  },
-                  "i": {
-                    "type": "port",
-                    "name": "gpio_0__gpio4__i",
-                    "dir": "in",
-                    "width": 1,
-                    "signed": false,
-                    "init": "0"
-                  }
-                },
-                "annotations": {
-                  "https://api.chipflow.com/schemas/0/pin-annotation": {
-                    "direction": "io",
-                    "width": 1
-                  }
-                }
-              },
-              "gpio5": {
-                "type": "interface",
-                "members": {
-                  "o": {
-                    "type": "port",
-                    "name": "gpio_0__gpio5__o",
-                    "dir": "out",
-                    "width": 1,
-                    "signed": false,
-                    "init": "0"
-                  },
-                  "oe": {
-                    "type": "port",
-                    "name": "gpio_0__gpio5__oe",
-                    "dir": "out",
-                    "width": 1,
-                    "signed": false,
-                    "init": "0"
-                  },
-                  "i": {
-                    "type": "port",
-                    "name": "gpio_0__gpio5__i",
-                    "dir": "in",
-                    "width": 1,
-                    "signed": false,
-                    "init": "0"
-                  }
-                },
-                "annotations": {
-                  "https://api.chipflow.com/schemas/0/pin-annotation": {
-                    "direction": "io",
-                    "width": 1
-                  }
-                }
-              },
-              "gpio6": {
-                "type": "interface",
-                "members": {
-                  "o": {
-                    "type": "port",
-                    "name": "gpio_0__gpio6__o",
-                    "dir": "out",
-                    "width": 1,
-                    "signed": false,
-                    "init": "0"
-                  },
-                  "oe": {
-                    "type": "port",
-                    "name": "gpio_0__gpio6__oe",
-                    "dir": "out",
-                    "width": 1,
-                    "signed": false,
-                    "init": "0"
-                  },
-                  "i": {
-                    "type": "port",
-                    "name": "gpio_0__gpio6__i",
-                    "dir": "in",
-                    "width": 1,
-                    "signed": false,
-                    "init": "0"
-                  }
-                },
-                "annotations": {
-                  "https://api.chipflow.com/schemas/0/pin-annotation": {
-                    "direction": "io",
-                    "width": 1
-                  }
-                }
-              },
-              "gpio7": {
-                "type": "interface",
-                "members": {
-                  "o": {
-                    "type": "port",
-                    "name": "gpio_0__gpio7__o",
-                    "dir": "out",
-                    "width": 1,
-                    "signed": false,
-                    "init": "0"
-                  },
-                  "oe": {
-                    "type": "port",
-                    "name": "gpio_0__gpio7__oe",
-                    "dir": "out",
-                    "width": 1,
-                    "signed": false,
-                    "init": "0"
-                  },
-                  "i": {
-                    "type": "port",
-                    "name": "gpio_0__gpio7__i",
-                    "dir": "in",
-                    "width": 1,
-                    "signed": false,
-                    "init": "0"
-                  }
-                },
-                "annotations": {
-                  "https://api.chipflow.com/schemas/0/pin-annotation": {
-                    "direction": "io",
-                    "width": 1
+                    "width": 8
                   }
                 }
               }
@@ -2432,30 +1977,30 @@
           "gpio_1": {
             "type": "interface",
             "members": {
-              "gpio0": {
+              "gpio": {
                 "type": "interface",
                 "members": {
                   "o": {
                     "type": "port",
-                    "name": "gpio_1__gpio0__o",
+                    "name": "gpio_1__gpio__o",
                     "dir": "out",
-                    "width": 1,
+                    "width": 8,
                     "signed": false,
                     "init": "0"
                   },
                   "oe": {
                     "type": "port",
-                    "name": "gpio_1__gpio0__oe",
+                    "name": "gpio_1__gpio__oe",
                     "dir": "out",
-                    "width": 1,
+                    "width": 8,
                     "signed": false,
                     "init": "0"
                   },
                   "i": {
                     "type": "port",
-                    "name": "gpio_1__gpio0__i",
+                    "name": "gpio_1__gpio__i",
                     "dir": "in",
-                    "width": 1,
+                    "width": 8,
                     "signed": false,
                     "init": "0"
                   }
@@ -2463,252 +2008,7 @@
                 "annotations": {
                   "https://api.chipflow.com/schemas/0/pin-annotation": {
                     "direction": "io",
-                    "width": 1
-                  }
-                }
-              },
-              "gpio1": {
-                "type": "interface",
-                "members": {
-                  "o": {
-                    "type": "port",
-                    "name": "gpio_1__gpio1__o",
-                    "dir": "out",
-                    "width": 1,
-                    "signed": false,
-                    "init": "0"
-                  },
-                  "oe": {
-                    "type": "port",
-                    "name": "gpio_1__gpio1__oe",
-                    "dir": "out",
-                    "width": 1,
-                    "signed": false,
-                    "init": "0"
-                  },
-                  "i": {
-                    "type": "port",
-                    "name": "gpio_1__gpio1__i",
-                    "dir": "in",
-                    "width": 1,
-                    "signed": false,
-                    "init": "0"
-                  }
-                },
-                "annotations": {
-                  "https://api.chipflow.com/schemas/0/pin-annotation": {
-                    "direction": "io",
-                    "width": 1
-                  }
-                }
-              },
-              "gpio2": {
-                "type": "interface",
-                "members": {
-                  "o": {
-                    "type": "port",
-                    "name": "gpio_1__gpio2__o",
-                    "dir": "out",
-                    "width": 1,
-                    "signed": false,
-                    "init": "0"
-                  },
-                  "oe": {
-                    "type": "port",
-                    "name": "gpio_1__gpio2__oe",
-                    "dir": "out",
-                    "width": 1,
-                    "signed": false,
-                    "init": "0"
-                  },
-                  "i": {
-                    "type": "port",
-                    "name": "gpio_1__gpio2__i",
-                    "dir": "in",
-                    "width": 1,
-                    "signed": false,
-                    "init": "0"
-                  }
-                },
-                "annotations": {
-                  "https://api.chipflow.com/schemas/0/pin-annotation": {
-                    "direction": "io",
-                    "width": 1
-                  }
-                }
-              },
-              "gpio3": {
-                "type": "interface",
-                "members": {
-                  "o": {
-                    "type": "port",
-                    "name": "gpio_1__gpio3__o",
-                    "dir": "out",
-                    "width": 1,
-                    "signed": false,
-                    "init": "0"
-                  },
-                  "oe": {
-                    "type": "port",
-                    "name": "gpio_1__gpio3__oe",
-                    "dir": "out",
-                    "width": 1,
-                    "signed": false,
-                    "init": "0"
-                  },
-                  "i": {
-                    "type": "port",
-                    "name": "gpio_1__gpio3__i",
-                    "dir": "in",
-                    "width": 1,
-                    "signed": false,
-                    "init": "0"
-                  }
-                },
-                "annotations": {
-                  "https://api.chipflow.com/schemas/0/pin-annotation": {
-                    "direction": "io",
-                    "width": 1
-                  }
-                }
-              },
-              "gpio4": {
-                "type": "interface",
-                "members": {
-                  "o": {
-                    "type": "port",
-                    "name": "gpio_1__gpio4__o",
-                    "dir": "out",
-                    "width": 1,
-                    "signed": false,
-                    "init": "0"
-                  },
-                  "oe": {
-                    "type": "port",
-                    "name": "gpio_1__gpio4__oe",
-                    "dir": "out",
-                    "width": 1,
-                    "signed": false,
-                    "init": "0"
-                  },
-                  "i": {
-                    "type": "port",
-                    "name": "gpio_1__gpio4__i",
-                    "dir": "in",
-                    "width": 1,
-                    "signed": false,
-                    "init": "0"
-                  }
-                },
-                "annotations": {
-                  "https://api.chipflow.com/schemas/0/pin-annotation": {
-                    "direction": "io",
-                    "width": 1
-                  }
-                }
-              },
-              "gpio5": {
-                "type": "interface",
-                "members": {
-                  "o": {
-                    "type": "port",
-                    "name": "gpio_1__gpio5__o",
-                    "dir": "out",
-                    "width": 1,
-                    "signed": false,
-                    "init": "0"
-                  },
-                  "oe": {
-                    "type": "port",
-                    "name": "gpio_1__gpio5__oe",
-                    "dir": "out",
-                    "width": 1,
-                    "signed": false,
-                    "init": "0"
-                  },
-                  "i": {
-                    "type": "port",
-                    "name": "gpio_1__gpio5__i",
-                    "dir": "in",
-                    "width": 1,
-                    "signed": false,
-                    "init": "0"
-                  }
-                },
-                "annotations": {
-                  "https://api.chipflow.com/schemas/0/pin-annotation": {
-                    "direction": "io",
-                    "width": 1
-                  }
-                }
-              },
-              "gpio6": {
-                "type": "interface",
-                "members": {
-                  "o": {
-                    "type": "port",
-                    "name": "gpio_1__gpio6__o",
-                    "dir": "out",
-                    "width": 1,
-                    "signed": false,
-                    "init": "0"
-                  },
-                  "oe": {
-                    "type": "port",
-                    "name": "gpio_1__gpio6__oe",
-                    "dir": "out",
-                    "width": 1,
-                    "signed": false,
-                    "init": "0"
-                  },
-                  "i": {
-                    "type": "port",
-                    "name": "gpio_1__gpio6__i",
-                    "dir": "in",
-                    "width": 1,
-                    "signed": false,
-                    "init": "0"
-                  }
-                },
-                "annotations": {
-                  "https://api.chipflow.com/schemas/0/pin-annotation": {
-                    "direction": "io",
-                    "width": 1
-                  }
-                }
-              },
-              "gpio7": {
-                "type": "interface",
-                "members": {
-                  "o": {
-                    "type": "port",
-                    "name": "gpio_1__gpio7__o",
-                    "dir": "out",
-                    "width": 1,
-                    "signed": false,
-                    "init": "0"
-                  },
-                  "oe": {
-                    "type": "port",
-                    "name": "gpio_1__gpio7__oe",
-                    "dir": "out",
-                    "width": 1,
-                    "signed": false,
-                    "init": "0"
-                  },
-                  "i": {
-                    "type": "port",
-                    "name": "gpio_1__gpio7__i",
-                    "dir": "in",
-                    "width": 1,
-                    "signed": false,
-                    "init": "0"
-                  }
-                },
-                "annotations": {
-                  "https://api.chipflow.com/schemas/0/pin-annotation": {
-                    "direction": "io",
-                    "width": 1
+                    "width": 8
                   }
                 }
               }

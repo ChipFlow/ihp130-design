@@ -5,7 +5,7 @@
 groups = ["default", "test"]
 strategy = []
 lock_version = "4.5.0"
-content_hash = "sha256:e8cccbcbfc0a411e9fe82d4fc133df1909ea2d7ff4684b84f3e4265702b5c583"
+content_hash = "sha256:3ecea092cca5e661846ec20d76b8bacc8c44cfa9fd19f8471185776bdbff0aa3"
 
 [[metadata.targets]]
 requires_python = "~=3.13"
@@ -74,11 +74,11 @@ dependencies = [
 
 [[package]]
 name = "amaranth-orchard"
-version = "0.1.dev45"
+version = "0.1.dev46"
 requires_python = ">=3.10"
 git = "https://github.com/ChipFlow/amaranth-orchard"
-ref = "replace-providers"
-revision = "ff161f2b7062319066fac5a42cad060962ffd654"
+ref = "multi-oe"
+revision = "9f8a6267658f349b94450e5f38edbf5798efcdb6"
 summary = "curated collection of Amaranth cores"
 dependencies = [
     "amaranth-soc @ git+https://github.com/amaranth-lang/amaranth-soc",
@@ -238,8 +238,8 @@ name = "chipflow-lib"
 version = "0.1.1.dev130"
 requires_python = ">=3.10"
 git = "https://github.com/ChipFlow/chipflow-lib.git"
-ref = "old-backend-api"
-revision = "463c1e39aae2a2c1cabe2c87137c5e7a127082c0"
+ref = "multi-oe"
+revision = "1cbea3ac163af70cde7ddcc96ce63fcb3040f1ea"
 summary = "ChipFlow common tools."
 dependencies = [
     "amaranth-boards @ git+https://github.com/amaranth-lang/amaranth-boards",

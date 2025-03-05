@@ -14,21 +14,21 @@ using namespace cxxrtl_design;
 int main(int argc, char **argv) {
     p_sim__top top;
 
-    spiflash_model flash("flash", top.p_flash____clk__o, top.p_flash____csn__o,
-        top.p_flash____d__o, top.p_flash____d__oe, top.p_flash____d__i);
+    spiflash_model flash("flash", top.p_flash____clk____o, top.p_flash____csn____o,
+        top.p_flash____d____o, top.p_flash____d____oe, top.p_flash____d____i);
 
-    uart_model uart_0("uart_0", top.p_uart__0____tx__o, top.p_uart__0____rx__i);
-    uart_model uart_1("uart_1", top.p_uart__1____tx__o, top.p_uart__1____rx__i);
+    uart_model uart_0("uart_0", top.p_uart__0____tx____o, top.p_uart__0____rx____i);
+    uart_model uart_1("uart_1", top.p_uart__1____tx____o, top.p_uart__1____rx____i);
 
-    gpio_model gpio_0("gpio_0", top.p_gpio__0____o, top.p_gpio__0____oe, top.p_gpio__0____i);
-    gpio_model gpio_1("gpio_1", top.p_gpio__1____o, top.p_gpio__1____oe, top.p_gpio__1____i);
+    gpio_model gpio_0("gpio_0", top.p_gpio__0____gpio____o, top.p_gpio__0____gpio____oe, top.p_gpio__0____gpio____i);
+    gpio_model gpio_1("gpio_1", top.p_gpio__1____gpio____o, top.p_gpio__1____gpio____oe, top.p_gpio__1____gpio____i);
 
-    spi_model spi_0("spi_0", top.p_user__spi__0____sck__o, top.p_user__spi__0____csn__o, top.p_user__spi__0____mosi__o, top.p_user__spi__0____miso__i);
-    spi_model spi_1("spi_1", top.p_user__spi__1____sck__o, top.p_user__spi__1____csn__o, top.p_user__spi__1____mosi__o, top.p_user__spi__1____miso__i);
-    spi_model spi_2("spi_2", top.p_user__spi__2____sck__o, top.p_user__spi__2____csn__o, top.p_user__spi__2____mosi__o, top.p_user__spi__2____miso__i);
+    spi_model spi_0("spi_0", top.p_user__spi__0____sck____o, top.p_user__spi__0____csn____o, top.p_user__spi__0____mosi____o, top.p_user__spi__0____miso____i);
+    spi_model spi_1("spi_1", top.p_user__spi__1____sck____o, top.p_user__spi__1____csn____o, top.p_user__spi__1____mosi____o, top.p_user__spi__1____miso____i);
+    spi_model spi_2("spi_2", top.p_user__spi__2____sck____o, top.p_user__spi__2____csn____o, top.p_user__spi__2____mosi____o, top.p_user__spi__2____miso____i);
 
-    i2c_model i2c_0("i2c_0", top.p_i2c__0____sda__oe, top.p_i2c__0____sda__i, top.p_i2c__0____scl__oe, top.p_i2c__0____scl__i);
-    i2c_model i2c_1("i2c_1", top.p_i2c__1____sda__oe, top.p_i2c__1____sda__i, top.p_i2c__1____scl__oe, top.p_i2c__1____scl__i);
+    i2c_model i2c_0("i2c_0", top.p_i2c__0____sda____oe, top.p_i2c__0____sda____i, top.p_i2c__0____scl____oe, top.p_i2c__0____scl____i);
+    i2c_model i2c_1("i2c_1", top.p_i2c__1____sda____oe, top.p_i2c__1____sda____i, top.p_i2c__1____scl____oe, top.p_i2c__1____scl____i);
 
     cxxrtl::agent agent(cxxrtl::spool("spool.bin"), top);
     if (getenv("DEBUG")) // can also be done when a condition is violated, etc
