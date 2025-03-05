@@ -5,7 +5,7 @@
 groups = ["default", "test"]
 strategy = []
 lock_version = "4.5.0"
-content_hash = "sha256:3ecea092cca5e661846ec20d76b8bacc8c44cfa9fd19f8471185776bdbff0aa3"
+content_hash = "sha256:52ff5827699d07abe2ed8431d42ea741808d96c9f6408652827b3838d1b2a14a"
 
 [[metadata.targets]]
 requires_python = "~=3.13"
@@ -74,11 +74,11 @@ dependencies = [
 
 [[package]]
 name = "amaranth-orchard"
-version = "0.1.dev46"
+version = "0.1.dev47"
 requires_python = ">=3.10"
 git = "https://github.com/ChipFlow/amaranth-orchard"
 ref = "multi-oe"
-revision = "9f8a6267658f349b94450e5f38edbf5798efcdb6"
+revision = "2a463db7f23b721b7b751540ac8b359f1b965b54"
 summary = "curated collection of Amaranth cores"
 dependencies = [
     "amaranth-soc @ git+https://github.com/amaranth-lang/amaranth-soc",
@@ -591,22 +591,20 @@ files = [
 
 [[package]]
 name = "pytest"
-version = "7.2.2"
-requires_python = ">=3.7"
+version = "8.3.5"
+requires_python = ">=3.8"
 summary = "pytest: simple powerful testing with Python"
 dependencies = [
-    "attrs>=19.2.0",
     "colorama; sys_platform == \"win32\"",
     "exceptiongroup>=1.0.0rc8; python_version < \"3.11\"",
-    "importlib-metadata>=0.12; python_version < \"3.8\"",
     "iniconfig",
     "packaging",
-    "pluggy<2.0,>=0.12",
-    "tomli>=1.0.0; python_version < \"3.11\"",
+    "pluggy<2,>=1.5",
+    "tomli>=1; python_version < \"3.11\"",
 ]
 files = [
-    {file = "pytest-7.2.2-py3-none-any.whl", hash = "sha256:130328f552dcfac0b1cec75c12e3f005619dc5f874f0a06e8ff7263f0ee6225e"},
-    {file = "pytest-7.2.2.tar.gz", hash = "sha256:c99ab0c73aceb050f68929bc93af19ab6db0558791c6a0715723abe9d0ade9d4"},
+    {file = "pytest-8.3.5-py3-none-any.whl", hash = "sha256:c69214aa47deac29fad6c2a4f590b9c4a9fdb16a403176fe154b79c0b4d4d820"},
+    {file = "pytest-8.3.5.tar.gz", hash = "sha256:f4efe70cc14e511565ac476b57c279e12a855b11f48f212af1080ef2263d3845"},
 ]
 
 [[package]]
