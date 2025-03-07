@@ -12,8 +12,8 @@ __all__ = ["SPISignature", "SPISignature"]
 
 SPISignature = wiring.Signature({
     "sck": Out(OutputPinSignature(1)),
-    "mosi": Out(OutputPinSignature(1)),
-    "miso": Out(InputPinSignature(1)),
+    "copi": Out(OutputPinSignature(1)),
+    "cipo": Out(InputPinSignature(1)),
     "csn": Out(OutputPinSignature(1)),
 })
 
@@ -104,11 +104,11 @@ class SPIController(wiring.Component):
         with m.If(setup):
             m.d.sync += sr_o.eq(Cat(C(0, 1), sr_o))
         with m.If(latch):
-            m.d.sync += sr_i.eq(Cat(self.spi.miso.i, sr_i))
+            m.d.sync += sr_i.eq(Cat(self.spi.cipo.i, sr_i))
 
         m.d.comb += [
             self.d_recv.eq(sr_i),
-            self.spi.mosi.o.eq(sr_o[-1])
+            self.spi.copi.o.eq(sr_o[-1])
         ]
 
         return m

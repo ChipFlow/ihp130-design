@@ -9,11 +9,11 @@ module spi_wrap
            input          wstb,
            input  [4:0]   addr,
            input  [7:0]   wdata,
-           input          miso,
+           input          cipo,
 
            output [7:0]   rdata,
            output         sck,
-           output         mosi,
+           output         copi,
            output         csn,
            output reg     done
        );
@@ -49,10 +49,10 @@ module spi_wrap
     .bus__w_data(wdata),
     .bus__w_stb(wstb),
     .spi_pins__sck_o(sck),
-    .spi_pins__mosi_o(mosi),
+    .spi_pins__copi_o(copi),
     .spi_pins__csn_o(csn),
     .bus__r_data(rdata),
-    .spi_pins__miso_i(miso)
+    .spi_pins__cipo_i(cipo)
   );
 
 endmodule : spi_wrap

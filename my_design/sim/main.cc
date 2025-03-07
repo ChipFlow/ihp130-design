@@ -23,9 +23,9 @@ int main(int argc, char **argv) {
     gpio_model gpio_0("gpio_0", top.p_gpio__0____gpio____o, top.p_gpio__0____gpio____oe, top.p_gpio__0____gpio____i);
     gpio_model gpio_1("gpio_1", top.p_gpio__1____gpio____o, top.p_gpio__1____gpio____oe, top.p_gpio__1____gpio____i);
 
-    spi_model spi_0("spi_0", top.p_user__spi__0____sck____o, top.p_user__spi__0____csn____o, top.p_user__spi__0____mosi____o, top.p_user__spi__0____miso____i);
-    spi_model spi_1("spi_1", top.p_user__spi__1____sck____o, top.p_user__spi__1____csn____o, top.p_user__spi__1____mosi____o, top.p_user__spi__1____miso____i);
-    spi_model spi_2("spi_2", top.p_user__spi__2____sck____o, top.p_user__spi__2____csn____o, top.p_user__spi__2____mosi____o, top.p_user__spi__2____miso____i);
+    spi_model spi_0("spi_0", top.p_user__spi__0____sck____o, top.p_user__spi__0____csn____o, top.p_user__spi__0____copi____o, top.p_user__spi__0____cipo____i);
+    spi_model spi_1("spi_1", top.p_user__spi__1____sck____o, top.p_user__spi__1____csn____o, top.p_user__spi__1____copi____o, top.p_user__spi__1____cipo____i);
+    spi_model spi_2("spi_2", top.p_user__spi__2____sck____o, top.p_user__spi__2____csn____o, top.p_user__spi__2____copi____o, top.p_user__spi__2____cipo____i);
 
     i2c_model i2c_0("i2c_0", top.p_i2c__0____sda____oe, top.p_i2c__0____sda____i, top.p_i2c__0____scl____oe, top.p_i2c__0____scl____i);
     i2c_model i2c_1("i2c_1", top.p_i2c__1____sda____oe, top.p_i2c__1____sda____i, top.p_i2c__1____scl____oe, top.p_i2c__1____scl____i);

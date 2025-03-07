@@ -32,7 +32,7 @@ class SpiBfm(metaclass=utility_classes.Singleton):
         self.driver_queue = Queue(maxsize=1)
         self.cmd_mon_queue = Queue(maxsize=0)
         self.result_mon_queue = Queue(maxsize=0)
-        self.data_miso = 0
+        self.data_cipo = 0
         self.clk_div = 0
         self.width_num = 0
         self.width_en = 0
@@ -112,8 +112,8 @@ class SpiBfm(metaclass=utility_classes.Singleton):
                             await RisingEdge(self.dut.sck)
                         else:
                             await FallingEdge(self.dut.sck)
-                        """uvm_root().logger.info(f"I: {i} MOSI: {get_int(self.dut.mosi)}")"""
-                        write_result = write_result + get_int(self.dut.mosi)*(2**i)
+                        """uvm_root().logger.info(f"I: {i} MOSI: {get_int(self.dut.copi)}")"""
+                        write_result = write_result + get_int(self.dut.copi)*(2**i)
                     for i in range(0, 100):
                         await RisingEdge(self.dut.clk_test)
                     final_result = self.reverse_bits(write_result,8)
@@ -132,7 +132,7 @@ class SpiBfm(metaclass=utility_classes.Singleton):
         self.dut.wdata.value = 0
         self.dut.rstb.value = 0
         self.dut.wstb.value = 0
-        self.dut.miso.value = 0
+        self.dut.cipo.value = 0
         await FallingEdge(self.dut.clk_test)
         await FallingEdge(self.dut.clk_test)
         await FallingEdge(self.dut.clk_test)
@@ -156,18 +156,18 @@ class SpiBfm(metaclass=utility_classes.Singleton):
                     self.dut.wstb.value = 1
                     self.dut.addr.value = addr
                     self.dut.wdata.value = data
-                    data_wr_miso = bin(data)[2:]
-                    data_wr_rd = (8 - len(data_wr_miso)) * '0' + data_wr_miso
-                    self.data_miso = int(data_wr_rd,2)
-                    binary_miso = bin(self.data_miso)[2:]
-                    uvm_root().logger.info(f"DATA EXTEND: {data_wr_rd} DATA MISO: {self.data_miso } BINARY MISO: {binary_miso}")
+                    data_wr_cipo = bin(data)[2:]
+                    data_wr_rd = (8 - len(data_wr_cipo)) * '0' + data_wr_cipo
+                    self.data_cipo = int(data_wr_rd,2)
+                    binary_cipo = bin(self.data_cipo)[2:]
+                    uvm_root().logger.info(f"DATA EXTEND: {data_wr_rd} DATA MISO: {self.data_cipo } BINARY MISO: {binary_cipo}")
                     await FallingEdge(self.dut.clk_test)
                     self.dut.wstb.value = 0
                     await RisingEdge(self.dut.clk_test)
 
-                    for bit_miso in data_wr_rd:
-                        self.dut.miso.value = int(bit_miso)
-                        """uvm_root().logger.info(f"DATA MISO BIT: {int(bit_miso)}")"""
+                    for bit_cipo in data_wr_rd:
+                        self.dut.cipo.value = int(bit_cipo)
+                        """uvm_root().logger.info(f"DATA MISO BIT: {int(bit_cipo)}")"""
                         await RisingEdge(self.dut.clk_test)
                         await RisingEdge(self.dut.clk_test)
 
