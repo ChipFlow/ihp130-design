@@ -34,13 +34,13 @@ class BoardSocWrapper(wiring.Component):
                 "expansion",
                 0,
                 Subsignal("user_spi0_sck",  Pins("0+", conn=("gpio", 0), dir='o')),
-                Subsignal("user_spi0_mosi", Pins("0-", conn=("gpio", 0), dir='o')),
-                Subsignal("user_spi0_miso", Pins("1+", conn=("gpio", 0), dir='i')),
+                Subsignal("user_spi0_copi", Pins("0-", conn=("gpio", 0), dir='o')),
+                Subsignal("user_spi0_cipo", Pins("1+", conn=("gpio", 0), dir='i')),
                 Subsignal("user_spi0_csn", Pins("1-", conn=("gpio", 0), dir='o')),
 
                 Subsignal("user_spi1_sck",  Pins("2+", conn=("gpio", 0), dir='o')),
-                Subsignal("user_spi1_mosi", Pins("2-", conn=("gpio", 0), dir='o')),
-                Subsignal("user_spi1_miso", Pins("3+", conn=("gpio", 0), dir='i')),
+                Subsignal("user_spi1_copi", Pins("2-", conn=("gpio", 0), dir='o')),
+                Subsignal("user_spi1_cipo", Pins("3+", conn=("gpio", 0), dir='i')),
                 Subsignal("user_spi1_csn", Pins("3-", conn=("gpio", 0), dir='o')),
 
                 Subsignal("i2c0_sda", Pins("4+", conn=("gpio", 0), dir='io')),

@@ -367,10 +367,10 @@
     "user_spi_0_csn_o": {
       "pin": 22
     },
-    "user_spi_0_miso_i": {
+    "user_spi_0_cipo_i": {
       "pin": 21
     },
-    "user_spi_0_mosi_o": {
+    "user_spi_0_copi_o": {
       "pin": 20
     },
     "user_spi_0_sck_o": {
@@ -379,10 +379,10 @@
     "user_spi_1_csn_o": {
       "pin": 26
     },
-    "user_spi_1_miso_i": {
+    "user_spi_1_cipo_i": {
       "pin": 25
     },
-    "user_spi_1_mosi_o": {
+    "user_spi_1_copi_o": {
       "pin": 24
     },
     "user_spi_1_sck_o": {
@@ -391,10 +391,10 @@
     "user_spi_2_csn_o": {
       "pin": 30
     },
-    "user_spi_2_miso_i": {
+    "user_spi_2_cipo_i": {
       "pin": 29
     },
-    "user_spi_2_mosi_o": {
+    "user_spi_2_copi_o": {
       "pin": 28
     },
     "user_spi_2_sck_o": {

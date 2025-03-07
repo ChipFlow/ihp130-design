@@ -282,7 +282,7 @@
             "init": null
           }
         },
-        "user_spi_0_mosi": {
+        "user_spi_0_copi": {
           "pins": [
             "99"
           ],
@@ -293,7 +293,7 @@
             "init": null
           }
         },
-        "user_spi_0_miso": {
+        "user_spi_0_cipo": {
           "pins": [
             "10"
           ],
@@ -328,7 +328,7 @@
             "init": null
           }
         },
-        "user_spi_1_mosi": {
+        "user_spi_1_copi": {
           "pins": [
             "43"
           ],
@@ -339,7 +339,7 @@
             "init": null
           }
         },
-        "user_spi_1_miso": {
+        "user_spi_1_cipo": {
           "pins": [
             "44"
           ],
@@ -374,7 +374,7 @@
             "init": null
           }
         },
-        "user_spi_2_mosi": {
+        "user_spi_2_copi": {
           "pins": [
             "83"
           ],
@@ -385,7 +385,7 @@
             "init": null
           }
         },
-        "user_spi_2_miso": {
+        "user_spi_2_cipo": {
           "pins": [
             "84"
           ],
@@ -1138,12 +1138,12 @@
                   }
                 }
               },
-              "mosi": {
+              "copi": {
                 "type": "interface",
                 "members": {
                   "o": {
                     "type": "port",
-                    "name": "user_spi_0__mosi__o",
+                    "name": "user_spi_0__copi__o",
                     "dir": "out",
                     "width": 1,
                     "signed": false,
@@ -1161,12 +1161,12 @@
                   }
                 }
               },
-              "miso": {
+              "cipo": {
                 "type": "interface",
                 "members": {
                   "i": {
                     "type": "port",
-                    "name": "user_spi_0__miso__i",
+                    "name": "user_spi_0__cipo__i",
                     "dir": "in",
                     "width": 1,
                     "signed": false,
@@ -1236,12 +1236,12 @@
                   }
                 }
               },
-              "mosi": {
+              "copi": {
                 "type": "interface",
                 "members": {
                   "o": {
                     "type": "port",
-                    "name": "user_spi_1__mosi__o",
+                    "name": "user_spi_1__copi__o",
                     "dir": "out",
                     "width": 1,
                     "signed": false,
@@ -1259,12 +1259,12 @@
                   }
                 }
               },
-              "miso": {
+              "cipo": {
                 "type": "interface",
                 "members": {
                   "i": {
                     "type": "port",
-                    "name": "user_spi_1__miso__i",
+                    "name": "user_spi_1__cipo__i",
                     "dir": "in",
                     "width": 1,
                     "signed": false,
@@ -1334,12 +1334,12 @@
                   }
                 }
               },
-              "mosi": {
+              "copi": {
                 "type": "interface",
                 "members": {
                   "o": {
                     "type": "port",
-                    "name": "user_spi_2__mosi__o",
+                    "name": "user_spi_2__copi__o",
                     "dir": "out",
                     "width": 1,
                     "signed": false,
@@ -1357,12 +1357,12 @@
                   }
                 }
               },
-              "miso": {
+              "cipo": {
                 "type": "interface",
                 "members": {
                   "i": {
                     "type": "port",
-                    "name": "user_spi_2__miso__i",
+                    "name": "user_spi_2__cipo__i",
                     "dir": "in",
                     "width": 1,
                     "signed": false,
