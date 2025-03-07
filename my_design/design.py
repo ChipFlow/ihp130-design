@@ -24,10 +24,10 @@ from .ips.pwm import PWMPins, PWMPeripheral
 __all__ = ["JTAGSignature", "MySoC"]
 
 JTAGSignature = wiring.Signature({
-    "trst": In(InputPinSignature(1)),
-    "tck": In(InputPinSignature(1)),
-    "tms": In(InputPinSignature(1)),
-    "tdi": In(InputPinSignature(1)),
+    "trst": Out(InputPinSignature(1)),
+    "tck": Out(InputPinSignature(1)),
+    "tms": Out(InputPinSignature(1)),
+    "tdi": Out(InputPinSignature(1)),
     "tdo": Out(OutputPinSignature(1)),
 })
 
