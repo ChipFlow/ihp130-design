@@ -5,7 +5,7 @@
 groups = ["default", "test"]
 strategy = ["direct_minimal_versions"]
 lock_version = "4.5.0"
-content_hash = "sha256:3382d71f487c2db38461c02c7a125d5d75b67f457f7bd98ec5797e37260acb75"
+content_hash = "sha256:9805c60016c148d816be64857331c0e4fc6f306710b2e639cc09f4813e78a923"
 
 [[metadata.targets]]
 requires_python = "~=3.13"
@@ -42,8 +42,7 @@ name = "amaranth-cv32e40p"
 version = "0.0.0"
 requires_python = "<4.0,>=3.8"
 git = "https://github.com/ChipFlow/amaranth-cv32e40p"
-ref = "update-amaranth-deps"
-revision = "23f7290c39c05ad3b3e7959346b28ec2bcd27e82"
+revision = "d6662e76bbb13785cd3afc6644c884a92354fe99"
 summary = "CV32E40P and Amaranth Integration"
 dependencies = [
     "amaranth>=0.5",
@@ -51,11 +50,10 @@ dependencies = [
 
 [[package]]
 name = "amaranth-orchard"
-version = "0.1.dev48"
+version = "0.1.dev49"
 requires_python = ">=3.10"
 git = "https://github.com/ChipFlow/amaranth-orchard"
-ref = "multi-oe"
-revision = "ba09381e9d18cefd213a784b6b9c208b0a71db3a"
+revision = "6f3d2825dfdeaa75d79798b602d43a2d01c26bd1"
 summary = "curated collection of Amaranth cores"
 dependencies = [
     "amaranth-soc @ git+https://github.com/amaranth-lang/amaranth-soc",
