@@ -11,7 +11,7 @@ authors = [
 ]
 license = {file = "LICENSE.md"}
 
-requires-python = ">=3.13"
+requires-python = ">=3.10"
 dependencies = [
     "amaranth[builtin-yosys]>=0.5.1",
     "amaranth-cv32e40p @ git+https://github.com/ChipFlow/amaranth-cv32e40p@update-amaranth-deps",
