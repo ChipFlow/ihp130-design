@@ -56,4 +56,5 @@ jobs:
         run: |
           make sim-check
       - name: Test submit dry run
+        run: |
           pdm run chipflow silicon submit --dry-run
