@@ -12,6 +12,7 @@
         "pins": [
           "1"
         ],
+        "port_name": "dvss0",
         "direction": null,
         "options": null
       },
@@ -20,6 +21,7 @@
         "pins": [
           "9"
         ],
+        "port_name": "dvdd0",
         "direction": null,
         "options": null
       },
@@ -28,6 +30,7 @@
         "pins": [
           "17"
         ],
+        "port_name": "vss0",
         "direction": null,
         "options": null
       },
@@ -36,6 +39,7 @@
         "pins": [
           "25"
         ],
+        "port_name": "vdd0",
         "direction": null,
         "options": null
       },
@@ -44,6 +48,7 @@
         "pins": [
           "33"
         ],
+        "port_name": "dvss1",
         "direction": null,
         "options": null
       },
@@ -52,6 +57,7 @@
         "pins": [
           "41"
         ],
+        "port_name": "dvdd1",
         "direction": null,
         "options": null
       },
@@ -60,6 +66,7 @@
         "pins": [
           "49"
         ],
+        "port_name": "vss1",
         "direction": null,
         "options": null
       },
@@ -68,6 +75,7 @@
         "pins": [
           "57"
         ],
+        "port_name": "vdd1",
         "direction": null,
         "options": null
       },
@@ -76,6 +84,7 @@
         "pins": [
           "65"
         ],
+        "port_name": "dvss2",
         "direction": null,
         "options": null
       },
@@ -84,6 +93,7 @@
         "pins": [
           "73"
         ],
+        "port_name": "dvdd2",
         "direction": null,
         "options": null
       },
@@ -92,6 +102,7 @@
         "pins": [
           "81"
         ],
+        "port_name": "vss2",
         "direction": null,
         "options": null
       },
@@ -100,6 +111,7 @@
         "pins": [
           "89"
         ],
+        "port_name": "vdd2",
         "direction": null,
         "options": null
       },
@@ -108,6 +120,7 @@
         "pins": [
           "97"
         ],
+        "port_name": "dvss3",
         "direction": null,
         "options": null
       },
@@ -116,6 +129,7 @@
         "pins": [
           "105"
         ],
+        "port_name": "dvdd3",
         "direction": null,
         "options": null
       },
@@ -124,6 +138,7 @@
         "pins": [
           "113"
         ],
+        "port_name": "vss3",
         "direction": null,
         "options": null
       },
@@ -132,6 +147,7 @@
         "pins": [
           "121"
         ],
+        "port_name": "vdd3",
         "direction": null,
         "options": null
       },
@@ -140,6 +156,7 @@
         "pins": [
           "129"
         ],
+        "port_name": "dvss4",
         "direction": null,
         "options": null
       },
@@ -148,6 +165,7 @@
         "pins": [
           "137"
         ],
+        "port_name": "dvdd4",
         "direction": null,
         "options": null
       }
@@ -158,6 +176,7 @@
         "pins": [
           "114"
         ],
+        "port_name": "sys_clk",
         "direction": "i",
         "options": null
       }
@@ -168,6 +187,7 @@
         "pins": [
           "115"
         ],
+        "port_name": "sys_rst_n",
         "direction": "i",
         "options": null
       }
@@ -176,29 +196,31 @@
   "port_map": {
     "soc": {
       "flash": {
-        "flash_clk": {
+        "clk": {
           "pins": [
             "122"
           ],
           "direction": "o",
           "type": "io",
+          "port_name": "flash_clk",
           "options": {
             "all_have_oe": false,
             "init": null
           }
         },
-        "flash_csn": {
+        "csn": {
           "pins": [
             "123"
           ],
           "direction": "o",
           "type": "io",
+          "port_name": "flash_csn",
           "options": {
             "all_have_oe": false,
             "init": null
           }
         },
-        "flash_d": {
+        "d": {
           "pins": [
             "124",
             "125",
@@ -207,6 +229,7 @@
           ],
           "direction": "io",
           "type": "io",
+          "port_name": "flash_d",
           "options": {
             "all_have_oe": true,
             "init": null
@@ -214,56 +237,61 @@
         }
       },
       "cpu_jtag": {
-        "cpu_jtag_trst": {
+        "trst": {
           "pins": [
             "138"
           ],
           "direction": "i",
           "type": "io",
+          "port_name": "cpu_jtag_trst",
           "options": {
             "all_have_oe": false,
             "init": null
           }
         },
-        "cpu_jtag_tck": {
+        "tck": {
           "pins": [
             "139"
           ],
           "direction": "i",
           "type": "io",
+          "port_name": "cpu_jtag_tck",
           "options": {
             "all_have_oe": false,
             "init": null
           }
         },
-        "cpu_jtag_tms": {
+        "tms": {
           "pins": [
             "14"
           ],
           "direction": "i",
           "type": "io",
+          "port_name": "cpu_jtag_tms",
           "options": {
             "all_have_oe": false,
             "init": null
           }
         },
-        "cpu_jtag_tdi": {
+        "tdi": {
           "pins": [
             "140"
           ],
           "direction": "i",
           "type": "io",
+          "port_name": "cpu_jtag_tdi",
           "options": {
             "all_have_oe": false,
             "init": null
           }
         },
-        "cpu_jtag_tdo": {
+        "tdo": {
           "pins": [
             "141"
           ],
           "direction": "o",
           "type": "io",
+          "port_name": "cpu_jtag_tdo",
           "options": {
             "all_have_oe": false,
             "init": null
@@ -271,45 +299,49 @@
         }
       },
       "user_spi_0": {
-        "user_spi_0_sck": {
+        "sck": {
           "pins": [
             "98"
           ],
           "direction": "o",
           "type": "io",
+          "port_name": "user_spi_0_sck",
           "options": {
             "all_have_oe": false,
             "init": null
           }
         },
-        "user_spi_0_copi": {
+        "copi": {
           "pins": [
             "99"
           ],
           "direction": "o",
           "type": "io",
+          "port_name": "user_spi_0_copi",
           "options": {
             "all_have_oe": false,
             "init": null
           }
         },
-        "user_spi_0_cipo": {
+        "cipo": {
           "pins": [
             "10"
           ],
           "direction": "i",
           "type": "io",
+          "port_name": "user_spi_0_cipo",
           "options": {
             "all_have_oe": false,
             "init": null
           }
         },
-        "user_spi_0_csn": {
+        "csn": {
           "pins": [
             "100"
           ],
           "direction": "o",
           "type": "io",
+          "port_name": "user_spi_0_csn",
           "options": {
             "all_have_oe": false,
             "init": null
@@ -317,45 +349,49 @@
         }
       },
       "user_spi_1": {
-        "user_spi_1_sck": {
+        "sck": {
           "pins": [
             "42"
           ],
           "direction": "o",
           "type": "io",
+          "port_name": "user_spi_1_sck",
           "options": {
             "all_have_oe": false,
             "init": null
           }
         },
-        "user_spi_1_copi": {
+        "copi": {
           "pins": [
             "43"
           ],
           "direction": "o",
           "type": "io",
+          "port_name": "user_spi_1_copi",
           "options": {
             "all_have_oe": false,
             "init": null
           }
         },
-        "user_spi_1_cipo": {
+        "cipo": {
           "pins": [
             "44"
           ],
           "direction": "i",
           "type": "io",
+          "port_name": "user_spi_1_cipo",
           "options": {
             "all_have_oe": false,
             "init": null
           }
         },
-        "user_spi_1_csn": {
+        "csn": {
           "pins": [
             "45"
           ],
           "direction": "o",
           "type": "io",
+          "port_name": "user_spi_1_csn",
           "options": {
             "all_have_oe": false,
             "init": null
@@ -363,45 +399,49 @@
         }
       },
       "user_spi_2": {
-        "user_spi_2_sck": {
+        "sck": {
           "pins": [
             "82"
           ],
           "direction": "o",
           "type": "io",
+          "port_name": "user_spi_2_sck",
           "options": {
             "all_have_oe": false,
             "init": null
           }
         },
-        "user_spi_2_copi": {
+        "copi": {
           "pins": [
             "83"
           ],
           "direction": "o",
           "type": "io",
+          "port_name": "user_spi_2_copi",
           "options": {
             "all_have_oe": false,
             "init": null
           }
         },
-        "user_spi_2_cipo": {
+        "cipo": {
           "pins": [
             "84"
           ],
           "direction": "i",
           "type": "io",
+          "port_name": "user_spi_2_cipo",
           "options": {
             "all_have_oe": false,
             "init": null
           }
         },
-        "user_spi_2_csn": {
+        "csn": {
           "pins": [
             "85"
           ],
           "direction": "o",
           "type": "io",
+          "port_name": "user_spi_2_csn",
           "options": {
             "all_have_oe": false,
             "init": null
@@ -409,23 +449,25 @@
         }
       },
       "i2c_0": {
-        "i2c_0_scl": {
+        "scl": {
           "pins": [
             "90"
           ],
           "direction": "io",
           "type": "io",
+          "port_name": "i2c_0_scl",
           "options": {
             "all_have_oe": false,
             "init": null
           }
         },
-        "i2c_0_sda": {
+        "sda": {
           "pins": [
             "91"
           ],
           "direction": "io",
           "type": "io",
+          "port_name": "i2c_0_sda",
           "options": {
             "all_have_oe": false,
             "init": null
@@ -433,23 +475,25 @@
         }
       },
       "i2c_1": {
-        "i2c_1_scl": {
+        "scl": {
           "pins": [
             "92"
           ],
           "direction": "io",
           "type": "io",
+          "port_name": "i2c_1_scl",
           "options": {
             "all_have_oe": false,
             "init": null
           }
         },
-        "i2c_1_sda": {
+        "sda": {
           "pins": [
             "93"
           ],
           "direction": "io",
           "type": "io",
+          "port_name": "i2c_1_sda",
           "options": {
             "all_have_oe": false,
             "init": null
@@ -457,34 +501,37 @@
         }
       },
       "motor_pwm0": {
-        "motor_pwm0_pwm": {
+        "pwm": {
           "pins": [
             "46"
           ],
           "direction": "o",
           "type": "io",
+          "port_name": "motor_pwm0_pwm",
           "options": {
             "all_have_oe": false,
             "init": null
           }
         },
-        "motor_pwm0_dir": {
+        "dir": {
           "pins": [
             "47"
           ],
           "direction": "o",
           "type": "io",
+          "port_name": "motor_pwm0_dir",
           "options": {
             "all_have_oe": false,
             "init": null
           }
         },
-        "motor_pwm0_stop": {
+        "stop": {
           "pins": [
             "48"
           ],
           "direction": "i",
           "type": "io",
+          "port_name": "motor_pwm0_stop",
           "options": {
             "all_have_oe": false,
             "init": null
@@ -492,34 +539,37 @@
         }
       },
       "motor_pwm1": {
-        "motor_pwm1_pwm": {
+        "pwm": {
           "pins": [
             "86"
           ],
           "direction": "o",
           "type": "io",
+          "port_name": "motor_pwm1_pwm",
           "options": {
             "all_have_oe": false,
             "init": null
           }
         },
-        "motor_pwm1_dir": {
+        "dir": {
           "pins": [
             "87"
           ],
           "direction": "o",
           "type": "io",
+          "port_name": "motor_pwm1_dir",
           "options": {
             "all_have_oe": false,
             "init": null
           }
         },
-        "motor_pwm1_stop": {
+        "stop": {
           "pins": [
             "88"
           ],
           "direction": "i",
           "type": "io",
+          "port_name": "motor_pwm1_stop",
           "options": {
             "all_have_oe": false,
             "init": null
@@ -527,34 +577,37 @@
         }
       },
       "motor_pwm2": {
-        "motor_pwm2_pwm": {
+        "pwm": {
           "pins": [
             "94"
           ],
           "direction": "o",
           "type": "io",
+          "port_name": "motor_pwm2_pwm",
           "options": {
             "all_have_oe": false,
             "init": null
           }
         },
-        "motor_pwm2_dir": {
+        "dir": {
           "pins": [
             "95"
           ],
           "direction": "o",
           "type": "io",
+          "port_name": "motor_pwm2_dir",
           "options": {
             "all_have_oe": false,
             "init": null
           }
         },
-        "motor_pwm2_stop": {
+        "stop": {
           "pins": [
             "96"
           ],
           "direction": "i",
           "type": "io",
+          "port_name": "motor_pwm2_stop",
           "options": {
             "all_have_oe": false,
             "init": null
@@ -562,34 +615,37 @@
         }
       },
       "motor_pwm3": {
-        "motor_pwm3_pwm": {
+        "pwm": {
           "pins": [
             "128"
           ],
           "direction": "o",
           "type": "io",
+          "port_name": "motor_pwm3_pwm",
           "options": {
             "all_have_oe": false,
             "init": null
           }
         },
-        "motor_pwm3_dir": {
+        "dir": {
           "pins": [
             "101"
           ],
           "direction": "o",
           "type": "io",
+          "port_name": "motor_pwm3_dir",
           "options": {
             "all_have_oe": false,
             "init": null
           }
         },
-        "motor_pwm3_stop": {
+        "stop": {
           "pins": [
             "102"
           ],
           "direction": "i",
           "type": "io",
+          "port_name": "motor_pwm3_stop",
           "options": {
             "all_have_oe": false,
             "init": null
@@ -597,34 +653,37 @@
         }
       },
       "motor_pwm4": {
-        "motor_pwm4_pwm": {
+        "pwm": {
           "pins": [
             "142"
           ],
           "direction": "o",
           "type": "io",
+          "port_name": "motor_pwm4_pwm",
           "options": {
             "all_have_oe": false,
             "init": null
           }
         },
-        "motor_pwm4_dir": {
+        "dir": {
           "pins": [
             "143"
           ],
           "direction": "o",
           "type": "io",
+          "port_name": "motor_pwm4_dir",
           "options": {
             "all_have_oe": false,
             "init": null
           }
         },
-        "motor_pwm4_stop": {
+        "stop": {
           "pins": [
             "15"
           ],
           "direction": "i",
           "type": "io",
+          "port_name": "motor_pwm4_stop",
           "options": {
             "all_have_oe": false,
             "init": null
@@ -632,34 +691,37 @@
         }
       },
       "motor_pwm5": {
-        "motor_pwm5_pwm": {
+        "pwm": {
           "pins": [
             "16"
           ],
           "direction": "o",
           "type": "io",
+          "port_name": "motor_pwm5_pwm",
           "options": {
             "all_have_oe": false,
             "init": null
           }
         },
-        "motor_pwm5_dir": {
+        "dir": {
           "pins": [
             "103"
           ],
           "direction": "o",
           "type": "io",
+          "port_name": "motor_pwm5_dir",
           "options": {
             "all_have_oe": false,
             "init": null
           }
         },
-        "motor_pwm5_stop": {
+        "stop": {
           "pins": [
             "104"
           ],
           "direction": "i",
           "type": "io",
+          "port_name": "motor_pwm5_stop",
           "options": {
             "all_have_oe": false,
             "init": null
@@ -667,34 +729,37 @@
         }
       },
       "motor_pwm6": {
-        "motor_pwm6_pwm": {
+        "pwm": {
           "pins": [
             "106"
           ],
           "direction": "o",
           "type": "io",
+          "port_name": "motor_pwm6_pwm",
           "options": {
             "all_have_oe": false,
             "init": null
           }
         },
-        "motor_pwm6_dir": {
+        "dir": {
           "pins": [
             "107"
           ],
           "direction": "o",
           "type": "io",
+          "port_name": "motor_pwm6_dir",
           "options": {
             "all_have_oe": false,
             "init": null
           }
         },
-        "motor_pwm6_stop": {
+        "stop": {
           "pins": [
             "108"
           ],
           "direction": "i",
           "type": "io",
+          "port_name": "motor_pwm6_stop",
           "options": {
             "all_have_oe": false,
             "init": null
@@ -702,34 +767,37 @@
         }
       },
       "motor_pwm7": {
-        "motor_pwm7_pwm": {
+        "pwm": {
           "pins": [
             "116"
           ],
           "direction": "o",
           "type": "io",
+          "port_name": "motor_pwm7_pwm",
           "options": {
             "all_have_oe": false,
             "init": null
           }
         },
-        "motor_pwm7_dir": {
+        "dir": {
           "pins": [
             "117"
           ],
           "direction": "o",
           "type": "io",
+          "port_name": "motor_pwm7_dir",
           "options": {
             "all_have_oe": false,
             "init": null
           }
         },
-        "motor_pwm7_stop": {
+        "stop": {
           "pins": [
             "118"
           ],
           "direction": "i",
           "type": "io",
+          "port_name": "motor_pwm7_stop",
           "options": {
             "all_have_oe": false,
             "init": null
@@ -737,34 +805,37 @@
         }
       },
       "motor_pwm8": {
-        "motor_pwm8_pwm": {
+        "pwm": {
           "pins": [
             "119"
           ],
           "direction": "o",
           "type": "io",
+          "port_name": "motor_pwm8_pwm",
           "options": {
             "all_have_oe": false,
             "init": null
           }
         },
-        "motor_pwm8_dir": {
+        "dir": {
           "pins": [
             "12"
           ],
           "direction": "o",
           "type": "io",
+          "port_name": "motor_pwm8_dir",
           "options": {
             "all_have_oe": false,
             "init": null
           }
         },
-        "motor_pwm8_stop": {
+        "stop": {
           "pins": [
             "120"
           ],
           "direction": "i",
           "type": "io",
+          "port_name": "motor_pwm8_stop",
           "options": {
             "all_have_oe": false,
             "init": null
@@ -772,34 +843,37 @@
         }
       },
       "motor_pwm9": {
-        "motor_pwm9_pwm": {
+        "pwm": {
           "pins": [
             "13"
           ],
           "direction": "o",
           "type": "io",
+          "port_name": "motor_pwm9_pwm",
           "options": {
             "all_have_oe": false,
             "init": null
           }
         },
-        "motor_pwm9_dir": {
+        "dir": {
           "pins": [
             "130"
           ],
           "direction": "o",
           "type": "io",
+          "port_name": "motor_pwm9_dir",
           "options": {
             "all_have_oe": false,
             "init": null
           }
         },
-        "motor_pwm9_stop": {
+        "stop": {
           "pins": [
             "131"
           ],
           "direction": "i",
           "type": "io",
+          "port_name": "motor_pwm9_stop",
           "options": {
             "all_have_oe": false,
             "init": null
@@ -807,23 +881,25 @@
         }
       },
       "uart_0": {
-        "uart_0_tx": {
+        "tx": {
           "pins": [
             "18"
           ],
           "direction": "o",
           "type": "io",
+          "port_name": "uart_0_tx",
           "options": {
             "all_have_oe": false,
             "init": null
           }
         },
-        "uart_0_rx": {
+        "rx": {
           "pins": [
             "19"
           ],
           "direction": "i",
           "type": "io",
+          "port_name": "uart_0_rx",
           "options": {
             "all_have_oe": false,
             "init": null
@@ -831,23 +907,25 @@
         }
       },
       "uart_1": {
-        "uart_1_tx": {
+        "tx": {
           "pins": [
             "2"
           ],
           "direction": "o",
           "type": "io",
+          "port_name": "uart_1_tx",
           "options": {
             "all_have_oe": false,
             "init": null
           }
         },
-        "uart_1_rx": {
+        "rx": {
           "pins": [
             "20"
           ],
           "direction": "i",
           "type": "io",
+          "port_name": "uart_1_rx",
           "options": {
             "all_have_oe": false,
             "init": null
@@ -855,7 +933,7 @@
         }
       },
       "gpio_0": {
-        "gpio_0_gpio": {
+        "gpio": {
           "pins": [
             "21",
             "22",
@@ -868,6 +946,7 @@
           ],
           "direction": "io",
           "type": "io",
+          "port_name": "gpio_0_gpio",
           "options": {
             "all_have_oe": true,
             "init": null
@@ -875,7 +954,7 @@
         }
       },
       "gpio_1": {
-        "gpio_1_gpio": {
+        "gpio": {
           "pins": [
             "3",
             "30",
@@ -888,6 +967,7 @@
           ],
           "direction": "io",
           "type": "io",
+          "port_name": "gpio_1_gpio",
           "options": {
             "all_have_oe": true,
             "init": null
@@ -1000,7 +1080,7 @@
                   "i": {
                     "type": "port",
                     "name": "cpu_jtag__trst__i",
-                    "dir": "out",
+                    "dir": "in",
                     "width": 1,
                     "signed": false,
                     "init": "0"
@@ -1023,7 +1103,7 @@
                   "i": {
                     "type": "port",
                     "name": "cpu_jtag__tck__i",
-                    "dir": "out",
+                    "dir": "in",
                     "width": 1,
                     "signed": false,
                     "init": "0"
@@ -1046,7 +1126,7 @@
                   "i": {
                     "type": "port",
                     "name": "cpu_jtag__tms__i",
-                    "dir": "out",
+                    "dir": "in",
                     "width": 1,
                     "signed": false,
                     "init": "0"
@@ -1069,7 +1149,7 @@
                   "i": {
                     "type": "port",
                     "name": "cpu_jtag__tdi__i",
-                    "dir": "out",
+                    "dir": "in",
                     "width": 1,
                     "signed": false,
                     "init": "0"
