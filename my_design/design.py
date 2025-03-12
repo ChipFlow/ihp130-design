@@ -186,7 +186,7 @@ class MySoC(wiring.Component):
 
         # UART
         for i in range(self.uart_count):
-            uart = UARTPeripheral(init_divisor=int(25e6//115200))
+            uart = UARTPeripheral(init_divisor=int(25e6//115200), addr_width=5)
             base_addr = self.csr_uart_base + i * self.periph_offset
             csr_decoder.add(uart.bus, name=f"uart_{i}", addr=base_addr - self.csr_base)
             sw.add_periph("uart", f"UART_{i}", base_addr)

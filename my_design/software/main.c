@@ -2,9 +2,9 @@
 #include "generated/soc.h"
 
 char uart_getch_block(volatile uart_regs_t *uart) {
-    while (!uart->rx_avail)
+    while (!(uart->rx.status & 0x1))
         ;
-    return uart->rx_data;
+    return uart->rx.data;
 }
 
 uint32_t spi_xfer(volatile spi_regs_t *spi, uint32_t data, uint32_t width) {
@@ -43,6 +43,9 @@ void i2c_stop(volatile i2c_regs_t *i2c) {
 }
 
 void main() {
+    uart_init(UART_0, 25000000/115200);
+    uart_init(UART_1, 25000000/115200);
+
     puts("🐱: nyaa~!\r\n");
 
     puts("SoC type: ");
