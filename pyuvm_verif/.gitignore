@@ -1,5 +1,0 @@
-verilog/
-sim_build/
-*.vcd
-*.fst
-results.xml
