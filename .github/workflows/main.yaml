@@ -21,11 +21,18 @@ jobs:
       - name: Set up PDM
         uses: pdm-project/setup-pdm@v4
         with:
+          python-version-file: pyproject.toml
+          cache-dependency-path: pyproject.toml
           cache: true
+      - name: Relock PDM
+        run: pdm lock -d
       - name: Install dependencies
         run: |
-          pdm install
-      - run: pdm run chipflow silicon submit
+          pdm install -d
+      - name: Lock pins
+        run: pdm run chipflow pin lock
+      - name: Submit to cloud backend
+        run: pdm run chipflow silicon submit
         env:
           CHIPFLOW_API_ENDPOINT: 'https://build-staging.chipflow.org/build/submit'
           CHIPFLOW_API_KEY_ID: ${{ secrets.CHIPFLOW_API_KEY_ID }}
@@ -41,10 +48,15 @@ jobs:
       - name: Set up PDM
         uses: pdm-project/setup-pdm@v4
         with:
+          python-version-file: pyproject.toml
+          cache-dependency-path: pyproject.toml
           cache: true
+      - name: Relock PDM
+        run: |
+          pdm lock -d
       - name: Install dependencies
         run: |
-          pdm install
+          pdm install -d
       - name: Cache YoWASP build products
         uses: actions/cache@v4
         with:
@@ -52,6 +64,8 @@ jobs:
           key: YoWASP-${{ runner.os }}-${{ hashFiles('./.venv/**/*.wasm') }}
           restore-keys: |
             YoWASP-${{ runner.os }}-
+      - name: Lock pins
+        run: pdm run chipflow pin lock
       - name: Run tests
         run: |
           make sim-check
