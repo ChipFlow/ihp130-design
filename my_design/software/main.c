@@ -7,41 +7,6 @@ char uart_getch_block(volatile uart_regs_t *uart) {
     return uart->rx.data;
 }
 
-uint32_t spi_xfer(volatile spi_regs_t *spi, uint32_t data, uint32_t width) {
-    spi->config = ((width - 1) << 3) | 0x06; // CS=1, SCK_EDGE=1, SCK_IDLE=0
-    spi->send_data = data << (32U - width);
-    while (!(spi->status & 0x1)) // wait for rx full
-        ;
-    spi->config = ((width - 1) << 3) | 0x02; // CS=0, SCK_EDGE=1, SCK_IDLE=0
-    return spi->receive_data;
-}
-
-void i2c_start(volatile i2c_regs_t *i2c) {
-	i2c->action = (1<<1);
-	while (i2c->status & 0x1)
-		;
-}
-
-int i2c_write(volatile i2c_regs_t *i2c, uint8_t data) {
-	i2c->send_data = data;
-	while (i2c->status & 0x1)
-		;
-	return (i2c->status & 0x2) != 0; // check ACK
-}
-
-uint8_t i2c_read(volatile i2c_regs_t *i2c) {
-	i2c->action = (1<<3);
-	while (i2c->status & 0x1)
-		;
-	return i2c->receive_data;
-}
-
-void i2c_stop(volatile i2c_regs_t *i2c) {
-	i2c->action = (1<<2);
-	while (i2c->status & 0x1)
-		;
-}
-
 void main() {
     uart_init(UART_0, 25000000/115200);
     uart_init(UART_1, 25000000/115200);
@@ -101,16 +66,16 @@ void main() {
 
     puts("SPI: ");
 
-    USER_SPI_0->divider = 2;
+    spi_init(USER_SPI_0, 2);
 
     // test 8 bit transfer
-    puthex(spi_xfer(USER_SPI_0, 0x5A, 8));
+    puthex(spi_xfer(USER_SPI_0, 0x5A, 8, true));
     puts(" ");
     // test an odd 21 bit transfer
-    puthex(spi_xfer(USER_SPI_0, 0x123456, 21));
+    puthex(spi_xfer(USER_SPI_0, 0x123456, 21, true));
     puts("\n");
 
-    I2C_0->divider = 2;
+    i2c_init(I2C_0, 2);
 
     i2c_start(I2C_0);
 

@@ -13,11 +13,11 @@ from amaranth_orchard.memory import SPIMemIO
 from amaranth_orchard.memory import SRAMPeripheral
 from amaranth_orchard.io import GPIOPeripheral
 from amaranth_orchard.io import UARTPeripheral
+from amaranth_orchard.io import SPISignature, SPIPeripheral
+from amaranth_orchard.io import I2CSignature, I2CPeripheral
 
 from amaranth_cv32e40p.cv32e40p import CV32E40P, DebugModule
 from chipflow_lib.platforms import InputPinSignature, OutputPinSignature
-from .ips.spi import SPISignature, SPIPeripheral
-from .ips.i2c import I2CSignature, I2CPeripheral
 from .ips.pwm import PWMPins, PWMPeripheral
 # from .ips.pdm import PDMPeripheral
 
