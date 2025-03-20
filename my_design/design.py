@@ -9,7 +9,7 @@ from amaranth_soc import csr, wishbone
 from amaranth_soc.csr.wishbone import WishboneCSRBridge
 
 from amaranth_orchard.base import SoCID
-from amaranth_orchard.memory import SPIMemIO
+from amaranth_orchard.memory import QSPIFlash
 from amaranth_orchard.memory import SRAMPeripheral
 from amaranth_orchard.io import GPIOPeripheral
 from amaranth_orchard.io import UARTPeripheral
@@ -37,7 +37,7 @@ class MySoC(wiring.Component):
         # Top level interfaces
 
         interfaces = {
-            "flash": Out(SPIMemIO.Signature()),
+            "flash": Out(QSPIFlash.Signature()),
             "cpu_jtag": Out(JTAGSignature)
         }
 
@@ -143,9 +143,9 @@ class MySoC(wiring.Component):
         m.submodules.debug = debug
         # SPI flash
 
-        spiflash = SPIMemIO()
-        wb_decoder .add(spiflash.data_bus, addr=self.mem_spiflash_base)
-        csr_decoder.add(spiflash.ctrl_bus, name="spiflash", addr=self.csr_spiflash_base - self.csr_base)
+        spiflash = QSPIFlash(addr_width=24, data_width=32)
+        wb_decoder .add(spiflash.wb_bus, addr=self.mem_spiflash_base)
+        csr_decoder.add(spiflash.csr_bus, name="spiflash", addr=self.csr_spiflash_base - self.csr_base)
         m.submodules.spiflash = spiflash
 
         connect(m, flipped(self.flash), spiflash.pins)

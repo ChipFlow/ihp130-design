@@ -77,7 +77,7 @@ int main(int argc, char **argv) {
     tick();
 
     top.p_rst.set(false);
-    for (int i = 0; i < 2000000; i++)
+    for (int i = 0; i < 3000000; i++)
         tick();
 
     close_event_log();
