@@ -17,8 +17,6 @@ dependencies = [
     "amaranth-cv32e40p @ git+https://github.com/ChipFlow/amaranth-cv32e40p",
     "amaranth-orchard @ git+https://github.com/ChipFlow/amaranth-orchard",
     "chipflow-lib @ git+https://github.com/ChipFlow/chipflow-lib.git",
-    "cocotb>=1.9.2",
-    "pyuvm~=3.0.0",
     "ziglang==0.11.0",
     "amaranth-soc @ git+https://github.com/amaranth-lang/amaranth-soc",
 ]
