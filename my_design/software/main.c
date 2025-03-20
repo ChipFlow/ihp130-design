@@ -20,6 +20,16 @@ void main() {
     // puthex(SOC_ID->version);
     puts("\r\n");
 
+    // SPI Flash config
+    puts("Flash ID: ");
+    puthex(spiflash_read_id(SPIFLASH));
+    puts("\n");
+    spiflash_set_qspi_flag(SPIFLASH);
+    spiflash_set_quad_mode(SPIFLASH);
+    puts("Quad mode\n");
+
+    //
+
     GPIO_1->mode = GPIO_PIN4_PUSH_PULL | GPIO_PIN5_PUSH_PULL \
                  | GPIO_PIN6_PUSH_PULL | GPIO_PIN7_PUSH_PULL;
     GPIO_1->output = 0x50;
