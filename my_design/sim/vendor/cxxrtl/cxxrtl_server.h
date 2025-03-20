@@ -398,7 +398,7 @@ class server {
 
 	// Command implementations.
 
-	std::map<std::string, const debug_scope*> perform_list_scopes() {
+	std::map<std::string, const debug_scope*> perform_list_scopes(bool all, const std::string &scope) {
 		std::map<std::string, const debug_scope*> scopes = {};
 		std::string current_scope = " invalid"; // cannot appear as a scope name
 		for (auto &item : debug_items.table) {
@@ -410,7 +410,11 @@ class server {
 			// we only need to collapse runs of identical scopes into one.
 			if (item_scope == current_scope)
 				continue;
-			scopes[item_scope] = debug_scopes.contains(item_scope) ? &debug_scopes[item_scope] : nullptr;
+			if (all ||
+					(scope.empty() && item_scope.find(' ') == std::string::npos) ||
+					(!scope.empty() && item_scope.find(' ') != std::string::npos &&
+					 item_scope.substr(0, item_scope.rfind(' ')) == scope))
+				scopes[item_scope] = debug_scopes.contains(item_scope) ? &debug_scopes[item_scope] : nullptr;
 			current_scope = item_scope;
 		}
 		return scopes;
@@ -462,20 +466,26 @@ class server {
 	json perform_query_interval(const time &begin, const time &end, bool collapse,
 															const std::string &items_reference, const std::string &item_values_encoding,
 															bool emit_diagnostics) {
-		CXXRTL_ASSERT(item_values_encoding == "base64(u32)");
+		CXXRTL_ASSERT(items_reference.empty() || item_values_encoding == "base64(u32)");
 
+		time timestamp;
 		std::vector<diagnostic> diagnostics;
 
-		bool rewound = player.rewind_to_or_before(begin, emit_diagnostics ? &diagnostics : nullptr);
-		assert(rewound);
+		if (collapse && !emit_diagnostics && player.current_time() == begin && player.get_next_time(timestamp) && timestamp > begin) {
+			// In the special case where we need only the item values for a specific point in time, and we're already at that
+			// point in time, we don't need to rewind. This massively speeds up repeated examination of the same point in time, as well
+			// as stepping forward, regardless of when the last complete checkpoint was.
+		} else {
+			bool rewound = player.rewind_to_or_before(begin, emit_diagnostics ? &diagnostics : nullptr);
+			assert(rewound);
+		}
 
 		json samples = json::array();
 		std::vector<uint32_t> item_values; // reuse the buffer
-		do {
+		while (true) {
 			if (collapse) {
 				// Replay all following steps with the same timestamp as the current one. This avoids wasting bandwidth if
 				// the client does not have any way to display distinct delta cycles.
-				time timestamp;
 				while (player.get_next_time(timestamp) && player.current_time() == timestamp) {
 					bool replayed = player.replay(emit_diagnostics ? &diagnostics : nullptr);
 					assert(replayed);
@@ -563,11 +573,14 @@ class server {
 				}
 			}
 
-			// Replaying can fail if the `end` time is after the end of the replay log.
-			diagnostics.clear();
-			if (!player.replay(emit_diagnostics ? &diagnostics : nullptr))
+			// Make sure to not advance past the end of the interval, to speed up repeated examinations of the same point in time.
+			if (!player.get_next_time(timestamp) || timestamp > end)
 				break;
-		} while (player.current_time() < end);
+
+			diagnostics.clear();
+			bool replayed = player.replay(emit_diagnostics ? &diagnostics : nullptr);
+			assert(replayed);
+		}
 		return samples;
 	}
 
@@ -729,9 +742,15 @@ class server {
 
 	// Parsers for commands and builders for responses.
 
-	json parse_command_list_scopes(json &packet) {
+	json parse_command_list_scopes(json &packet, bool &all, std::string &scope) {
+		if (!(packet.contains("scope") && (packet.at("scope").is_null() || packet.at("scope").is_string())))
+			return build_error("invalid_args", "The `list_scopes` command requires the `scope` argument to be `null` or a string.");
+		all = packet.at("scope").is_null();
+		if (!all)
+			packet.at("scope").get_to(scope);
+		packet.erase("scope");
 		if (!packet.empty())
-			return build_error("invalid_args", "The `list_scopes` command takes no arguments.");
+			return build_error("invalid_args", "The `list_scopes` command takes no arguments besides `scope`.");
 		return json();
 	}
 
@@ -777,7 +796,7 @@ class server {
 			packet.at("scope").get_to(scope);
 		packet.erase("scope");
 		if (!packet.empty())
-			return build_error("invalid_args", "The `list_scopes` command takes no arguments besides `scope`.");
+			return build_error("invalid_args", "The `list_items` command takes no arguments besides `scope`.");
 		return json();
 	}
 
@@ -789,6 +808,8 @@ class server {
 			json &item_desc = (item_descs[item_name] = json::object());
 			if (attrs.find("src") != attrs.end() && attrs.at("src").value_type == metadata::STRING)
 				item_desc["src"] = attrs.at("src").string_value;
+			else
+				item_desc["src"] = nullptr;
 			if (parts.front().type == debug_item::MEMORY) {
 				item_desc["type"] = "memory";
 				item_desc["lsb_at"] = parts.front().lsb_at;
@@ -879,7 +900,7 @@ class server {
 		packet.erase("items");
 		if (!(packet.contains("item_values_encoding") && (packet.at("item_values_encoding").is_string() || packet.at("item_values_encoding").is_null())))
 			return build_error("invalid_args", "The `query_interval` command requires the `item_values_encoding` argument to be a string or null.");
-		if (!(item_values_encoding.empty() || item_values_encoding == "base64(u32)"))
+		if (!(packet.at("item_values_encoding").is_null() || packet.at("item_values_encoding") == "base64(u32)"))
 			return build_error("invalid_item_values_encoding", "The only supported item values encoding is `base64(u32)`.");
 		if (!packet.at("item_values_encoding").is_null())
 			packet.at("item_values_encoding").get_to(item_values_encoding);
@@ -979,9 +1000,11 @@ class server {
 			if ((error = parse_command(packet, command)) != nullptr)
 				return error;
 			if (command == "list_scopes") {
-				if ((error = parse_command_list_scopes(packet)) != nullptr)
+				bool all;
+				std::string scope;
+				if ((error = parse_command_list_scopes(packet, all, scope)) != nullptr)
 					return error;
-				auto scopes = perform_list_scopes();
+				auto scopes = perform_list_scopes(all, scope);
 				return build_response_list_scopes(scopes);
 			} else if (command == "list_items") {
 				bool all;
@@ -1196,17 +1219,27 @@ public:
 		size_t deltas = 0;
 		std::unique_lock<std::mutex> lock(shared_state.mutex);
 		if (shared_state.status == simulation_status::initializing) {
-			deltas = toplevel.step(&wrapping_performer);
+                        // XXX not upstream
+			do {
+				toplevel.eval(&wrapping_performer);
+				deltas++;
+			} while (toplevel.commit());
+			//deltas = toplevel.step(&wrapping_performer);
 			recorder.record_complete();
 			recorder.flush();
 			shared_state.status = simulation_status::running;
 			shared_state.condvar.notify_all();
 		} else {
-			bool converged = false;
+			// XXX not upstream
 			do {
-				converged = toplevel.eval(&wrapping_performer);
+				toplevel.eval(&wrapping_performer);
 				deltas++;
-			} while (recorder.record_incremental(toplevel) && !converged);
+			} while (recorder.record_incremental(toplevel));
+			//bool converged = false;
+			//do {
+			//	converged = toplevel.eval(&wrapping_performer);
+			//	deltas++;
+			//} while (recorder.record_incremental(toplevel) && !converged);
 		}
 		if (shared_state.run_until_diagnostics & wrapping_performer.diagnostics_emitted) {
 			recorder.flush();
@@ -1232,6 +1265,12 @@ public:
 			}
 		} performer;
 		return step(&performer);
+	}
+
+	// XXX not upstream
+	void snapshot() {
+		recorder.record_complete();
+		recorder.flush();
 	}
 
 	// Usage: `agent.print("<message>", CXXRTL_LOCATION);`
